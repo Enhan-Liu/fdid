@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{fdid}(
   x,
-  type = c("raw", "dynamic", "overlap"),
+  type = c("raw", "dynamic", "overlap", "curve", "contrast"),
   connected = FALSE,
   ci = TRUE,
   shade_periods = x$tr_period,
@@ -17,18 +17,53 @@
   ylab = NULL,
   main = NULL,
   ylim = NULL,
+  xlim = NULL,
+  curve = c("auto", "level", "derivative", "both"),
+  Xdistr = c("histogram", "hist", "density", "rug", "none"),
+  interval = c("auto", "pointwise", "uniform", "both", "none"),
+  show.uniform.CI = TRUE,
+  support.panel = c("embedded", "separate"),
+  show.eval_g = FALSE,
+  line.color = "steelblue",
+  line.size = 2,
+  ci.color = "steelblue",
+  ci.alpha = 0.25,
+  band.color = "gray45",
+  band.lty = 3,
+  hist.color = "gray50",
+  density.color = "gray50",
+  support.alpha = 0.25,
+  diff.values = NULL,
+  contrast.values = NULL,
+  ref.g = NULL,
+  target.g = NULL,
+  n.contrast = 7L,
+  max.contrast = 10L,
+  include.ref = TRUE,
+  target.type = c("level", "quantile"),
+  quantile.source = c("support", "eval_g"),
+  inference = c("auto", "replicate", "vcov", "band", "pointwise"),
+  interpolate = c("linear", "none"),
+  show.grid = FALSE,
+  theme.bw = FALSE,
   ...
 )
 }
 \arguments{
 \item{x}{An \code{fdid} object.}
 
-\item{type}{One of \code{"raw"}, \code{"dynamic"}, or \code{"overlap"}.}
+\item{type}{One of \code{"raw"}, \code{"dynamic"}, \code{"overlap"},
+\code{"curve"}, or \code{"contrast"}. The \code{"curve"} and
+\code{"contrast"} types are available for \code{method="kernel"} and
+\code{method="dml_flex"} objects with stored curve data.}
 
 \item{connected}{Logical; if \code{TRUE}, connects points with lines in
 the "raw" and "dynamic" plots.  Default is \code{FALSE}.}
 
-\item{ci}{Logical; if \code{TRUE}, draw 95\% CIs when available. Default is \code{TRUE}.}
+\item{ci}{Logical; if \code{TRUE}, draw 95\% CIs when available. Default is
+\code{TRUE}. For continuous-G curves, use \code{interval} to choose
+pointwise intervals, simultaneous bands, both, or neither. For
+continuous-G contrast plots, controls coefficient CI bars.}
 
 \item{shade_periods}{Shaded intervals on the time axis. Default uses \code{x$tr_period}, i.e. event periods.
 Set to \code{NULL} to remove shaded area.}
@@ -43,6 +78,91 @@ Set to \code{NULL} to remove shaded area.}
 
 \item{ylim}{Y-axis limits.  Default \code{NULL} (computed automatically).}
 
+\item{xlim}{X-axis limits. For \code{type="curve"}, curve rows and support
+overlays are restricted to this range before drawing.}
+
+\item{curve}{Which continuous-G curve to plot when \code{type="curve"}.
+Options are \code{"auto"}, \code{"level"}, \code{"derivative"}, and
+\code{"both"}.
+\code{"auto"} preserves method defaults: derivative for \code{"kernel"}
+and level for \code{"dml_flex"}.}
+
+\item{Xdistr}{How to display the observed support of continuous \code{G}
+under a curve plot. One of \code{"histogram"}, \code{"hist"},
+\code{"density"}, \code{"rug"}, or \code{"none"}. Default is
+\code{"histogram"}.}
+
+\item{interval}{For continuous-G curve plots, one of \code{"auto"},
+\code{"pointwise"}, \code{"uniform"}, \code{"both"}, or \code{"none"}.
+\code{"auto"} shows pointwise intervals when available and stored
+simultaneous bands when available. Kernel bootstrap bands are finite-grid
+bootstrap quantile-envelope bands. Kernel robust pointwise normal intervals
+are not shown as uniform bands. For \code{method="dml_flex"}, stored bands
+are labeled as practical signal-mapping bands or, for
+\code{signal_map="blp_spline"}, finite-grid Gaussian max-t BLP-spline
+covariance bands.}
+
+\item{show.uniform.CI}{Logical; if \code{FALSE}, suppress stored
+simultaneous bands in continuous-G curve plots.}
+
+\item{support.panel}{For continuous-G curve plots, \code{"embedded"} draws
+the support display in a lower strip of the main plot, while
+\code{"separate"} draws it in a small aligned panel below the curve. When
+\code{curve="both"}, support displays are embedded in each panel.}
+
+\item{show.eval_g}{Logical; if \code{TRUE}, draw ticks for the stored
+evaluation grid in continuous-G curve plots.}
+
+\item{line.color, line.size, ci.color, ci.alpha, band.color, band.lty, hist.color, density.color, support.alpha}{Conservative base-graphics style controls for continuous-G curve plots.
+\code{line.color} and \code{ci.color} also style continuous-G contrast
+coefficient plots.}
+
+\item{diff.values, contrast.values}{Optional numeric \code{G} values to mark
+with vertical reference lines in continuous-G curve plots. For
+\code{type="contrast"}, \code{contrast.values} supplies target
+\code{G} values and cannot be combined with \code{target.g}.}
+
+\item{ref.g}{Reference \code{G} value for \code{type="contrast"}. May be a
+finite number or one of \code{"median"}, \code{"mean"}, \code{"min"},
+\code{"max"}, or \code{"first"}. For level targets, the default
+\code{NULL} is equivalent to \code{"median"}. For quantile targets, the
+default uses the first selected quantile target.}
+
+\item{target.g}{Target \code{G} values for \code{type="contrast"}. With
+\code{target.type="level"}, numeric values are interpreted as absolute
+\code{G} levels. With \code{target.type="quantile"}, a scalar integer
+requests that many quantile points, a vector in \code{[0,1]} supplies
+quantile probabilities, and shorthand such as \code{"q5"} or \code{"5"}
+requests five quantile points.}
+
+\item{n.contrast, max.contrast}{Automatic contrast target count and cap.
+In automatic and quantile modes these counts include the reference row
+when \code{include.ref=TRUE}. User-supplied targets above
+\code{max.contrast} are allowed with a warning.}
+
+\item{include.ref}{Logical; if \code{TRUE}, include a reference row with
+coefficient zero in \code{type="contrast"} plots. Default is \code{TRUE}.}
+
+\item{target.type}{For \code{type="contrast"}, whether \code{target.g}
+denotes absolute \code{G} levels or quantile targets.}
+
+\item{quantile.source}{For quantile contrast targets, use observed
+continuous \code{G} support within the fitted \code{eval_g} range
+(\code{"support"}) or the fitted \code{eval_g} grid itself
+(\code{"eval_g"}).}
+
+\item{inference}{Inference rule passed to \code{\link{fdid_contrast}} for
+\code{type="contrast"}.}
+
+\item{interpolate}{Interpolation rule passed to \code{\link{fdid_contrast}}
+for \code{type="contrast"}.}
+
+\item{show.grid}{Logical; if \code{TRUE}, draw a light background grid for
+continuous-G curve and contrast plots.}
+
+\item{theme.bw}{Reserved for compatibility with ggplot-style plotting
+controls; currently ignored by the base graphics method.}
+
 \item{...}{Additional graphics parameters.}
 }
 \value{
@@ -50,8 +170,9 @@ Produces a plot; invisibly returns \code{NULL}.
 }
 \description{
 Provides visualisations for FDID results, including raw means, dynamic
-effects, and propensity-score overlap.  The comparison plot of multiple
-methods has been removed; use \code{plot.fdid_list()} for that.
+effects, propensity-score overlap, continuous-G curves, and continuous-G
+level contrasts. The comparison plot of multiple methods has been removed;
+use \code{plot.fdid_list()} for that.
 }
 \examples{
 \donttest{

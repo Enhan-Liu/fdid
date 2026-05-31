@@ -11,7 +11,13 @@ fdid_prepare(
   G_label,
   unit_label,
   time_label,
-  cluster_label = NULL
+  cluster_label = NULL,
+  basis_type = c("none", "polynomial", "bspline"),
+  include_interactions = FALSE,
+  poly_degree = 2L,
+  spline_df = 4L,
+  spline_degree = 2L,
+  standardize_basis = TRUE
 )
 }
 \arguments{
@@ -28,6 +34,25 @@ fdid_prepare(
 \item{time_label}{A string specifying the column name of the time variable.}
 
 \item{cluster_label}{An optional string specifying the column name of the clustering variable. Default is `NULL`.}
+
+\item{basis_type}{Optional basis expansion for covariates before estimation.
+Options are \code{"none"} (default), \code{"polynomial"}, and
+\code{"bspline"}.}
+
+\item{include_interactions}{Logical; if \code{TRUE}, add pairwise
+interactions among the expanded covariate basis columns.}
+
+\item{poly_degree}{Integer polynomial degree used when
+\code{basis_type = "polynomial"}.}
+
+\item{spline_df}{Integer degrees of freedom used when
+\code{basis_type = "bspline"}.}
+
+\item{spline_degree}{Integer spline degree used when
+\code{basis_type = "bspline"}.}
+
+\item{standardize_basis}{Logical; if \code{TRUE}, center and scale expanded
+covariate columns. Ignored when no expansion or interactions are requested.}
 }
 \value{
 A data frame in wide format with the following:
@@ -35,7 +60,7 @@ A data frame in wide format with the following:
 - Time-varying covariates averaged across time.
 - Columns renamed:
   - Unit identifier -> `unit`
-  - Covariates -> `x1`, `x2`, ...
+  - Raw or expanded covariates -> `x1`, `x2`, ...
   - Group variable -> `G`
   - Clustering variable (if provided) -> `c`
 }

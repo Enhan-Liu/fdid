@@ -1,6 +1,18 @@
 # fdid 1.0.2
 
-* Replaced `options(warn = -1)` with `suppressWarnings()` in internal helper `silent_ebalance()` for CRAN compliance (avoids global state modification).
+* Added `fdid_contrast()` for continuous-G level comparisons and
+  `fdid_derivative()` for fixed-G derivative extraction from `kernel` and
+  `dml_flex` curve objects.
+* Stored kernel bootstrap curve replicates and `dml_flex` multiplier curve
+  replicates for reporting-level contrast and derivative inference when those
+  resampling routines run.
+* Clarified continuous-G curve-grid semantics in package markdown docs:
+  `eval_g` is the estimator grid for `kernel` and `dml_flex`, while
+  `plot(type = "curve")` displays stored curve estimates.
+* Aligned continuous-curve support overlays with the displayed curve window by
+  using observed `G` values restricted to the plotted range.
+* Replaced `options(warn = -1)` with `suppressWarnings()` in internal helper
+  `silent_ebalance()` for CRAN compliance (avoids global state modification).
 
 # fdid 0.2.0
 

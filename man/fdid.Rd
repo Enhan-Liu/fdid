@@ -15,7 +15,23 @@ fdid(
   nsims = 1000,
   parallel = FALSE,
   cores = 2,
-  target.pop = c("all", "1", "0")
+  target.pop = c("all", "1", "0"),
+  eval_g = NULL,
+  h0 = NULL,
+  K_folds = 10L,
+  boot = 500L,
+  alpha = 0.05,
+  trim = 0.05,
+  learner = "linear",
+  K = 5L,
+  S = 3L,
+  signal_map = "local_poly",
+  map_degree = 2L,
+  map_df = NULL,
+  density_method = "residual_kde",
+  dml_inference = "score",
+  dml_boot = 500L,
+  dml_multiplier = "normal"
 )
 }
 \arguments{
@@ -30,11 +46,18 @@ If \code{NULL}, estimation is performed on all available time periods.
 Example: \code{c(1958, 1959, 1960, 1961)}.}
 
 \item{method}{A string specifying the estimation method.
-Options: \code{"ols1"}, \code{"ols2"}, \code{"did"}, \code{"ebal"}, \code{"ipw"}, \code{"aipw"}.
+Options: \code{"ols1"}, \code{"ols2"}, \code{"did"}, \code{"ebal"}, \code{"ipw"}, \code{"aipw"},
+\code{"kernel"}, \code{"dml_binary"}, \code{"dml_plr"}, \code{"dml_flex"},
+\code{"dml_incremental"}.
 Default is \code{"ols1"}.}
 
 \item{vartype}{A string specifying the variance estimation type.
 Options: \code{"robust"}, \code{"bootstrap"}, \code{"jackknife"}.
+For \code{method="kernel"}, currently only \code{"robust"} and
+\code{"bootstrap"} are supported. DML methods currently support
+\code{"robust"} only; scalar DML robust standard errors are
+cluster-aware when \code{fdid_prepare(cluster_label = ...)} supplies a
+cluster column.
 Default is \code{"robust"}.}
 
 \item{missing_data}{How to handle missing data. Two options:
@@ -58,6 +81,67 @@ Default is \code{2}.}
 \item{target.pop}{Character; the target population for averaging: \code{"all"}, \code{"1"}, or \code{"0"}.
 \code{"all"} corresponds to the full sample. \code{"1"} targets the \code{G=1} population.
 \code{"0"} targets the \code{G=0} population. Default is \code{"all"}.}
+
+\item{eval_g}{Numeric vector of evaluation points for continuous-G curve methods
+(\code{"kernel"}, \code{"dml_flex"}).
+Default \code{NULL} auto-selects a trimmed grid.}
+
+\item{h0}{Numeric baseline bandwidth for \code{method="kernel"}.
+Default \code{NULL} selects by 10-fold LSCV.}
+
+\item{K_folds}{Integer; number of CV folds for kernel bandwidth selection. Default 10.}
+
+\item{boot}{Integer; bootstrap or multiplier replications for curve bands.
+For \code{method="kernel"} with \code{vartype="bootstrap"}, this controls
+the kernel bootstrap level and derivative bands and stored replicate
+curves. For \code{method="dml_flex"}, this controls the practical
+multiplier band and stored multiplier replicate curves over
+signal-mapping residuals, and Gaussian max-\eqn{t} draws for BLP-spline
+covariance bands when available.
+Default 500.}
+
+\item{alpha}{Numeric significance level for confidence intervals. Default 0.05.}
+
+\item{trim}{Numeric tail-trim fraction for \code{eval_g} construction. Default 0.05.}
+
+\item{learner}{Learner for DML nuisance functions.
+Options: \code{"linear"} (default), \code{"glmnet"} / \code{"lasso"},
+\code{"ridge"}, \code{"elasticnet"}, \code{"ranger"} / \code{"rf"},
+\code{"grf"}, \code{"gam"}, \code{"nnet"}, and
+\code{"xgboost"} / \code{"boosting"}. Optional learners are checked
+lazily when requested.}
+
+\item{K}{Integer; number of DML cross-fitting folds. Default 5.}
+
+\item{S}{Integer; number of random splits for median aggregation. Default 3.}
+
+\item{signal_map}{Signal-to-\code{G} mapping for \code{method="dml_flex"}.
+Options are \code{"local_poly"} (default), \code{"spline"},
+\code{"blp_spline"}, \code{"gam"}, and \code{"kernel"}. The
+\code{"blp_spline"} option stores a spline-basis covariance matrix used
+for covariance-aware contrasts and Gaussian max-\eqn{t} curve bands.}
+
+\item{map_degree}{Integer polynomial degree for \code{signal_map="local_poly"}
+and spline degree for \code{signal_map="spline"}. Default 2.}
+
+\item{map_df}{Optional integer degrees of freedom or basis size for
+\code{signal_map="spline"} and \code{signal_map="gam"}. Default \code{NULL}
+chooses a small data-dependent value.}
+
+\item{density_method}{Conditional-density estimator for \code{method="dml_flex"}
+and \code{method="dml_incremental"}. Options are \code{"residual_kde"}
+(default), \code{"location_scale"}, and \code{"local_kde"}.}
+
+\item{dml_inference}{Scalar DML interval rule. \code{"score"} (default)
+reports analytical score-based pointwise intervals. \code{"score_multiplier"}
+uses the stored score multiplier critical value for scalar DML intervals
+when available.}
+
+\item{dml_boot}{Integer; multiplier draws for scalar DML score multiplier
+inference. Default 500.}
+
+\item{dml_multiplier}{Multiplier law for scalar DML score inference:
+\code{"normal"} (default), \code{"wild"}, or \code{"exponential"}.}
 }
 \value{
 A list with the following components:
@@ -72,9 +156,24 @@ A list with the following components:
   \item{entire_period}{All time periods for dynamic estimation.}
   \item{method}{Method used.}
   \item{vartype}{Variance type used.}
+  \item{alpha}{Significance level used for confidence intervals.}
   \item{times}{All numeric time columns found.}
-  \item{G}{Group indicator (0/1).}
-  \item{ps}{Propensity scores (if \code{ipw} or \code{aipw} method used).}
+  \item{G}{Baseline factor; binary for binary methods and continuous for continuous-G methods.}
+  \item{ps}{Propensity scores (if \code{ipw}, \code{aipw}, or \code{dml_binary} method used).}
+  \item{curve_event}{Continuous-G curve fields for \code{method="kernel"} and
+             \code{method="dml_flex"}. For \code{dml_flex}, this contains
+             both \code{theta_hat} and \code{delta_hat}, pointwise
+             confidence intervals, curve covariance matrices when available,
+             and simultaneous bands when available. For reporting level contrasts and
+             fixed-\code{g} derivatives, use \code{\link{fdid_contrast}} and
+             \code{\link{fdid_derivative}}.}
+  \item{incremental_event}{Scalar observed-average-derivative signal fields
+             for \code{method="dml_incremental"}.}
+  \item{scalar_event}{Scalar DML score, influence-function, and multiplier
+             inference fields for scalar DML methods.}
+  \item{dml_metadata}{DML target and inference metadata when available.}
+  \item{dml_diagnostics}{DML signal, density, derivative, correction, and
+             cluster diagnostics when available.}
   \item{call}{The matched call.}
   \item{target.pop}{Character indicating the target population used.}
 }

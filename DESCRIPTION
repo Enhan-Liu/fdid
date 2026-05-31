@@ -3,6 +3,8 @@ Type: Package
 Title: Factorial Difference-in-Differences
 Version: 1.0.2
 Date: 2026-03-18
+Author: Yiqing Xu [aut, cre], Rivka Lipkovitz [aut], Enhan Liu [aut]
+Maintainer: Yiqing Xu <yiqingxu@stanford.edu>
 Authors@R:
     c(person("Yiqing", "Xu", , "yiqingxu@stanford.edu", role = c("aut", "cre")),
       person("Rivka", "Lipkovitz", email = "rivkal@mit.edu", role = c("aut")),
@@ -25,11 +27,17 @@ Imports:
     ebal,
     grf,
     car,
-    sandwich
+    sandwich,
+    splines
 Suggests:
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    glmnet,
+    ranger,
+    mgcv,
+    nnet,
+    xgboost
 VignetteBuilder: knitr
 Depends: R (>= 3.6.0)
 RoxygenNote: 7.3.3

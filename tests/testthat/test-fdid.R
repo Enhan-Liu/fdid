@@ -96,10 +96,10 @@ REF <- 1957
 # Helper: basic structural checks on any fdid result
 check_fdid <- function(res, method_name) {
   expect_s3_class(res, "fdid")
-  expect_named(res, c("est", "dynamic", "raw_means", "tr_period", "ref_period",
-                      "entire_period", "method", "vartype", "times", "G", "ps",
-                      "call", "target.pop"),
-               ignore.order = TRUE)
+	  expect_named(res, c("est", "dynamic", "raw_means", "tr_period", "ref_period",
+	                      "entire_period", "method", "vartype", "alpha", "times", "G", "ps",
+	                      "call", "target.pop"),
+	               ignore.order = TRUE)
   expect_equal(res$method, method_name)
   expect_true(is.finite(res$est$event$Estimate),
               label = paste(method_name, "event estimate is finite"))
