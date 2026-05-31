@@ -62,8 +62,17 @@ Verification:
 - File hygiene scan for `.DS_Store`, `.Rhistory`, and `Rplots.pdf`: pass.
 - Staged scope scan: pass; no `R/`, `man/`, `tests/`, `NAMESPACE`, or
   `DESCRIPTION` files changed.
-- Package build/install/test/check validation: pending tester audit by design;
-  scriber did not run package validation commands in this docs-only pass.
+- Tester dispatch was blocked by the child Codex usage limit, so the leader ran
+  the same observable audit checklist as a fallback.
+- R source parse and `tools::checkRd`: pass; locale startup warnings only.
+- `R CMD INSTALL -l /private/tmp/fdidlib .`: pass.
+- RStudio-bundled Quarto render with the installed package library: pass;
+  validation regenerated whitespace-only HTML differences, which were restored
+  to the committed docs after confirming the render succeeds.
+- `R CMD build --no-build-vignettes --no-manual /private/tmp/enhan-fdid-sync`:
+  pass; built `/private/tmp/fdid_1.0.2.tar.gz`.
+- `Rscript -e 'devtools::test(".")'`: pass with `374` passed, `0` failed, and
+  one existing warning about `target.pop` not changing `method = "did"`.
 
 ## 2026-05-31 Review-Driven Package-Impact Fixes
 

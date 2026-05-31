@@ -101,7 +101,8 @@ create it.
 
 ## Validation Results
 
-Scriber-run checks:
+Scriber-run checks plus leader fallback audit after tester dispatch hit the
+child Codex usage limit:
 
 | Command | Result | Notes |
 |---|---|---|
@@ -111,10 +112,15 @@ Scriber-run checks:
 | `git diff --cached --check` | pass | No whitespace errors after trimming generated HTML trailing whitespace. |
 | `find . -maxdepth 4 \( -name '.DS_Store' -o -name '.Rhistory' -o -name 'Rplots.pdf' \) -print` | pass | No matching artifacts found. |
 | staged scope scan for `R/`, `man/`, `tests/`, `NAMESPACE`, `DESCRIPTION` | pass | No package implementation, help, test, namespace, or description files staged. |
-| package validation commands | pending tester audit | Not run by scriber per dispatch instruction. |
+| R source parse | pass | `Rscript` parse check passed; locale warning only. |
+| Rd check | pass | `tools::checkRd` passed; locale warning only. |
+| `R CMD INSTALL -l /private/tmp/fdidlib .` | pass | Package installed and loaded from temporary and final locations. |
+| RStudio-bundled Quarto render with installed package library | pass | Render succeeded; generated whitespace-only HTML differences were restored to the committed docs. |
+| `R CMD build --no-build-vignettes --no-manual /private/tmp/enhan-fdid-sync` | pass | Built `/private/tmp/fdid_1.0.2.tar.gz`. |
+| `Rscript -e 'devtools::test(".")'` | pass with warning | `374` passed, `0` failed, `1` existing warning about `target.pop` not changing `method = "did"`. |
 
-Package build, install, examples, tests, and check commands remain pending the
-separate tester/reviewer audit.
+Detailed fallback audit evidence is recorded in the StatsClaw run artifact
+`audit.md`.
 
 ## Changed Files
 

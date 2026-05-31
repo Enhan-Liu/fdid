@@ -182,5 +182,6 @@ graph TD
 ## Notes
 
 - This run changed documentation, site output, and planning/log artifacts only.
-- Package validation commands are pending tester audit by design.
+- Package validation was recorded in the StatsClaw fallback `audit.md` after
+  tester dispatch hit the child Codex usage limit.
 - `docs/.nojekyll` is required for GitHub Pages and was restored after render.

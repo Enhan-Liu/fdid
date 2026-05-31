@@ -40,9 +40,10 @@ Final chapter files:
 
 The obsolete source copies `tutorial-full-continuous-g/` and
 `tutorial-next-2026-05-30/` were removed after migration. Remaining tutorial
-follow-ups are reviewer/tester validation, future plotting-layer modernization
-documentation if that API is implemented, and any future theory-note sync if
-the inference semantics change.
+follow-ups are future plotting-layer modernization documentation if that API is
+implemented, and any future theory-note sync if the inference semantics change.
+The tutorial cleanup validation is recorded in
+`TUTORIAL_CLEANUP_PLAN_2026-05-31.md` and the StatsClaw run `audit.md`.
 
 ## Current Status
 
@@ -604,8 +605,7 @@ The items below were first completed in the temporary tutorial copy
 
 Open tutorial tasks:
 
-- Tester/reviewer should audit package validation and rendered-site behavior
-  before ship.
+- Reviewer should inspect the completed fallback audit before ship.
 - Keep the new `plot(type = "contrast")` examples synchronized with any future
   changes to `fdid_contrast()` inference labels or package-wide plotting APIs.
 - After the package-wide plotting-layer decision is made, update the kernel
