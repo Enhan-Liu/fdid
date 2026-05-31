@@ -1,0 +1,111 @@
+# Continuous-G Overview {#sec-continuous-overview}
+
+```{r setup-continuous-overview, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  cache = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+This chapter is the target map for continuous-`G` analysis. It does not try to
+fit every estimator. It explains which object you want, how to prepare the
+design, why support comes before estimation, and which chapter gives the full
+workflow.
+
+## Choose the Target First
+
+Continuous-`G` methods do not estimate one interchangeable object. Decide
+whether the report needs a scalar, a curve, a derivative, a contrast, or a
+diagnostic display before choosing `method`.
+
+| User target | Primary workflow | Reporting/display |
+|---|---|---|
+| Binary-G or discrete treated-vs-control FDID effect | `method = "did"`, `"ols1"`, `"ols2"`, `"ebal"`, `"ipw"`, `"aipw"` | `summary()`, raw/dynamic/overlap plots |
+| Continuous-G scalar linear slope | `method = "dml_plr"` | `summary()` with scalar DML inference label |
+| Smooth continuous-G level curve | `method = "kernel"` first; `method = "dml_flex"` for adjusted flexible nuisance learning | `plot(type = "curve", curve = "level")`, curve table |
+| Continuous-G derivative curve | `kernel` or `dml_flex` with derivative output | `plot(type = "curve", curve = "derivative")`, `fdid_derivative()` |
+| Observed-population average derivative | `method = "dml_incremental"` | `summary()` and density diagnostics |
+| Fixed-reference level contrast | fitted `kernel` or `dml_flex` plus `fdid_contrast()` | `fdid_contrast()`, `plot(type = "contrast")` |
+| Support and overlap diagnostics | preparation and plotting diagnostics | support panels, rugs, density/histogram displays, overlap plots |
+
+Keep four concepts separate:
+
+1. the estimand, such as a scalar slope or `theta(g1) - theta(g0)`;
+2. the estimator, such as `kernel`, `dml_flex`, or `dml_incremental`;
+3. the inference calculation, such as analytical, bootstrap, or multiplier;
+4. the plot or reporting view, such as a curve plot or contrast table.
+
+## Prepare the Continuous-G Design
+
+Use a continuous baseline factor in `fdid_prepare()`. The example below uses
+`lnpczupu`, a log social-capital measure from the mortality data.
+
+```{r continuous-prepare, eval=FALSE}
+library(fdid)
+data(fdid)
+
+mortality$uniqueid <- paste(mortality$provid, mortality$countyid, sep = "-")
+
+covar <- c("avggrain", "nograin", "urban", "dis_bj", "dis_pc",
+           "rice", "minority", "edu", "lnpop")
+
+s_cont <- fdid_prepare(
+  data = transform(mortality, G_cont = lnpczupu),
+  Y_label = "mortality",
+  X_labels = covar,
+  G_label = "G_cont",
+  unit_label = "uniqueid",
+  time_label = "year"
+)
+
+tr_period <- 1958:1961
+ref_period <- 1957
+```
+
+For curve methods, `eval_g` is an estimation grid. The package estimates and
+stores curve quantities at those values; plotting displays the stored grid
+rather than densifying the curve after the fact.
+
+```{r continuous-grid, eval=FALSE}
+g_positive <- s_cont$G[s_cont$G > 0]
+eval_g <- as.numeric(stats::quantile(
+  g_positive,
+  probs = seq(0.20, 0.80, length.out = 9),
+  na.rm = TRUE
+))
+```
+
+## Inspect Support Before Estimation
+
+Continuous-`G` curve estimates are weakest where observed support is sparse.
+Inspect the empirical distribution of `G` before fitting a curve and avoid
+turning a tail extrapolation into a headline result.
+
+```{r continuous-support, eval=FALSE}
+hist(s_cont$G, breaks = 35, col = "gray85", border = "white",
+     xlab = "Baseline factor G", main = "Observed support")
+abline(v = range(eval_g), col = c("steelblue", "firebrick"), lwd = 2)
+rug(s_cont$G, col = grDevices::adjustcolor("black", 0.25))
+```
+
+## Method Choice In One Table
+
+| Need | Use first | Then check | Avoid saying |
+|---|---|---|---|
+| Quick scalar benchmark | `dml_plr` | OLS/discrete sensitivity | "This is the whole dose-response curve" |
+| Smooth level curve | `kernel` | bandwidth and support | "Kernel removes all confounding concerns" |
+| Flexible adjusted level curve | `dml_flex` | learners, density, signal map | "The scalar summary is the main result" |
+| Observed average derivative | `dml_incremental` | density diagnostics and fold sensitivity | "It is just the average plotted slope" |
+| Fixed-reference comparison | `fdid_contrast()` after `kernel` or `dml_flex` | exact grid vs interpolation and available covariance/replicates | "All contrast intervals use the same variance source" |
+| Plot support | curve plot support options | mass points and sparse regions | "The support display is adjusted causal evidence" |
+
+## What Not To Compare Directly
+
+Do not line up `dml_plr`, `kernel`, `dml_flex`, and `dml_incremental` as if
+they estimate the same number. `dml_plr` is a scalar partially linear slope.
+`kernel` and `dml_flex` can report level and derivative curves. `dml_incremental`
+is an observed-population average derivative, not the average of a plotted
+`dml_flex` derivative curve. A fixed-reference contrast is a function of a
+stored level curve, not a new estimator.

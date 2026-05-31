@@ -19,6 +19,31 @@ The other two active project markdowns are:
 
 Package-standard files `NEWS.md` and `LICENSE.md` remain in place.
 
+## Tutorial Cleanup Status As Of 2026-05-31
+
+The P0 tutorial reorganization has been completed in the public tutorial
+source. The canonical source is now `tutorial/`, with rendered GitHub Pages
+output in `docs/`.
+
+Final chapter files:
+
+```text
+01-start.Rmd
+02-main.Rmd
+03-continuous-overview.Rmd
+04-kernel-continuous-g.Rmd
+05-dml-continuous-g.Rmd
+06-visualization.Rmd
+07-reporting-inference.Rmd
+08-sensitivity.Rmd
+```
+
+The obsolete source copies `tutorial-full-continuous-g/` and
+`tutorial-next-2026-05-30/` were removed after migration. Remaining tutorial
+follow-ups are reviewer/tester validation, future plotting-layer modernization
+documentation if that API is implemented, and any future theory-note sync if
+the inference semantics change.
+
 ## Current Status
 
 The package now supports the original binary-G methods and the new
@@ -188,6 +213,11 @@ Needed work:
 
 ### 4. Rewrite the Continuous G tutorial into a main path plus appendices
 
+Status as of 2026-05-31: complete for the public tutorial cleanup. The final
+structure is target-first rather than appendix-heavy, with focused chapters for
+continuous overview, kernel, DML, visualization, reporting/inference, and
+sensitivity. Historical details below are retained for provenance.
+
 The current tutorial remains too dense. The recommended organization from the
 2026-05-18 plan is:
 
@@ -238,6 +268,8 @@ Rewrite rules:
 - Keep default RStudio render fast.
 
 ### 5. Add a concise estimator-reporting section to the tutorial
+
+Status as of 2026-05-31: complete in `tutorial/07-reporting-inference.Rmd`.
 
 The tutorial should teach the difference between:
 
@@ -534,7 +566,9 @@ The next priority is to validate and harden it:
 
 ## Tutorial Audit Update Added 2026-05-31
 
-Completed in the new tutorial copy `tutorial-next-2026-05-30/`:
+The items below were first completed in the temporary tutorial copy
+`tutorial-next-2026-05-30/` and were then migrated into the canonical
+`tutorial/` source during the target-first cleanup:
 
 - Added a focused kernel chapter covering support diagnostics, estimation-grid
   choices, level and derivative curves, pointwise versus bootstrap
@@ -566,15 +600,12 @@ Completed in the new tutorial copy `tutorial-next-2026-05-30/`:
   supports `ref.g = "median"`, `"mean"`, `"min"`, `"max"`, or `"first"`,
   and supports quantile target selection through
   `target.type = "quantile"`.
-- Rendered the full copied tutorial book successfully. The original
-  `tutorial/` directory was not overwritten.
+- Rendered the full canonical tutorial book successfully into `docs/`.
 
 Open tutorial tasks:
 
-- Decide later whether `tutorial-next-2026-05-30/` should replace
-  `tutorial/`, be renamed, or remain as a comparison copy.
-- If the new copy becomes canonical, clean generated `_book`, cache, and IDE
-  files before shipping source-only documentation.
+- Tester/reviewer should audit package validation and rendered-site behavior
+  before ship.
 - Keep the new `plot(type = "contrast")` examples synchronized with any future
   changes to `fdid_contrast()` inference labels or package-wide plotting APIs.
 - After the package-wide plotting-layer decision is made, update the kernel

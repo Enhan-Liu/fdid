@@ -17,7 +17,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */
   vertical-align: middle;
 }
 /* CSS for syntax highlighting */
@@ -124,35 +124,6 @@ div.csl-indent {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 </head>
 
@@ -166,7 +137,7 @@ window.Quarto = {
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
         <i class="bi bi-search"></i>
@@ -180,7 +151,7 @@ window.Quarto = {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">fdid – User Manual</a> 
+      <a href="./">fdid – User Manual</a>
     </div>
       </div>
         <div class="mt-2 flex-shrink-0 align-items-center">
@@ -188,58 +159,64 @@ window.Quarto = {
         <div id="quarto-search" class="" title="Search"></div>
         </div>
         </div>
-    <div class="sidebar-menu-container"> 
+    <div class="sidebar-menu-container">
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./index.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Welcome</span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./01-start.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Get Started</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
   <a href="./02-main.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Binary G</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./03-continuous.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Continuous G</span></span></a>
+  <div class="sidebar-item-container">
+  <a href="./03-continuous-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Continuous-G Overview</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./03a-kernel-continuous-g.html" class="sidebar-item-text sidebar-link">
+  <div class="sidebar-item-container">
+  <a href="./04-kernel-continuous-g.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Kernel Estimator for Continuous G</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./03b-dml-continuous-g.html" class="sidebar-item-text sidebar-link">
+  <div class="sidebar-item-container">
+  <a href="./05-dml-continuous-g.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">DML Estimators for Continuous G</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./04-visualization.html" class="sidebar-item-text sidebar-link">
+  <div class="sidebar-item-container">
+  <a href="./06-visualization.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Visualization Options</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./05-sensitivity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Sensitivity Analysis</span></span></a>
+  <div class="sidebar-item-container">
+  <a href="./07-reporting-inference.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Reporting And Inference</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
+  <div class="sidebar-item-container">
+  <a href="./08-sensitivity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sensitivity Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container">
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">References</span></a>
   </div>
@@ -252,7 +229,7 @@ window.Quarto = {
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
-   
+
   <ul>
   <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a>
   <ul class="collapse">
@@ -275,11 +252,11 @@ window.Quarto = {
 
 <div class="quarto-title-meta">
 
-    
-  
-    
+
+
+
   </div>
-  
+
 
 
 </header>
@@ -287,55 +264,40 @@ window.Quarto = {
 
 <section id="welcome" class="level1 unnumbered">
 <h1 class="unnumbered">Welcome</h1>
-<p>This Quarto book serves as a user tutorial for the <code>fdid</code> package in R, which implements the <strong>Factorial Difference-in-Differences (FDID)</strong> framework introduced by <span class="citation" data-cites="xu2026factorial">Xu, Zhao, and Ding (<a href="references.html#ref-xu2026factorial" role="doc-biblioref">2026</a>)</span>[<a href="https://yiqingxu.org/papers/2025_fdid/fdid.pdf" target="_blank">Paper</a>]. This design is tailored for panel data settings where all units are exposed to a universal event but vary in a baseline factor <span class="math inline">\(G\)</span>, which can be binary or continuous depending on the estimator.</p>
-<p><code>fdid</code> provides four main user-facing functions:</p>
+<p>This book is the public tutorial for the <code>fdid</code> R package, which implements Factorial Difference-in-Differences (FDID) for panel data settings where all units experience a common event and differ in a baseline factor <code>G</code> <span class="citation" data-cites="xu2026factorial">(<a href="references.html#ref-xu2026factorial" role="doc-biblioref">Xu, Zhao, and Ding 2026</a>)</span>.</p>
+<p>The tutorial is organized around the target the analyst wants to report. The binary and discrete-<code>G</code> workflow comes first. Continuous-<code>G</code> workflows then separate scalar slopes, level curves, derivative curves, observed-population average derivatives, fixed-reference contrasts, and support diagnostics.</p>
+<p>Main user-facing functions:</p>
 <ul>
-<li><code>fdid_prepare()</code>: reshapes long format panel data into a wide <code>fdid()</code>-ready format.</li>
-<li><code>fdid()</code>: performs factorial difference-in-differences estimation using several methods.</li>
-<li><code>fdid_contrast()</code>: reports continuous-<span class="math inline">\(G\)</span> level contrasts from fitted curve objects.</li>
-<li><code>fdid_derivative()</code>: reports fixed-<span class="math inline">\(G\)</span> derivative values from fitted curve objects.</li>
-</ul>
-<p>And two S3 methods:</p>
-<ul>
-<li><code>summary()</code>: summarizes the estimation results.</li>
-<li><code>plot()</code>: visualizes raw means, dynamic effects, continuous-<span class="math inline">\(G\)</span> curves, and model comparisons.</li>
+<li><code>fdid_prepare()</code> reshapes long panel data into the wide format used by <code>fdid()</code>.</li>
+<li><code>fdid()</code> estimates binary, discrete, kernel continuous-<code>G</code>, and DML continuous-<code>G</code> FDID models.</li>
+<li><code>fdid_contrast()</code> reports continuous-<code>G</code> level contrasts from stored curve objects.</li>
+<li><code>fdid_derivative()</code> reports fixed-<code>G</code> derivative values from stored curve objects.</li>
+<li><code>summary()</code> and <code>plot()</code> display fitted objects.</li>
 </ul>
 <section id="organization" class="level2">
 <h2 class="anchored" data-anchor-id="organization">Organization</h2>
-<p>The user tutorial is structured into the following chapters:</p>
 <ul>
-<li><p><a href="01-start.html" class="quarto-xref">Chapter&nbsp;<span>1&nbsp; Get Started</span></a><br>
-Installation instructions and dataset description.</p></li>
-<li><p><a href="02-main.html" class="quarto-xref">Chapter&nbsp;<span>2&nbsp; Binary G</span></a><br>
-Data preparation, estimation with binary <span class="math inline">\(G\)</span>, and basic plots.</p></li>
-<li><p><a href="03-continuous.html" class="quarto-xref">Chapter&nbsp;<span>3&nbsp; Continuous G</span></a><br>
-Estimation with continuous <span class="math inline">\(G\)</span> using linear, kernel, and DML methods, including a roadmap for level curves, level contrasts, and derivative estimands.</p></li>
-<li><p><a href="03a-kernel-continuous-g.html" class="quarto-xref">Chapter&nbsp;<span>4&nbsp; Kernel Estimator for Continuous G</span></a><br>
-A focused kernel-estimator workflow: support diagnostics, estimation-grid choices, pointwise versus bootstrap curve bands, and reporting helpers.</p></li>
-<li><p><a href="03b-dml-continuous-g.html" class="quarto-xref">Chapter&nbsp;<span>5&nbsp; DML Estimators for Continuous G</span></a><br>
-A focused DML workflow: target mapping, scalar PLR, flexible DML curves, incremental average derivatives, inference labels, and sensitivity checks.</p></li>
-<li><p><a href="04-visualization.html" class="quarto-xref">Chapter&nbsp;<span>6&nbsp; Visualization Options</span></a><br>
-Extended visualization options, continuous-<span class="math inline">\(G\)</span> level and derivative curves, and method comparisons.</p></li>
-<li><p><a href="05-sensitivity.html" class="quarto-xref">Chapter&nbsp;<span>7&nbsp; Sensitivity Analysis</span></a><br>
-Sensitivity analysis for unmeasured confounding using <code>sensemakr</code>.</p></li>
+<li><a href="01-start.html" class="quarto-xref">Chapter&nbsp;<span>1&nbsp; Get Started</span></a> covers installation, loading, and the required data shape.</li>
+<li><a href="02-main.html" class="quarto-xref">Chapter&nbsp;<span>2&nbsp; Binary G</span></a> covers the original binary/discrete-<code>G</code> workflow.</li>
+<li><a href="03-continuous-overview.html" class="quarto-xref">Chapter&nbsp;<span>3&nbsp; Continuous-G Overview</span></a> maps user targets to continuous-<code>G</code> methods, support checks, and reporting views.</li>
+<li><a href="04-kernel-continuous-g.html" class="quarto-xref">Chapter&nbsp;<span>4&nbsp; Kernel Estimator for Continuous G</span></a> covers kernel level and derivative curves.</li>
+<li><a href="05-dml-continuous-g.html" class="quarto-xref">Chapter&nbsp;<span>5&nbsp; DML Estimators for Continuous G</span></a> covers DML scalar, flexible-curve, and incremental targets.</li>
+<li><a href="06-visualization.html" class="quarto-xref">Chapter&nbsp;<span>6&nbsp; Visualization Options</span></a> documents current base-graphics plotting.</li>
+<li><a href="07-reporting-inference.html" class="quarto-xref">Chapter&nbsp;<span>7&nbsp; Reporting And Inference</span></a> centralizes summaries, contrasts, derivatives, and interval labels.</li>
+<li><a href="08-sensitivity.html" class="quarto-xref">Chapter&nbsp;<span>8&nbsp; Sensitivity Analysis</span></a> gives applied sensitivity checks.</li>
 </ul>
 </section>
 <section id="contributors" class="level2">
 <h2 class="anchored" data-anchor-id="contributors">Contributors</h2>
 <ul>
-<li><a href="https://rivka.me/" target="_blank">Rivka Lipkovitz</a> (MIT)<br>
-</li>
+<li><a href="https://rivka.me/" target="_blank">Rivka Lipkovitz</a> (MIT)</li>
 <li><a href="https://enhan-liu.github.io/" target="_blank">Enhan Liu</a> (UChicago Harris)</li>
-<li><a href="https://yiqingxu.org/" target="_blank">Yiqing Xu</a> (Stanford)<br>
-</li>
+<li><a href="https://yiqingxu.org/" target="_blank">Yiqing Xu</a> (Stanford)</li>
 </ul>
 </section>
 <section id="report-bugs" class="level2">
 <h2 class="anchored" data-anchor-id="report-bugs">Report bugs</h2>
-<p>Please report any bugs to me (yiqingxu [at] stanford.edu) or submit an issue on <a href="https://github.com/xuyiqing/fdid/issues">GitHub</a>. Please include your minimally replicable code and data files and a <strong>panelView</strong> treatment status plot. Your feedback is highly valued!</p>
-<!-- badges: start -->
-<p>fect: <a href="https://www.tidyverse.org/lifecycle/#experimental"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" class="img-fluid" alt="Lifecycle: experimental"></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" class="img-fluid" alt="License: MIT"></a> <a href="https://cran.r-project.org/web/packages/fdid/index.html"><img src="https://cranlogs.r-pkg.org/badges/grand-total/fdid" alt="downloads: CRAN"></a></p>
-<!-- badges: end -->
+<p>Please report bugs on <a href="https://github.com/xuyiqing/fdid/issues">GitHub</a> with minimal replicable code, data, and a treatment-status plot when relevant.</p>
 
 
 <!-- -->
@@ -344,26 +306,8 @@ Sensitivity analysis for unmeasured confounding using <code>sensemakr</code>.</p
 <div id="ref-cao2022clans" class="csl-entry" role="listitem">
 Cao, Jiarui, Yiqing Xu, and Chuanchuan Zhang. 2022. <span>“Clans and Calamity: How Social Capital Saved Lives During China’s Great Famine.”</span> <em>Journal of Development Economics</em> 157: 102865.
 </div>
-<div id="ref-chernozhukov2018double" class="csl-entry" role="listitem">
-Chernozhukov, Victor, Denis Chetverikov, Mert Demirer, Esther Duflo, Christian Hansen, Whitney Newey, and James Robins. 2018. <span>“Double/Debiased Machine Learning for Treatment and Structural Parameters.”</span> <em>The Econometrics Journal</em> 21 (1): C1–68. <a href="https://doi.org/10.1111/ectj.12097">https://doi.org/10.1111/ectj.12097</a>.
-</div>
 <div id="ref-cinelli2020making" class="csl-entry" role="listitem">
 Cinelli, Carlos, and Chad Hazlett. 2020. <span>“Making Sense of Sensitivity: Extending Omitted Variable Bias.”</span> <em>Journal of the Royal Statistical Society: Series B</em> 82 (1): 39–67.
-</div>
-<div id="ref-hainmueller2019much" class="csl-entry" role="listitem">
-Hainmueller, Jens, Jonathan Mummolo, and Yiqing Xu. 2019. <span>“How Much Should We Trust Estimates from Multiplicative Interaction Models? Simple Tools to Improve Empirical Practice.”</span> <em>Political Analysis</em> 27 (2): 163–92.
-</div>
-<div id="ref-kennedy2017non" class="csl-entry" role="listitem">
-Kennedy, Edward H, Zongming Ma, Matthew D McHugh, and Dylan S Small. 2017. <span>“Non-Parametric Methods for Doubly Robust Estimation of Continuous Treatment Effects.”</span> <em>Journal of the Royal Statistical Society Series B: Statistical Methodology</em> 79 (4): 1229–45.
-</div>
-<div id="ref-liu2025practical" class="csl-entry" role="listitem">
-Liu, Jiehan, Ziyi Liu, and Yiqing Xu. 2025. <span>“A Practical Guide to Estimating Conditional Marginal Effects: Modern Approaches.”</span> <em>arXiv Preprint arXiv:2504.01355</em>.
-</div>
-<div id="ref-robinson1988root" class="csl-entry" role="listitem">
-Robinson, Peter M. 1988. <span>“Root-n-Consistent Semiparametric Regression.”</span> <em>Econometrica</em>, 931–54.
-</div>
-<div id="ref-semenova2021debiased" class="csl-entry" role="listitem">
-Semenova, Vira, and Victor Chernozhukov. 2021. <span>“Debiased Machine Learning of Conditional Average Treatment Effects and Other Causal Functions.”</span> <em>The Econometrics Journal</em> 24 (2): 264–89. <a href="https://doi.org/10.1093/ectj/utaa027">https://doi.org/10.1093/ectj/utaa027</a>.
 </div>
 <div id="ref-xu2026factorial" class="csl-entry" role="listitem">
 Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Differences.”</span> <em>Journal of the American Statistical Association</em>, no. just-accepted: 1–23.
@@ -384,7 +328,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
     anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
-        if (clz.startsWith('code-annotation-')) {                     
+        if (clz.startsWith('code-annotation-')) {
           return true;
         }
       }
@@ -404,11 +348,11 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
         button.setAttribute("data-bs-title", "Copied!");
-        tooltip = new bootstrap.Tooltip(button, 
-          { trigger: "manual", 
+        tooltip = new bootstrap.Tooltip(button,
+          { trigger: "manual",
             customClass: "code-copy-button-tooltip",
             offset: [0, -8]});
-        tooltip.show();    
+        tooltip.show();
       }
       setTimeout(function() {
         if (tooltip) {
@@ -481,7 +425,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
           if (codeDiv.classList.contains(fromCls)) {
             codeDiv.classList.remove(fromCls);
             codeDiv.classList.add(toCls);
-          } 
+          }
         }
         return false;
       }
@@ -535,7 +479,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
       if (onUntriggerFn) {
         config.onUntrigger = onUntriggerFn;
       }
-      window.tippy(el, config); 
+      window.tippy(el, config);
     }
     const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
     for (var i=0; i<noterefs.length; i++) {
@@ -610,7 +554,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
       tippyHover(xref, undefined, function(instance) {
         instance.disable();
         let url = xref.getAttribute('href');
-        let hash = undefined; 
+        let hash = undefined;
         if (url.startsWith('#')) {
           hash = url;
         } else {
@@ -638,7 +582,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
               if (note !== null) {
                 const html = processXRef(id, note);
                 instance.setContent(html);
-              } 
+              }
             }).finally(() => {
               instance.enable();
               instance.show();
@@ -662,7 +606,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
               }
               const html = processXRef(null, note);
               instance.setContent(html);
-            } 
+            }
           }).finally(() => {
             instance.enable();
             instance.show();
@@ -702,7 +646,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
               height = bottom - top;
             }
             if (top !== null && height !== null && parent !== null) {
-              // cook up a div (if necessary) and position it 
+              // cook up a div (if necessary) and position it
               let div = window.document.getElementById("code-annotation-line-highlight");
               if (div === null) {
                 div = window.document.createElement("div");
@@ -834,66 +778,53 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Welcome {.unnumbered}</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>This Quarto book serves as a user tutorial for the <span class="in">`fdid`</span> package in R, which implements the **Factorial Difference-in-Differences (FDID)** framework introduced by @xu2026factorial<span class="sc">\[</span><span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://yiqingxu.org/papers/2025_fdid/fdid.pdf"</span><span class="ot"> target</span><span class="op">=</span><span class="st">"_blank"</span><span class="dt">&gt;</span>Paper<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span><span class="sc">\]</span>. This design is tailored for panel data settings where all units are exposed to a universal event but vary in a baseline factor $G$, which can be binary or continuous depending on the estimator.</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="in">`fdid`</span> provides four main user-facing functions:</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`fdid_prepare()`</span>: reshapes long format panel data into a wide <span class="in">`fdid()`</span>-ready format.</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`fdid()`</span>: performs factorial difference-in-differences estimation using several methods.</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`fdid_contrast()`</span>: reports continuous-$G$ level contrasts from fitted curve objects.</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`fdid_derivative()`</span>: reports fixed-$G$ derivative values from fitted curve objects.</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>And two S3 methods:</span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`summary()`</span>: summarizes the estimation results.</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`plot()`</span>: visualizes raw means, dynamic effects, continuous-$G$ curves, and model comparisons.</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">## Organization</span></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>The user tutorial is structured into the following chapters:</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Chapter @sec-start</span><span class="co">]</span>\</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>    Installation instructions and dataset description.</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Chapter @sec-binary</span><span class="co">]</span>\</span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    Data preparation, estimation with binary $G$, and basic plots.</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>This book is the public tutorial for the <span class="in">`fdid`</span> R package, which implements</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>Factorial Difference-in-Differences (FDID) for panel data settings where all</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>units experience a common event and differ in a baseline factor <span class="in">`G`</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">@xu2026factorial</span><span class="co">]</span>.</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>The tutorial is organized around the target the analyst wants to report. The</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>binary and discrete-<span class="in">`G`</span> workflow comes first. Continuous-<span class="in">`G`</span> workflows then</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>separate scalar slopes, level curves, derivative curves, observed-population</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>average derivatives, fixed-reference contrasts, and support diagnostics.</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>Main user-facing functions:</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fdid_prepare()`</span> reshapes long panel data into the wide format used by</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="in">`fdid()`</span>.</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fdid()`</span> estimates binary, discrete, kernel continuous-<span class="in">`G`</span>, and DML</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  continuous-<span class="in">`G`</span> FDID models.</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fdid_contrast()`</span> reports continuous-<span class="in">`G`</span> level contrasts from stored curve</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  objects.</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`fdid_derivative()`</span> reports fixed-<span class="in">`G`</span> derivative values from stored curve</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  objects.</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`summary()`</span> and <span class="in">`plot()`</span> display fitted objects.</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="fu">## Organization</span></span>
 <span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Chapter @sec-continuous</span><span class="co">]</span>\</span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    Estimation with continuous $G$ using linear, kernel, and DML methods,</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    including a roadmap for level curves, level contrasts, and derivative</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    estimands.</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Chapter @sec-kernel-continuous</span><span class="co">]</span>\</span>
-<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    A focused kernel-estimator workflow: support diagnostics, estimation-grid</span>
-<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    choices, pointwise versus bootstrap curve bands, and reporting helpers.</span>
-<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Chapter @sec-dml-continuous</span><span class="co">]</span>\</span>
-<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    A focused DML workflow: target mapping, scalar PLR, flexible DML curves,</span>
-<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    incremental average derivatives, inference labels, and sensitivity checks.</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Chapter @sec-start</span><span class="co">]</span> covers installation, loading, and the required data</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  shape.</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Chapter @sec-binary</span><span class="co">]</span> covers the original binary/discrete-<span class="in">`G`</span> workflow.</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Chapter @sec-continuous-overview</span><span class="co">]</span> maps user targets to continuous-<span class="in">`G`</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  methods, support checks, and reporting views.</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Chapter @sec-kernel-continuous</span><span class="co">]</span> covers kernel level and derivative curves.</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Chapter @sec-dml-continuous</span><span class="co">]</span> covers DML scalar, flexible-curve, and</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  incremental targets.</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Chapter @sec-visualization</span><span class="co">]</span> documents current base-graphics plotting.</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Chapter @sec-reporting-inference</span><span class="co">]</span> centralizes summaries, contrasts,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  derivatives, and interval labels.</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Chapter @sec-sensitivity</span><span class="co">]</span> gives applied sensitivity checks.</span>
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Chapter @sec-visualization</span><span class="co">]</span>\</span>
-<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a>    Extended visualization options, continuous-$G$ level and derivative curves,</span>
-<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>    and method comparisons.</span>
-<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Chapter @sec-sensitivity</span><span class="co">]</span>\</span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>    Sensitivity analysis for unmeasured confounding using <span class="in">`sensemakr`</span>.</span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="fu">## Contributors</span></span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Rivka Lipkovitz</span><span class="co">](https://rivka.me/)</span>{target="_blank"} (MIT)\</span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Enhan Liu</span><span class="co">](https://enhan-liu.github.io/)</span>{target="_blank"} (UChicago Harris)</span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="co">[</span><span class="ot">Yiqing Xu</span><span class="co">](https://yiqingxu.org/)</span>{target="_blank"} (Stanford)\</span>
-<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## Report bugs</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>Please report any bugs to me (yiqingxu <span class="sc">\[</span>at<span class="sc">\]</span> stanford.edu) or submit an issue on <span class="co">[</span><span class="ot">GitHub</span><span class="co">](https://github.com/xuyiqing/fdid/issues)</span>. Please include your minimally replicable code and data files and a **panelView** treatment status plot. Your feedback is highly valued!</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- badges: start --&gt;</span></span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a>fect: <span class="co">[</span><span class="al">![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)</span><span class="co">](https://www.tidyverse.org/lifecycle/#experimental)</span> <span class="co">[</span><span class="al">![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)</span><span class="co">](https://opensource.org/licenses/MIT)</span> <span class="co">[</span><span class="ot">&lt;img src="https://cranlogs.r-pkg.org/badges/grand-total/fdid" alt="downloads: CRAN"/&gt;</span><span class="co">](https://cran.r-project.org/web/packages/fdid/index.html)</span></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- badges: end --&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="fu">## Contributors</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Rivka Lipkovitz</span><span class="co">](https://rivka.me/)</span>{target="_blank"} (MIT)</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Enhan Liu</span><span class="co">](https://enhan-liu.github.io/)</span>{target="_blank"} (UChicago Harris)</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">Yiqing Xu</span><span class="co">](https://yiqingxu.org/)</span>{target="_blank"} (Stanford)</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## Report bugs</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>Please report bugs on <span class="co">[</span><span class="ot">GitHub</span><span class="co">](https://github.com/xuyiqing/fdid/issues)</span> with</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>minimal replicable code, data, and a treatment-status plot when relevant.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

@@ -1,0 +1,121 @@
+# Kernel Estimator for Continuous G {#sec-kernel-continuous}
+
+```{r setup-kernel, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  cache = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+The kernel estimator is the transparent first curve workflow for continuous
+`G`. It estimates a level curve `mu(g)` and a derivative curve `delta(g)` over
+the supplied `eval_g` grid.
+
+## When Kernel Is The Right First Curve
+
+Use `method = "kernel"` when the main object is a smooth curve and you want a
+direct view of how the FDID response changes with `G`. It is especially useful
+as a first curve because the evaluation grid, bandwidth, and support choices
+are explicit.
+
+## Evaluation Grid And Bandwidth
+
+```{r kernel-grid-fit, eval=FALSE}
+fit_kernel <- fdid(
+  s_cont,
+  tr_period = tr_period,
+  ref_period = ref_period,
+  method = "kernel",
+  eval_g = eval_g,
+  h0 = 0.18,
+  vartype = "robust"
+)
+```
+
+`eval_g` is the grid where level and derivative quantities are estimated.
+Leaving `h0 = NULL` requests bandwidth selection; setting `h0` fixes the
+bandwidth for reproducibility or sensitivity checks.
+
+## Level Curve
+
+```{r kernel-level, eval=FALSE}
+plot(fit_kernel, type = "curve", curve = "level",
+     interval = "pointwise", Xdistr = "rug")
+```
+
+The level curve is the fitted event-period response `mu(g)`.
+
+## Derivative Curve
+
+```{r kernel-derivative, eval=FALSE}
+plot(fit_kernel, type = "curve", curve = "derivative",
+     interval = "pointwise", Xdistr = "rug")
+```
+
+The derivative curve is the local slope `delta(g)` on the evaluation grid.
+Derivative interpretation is more sensitive to bandwidth and support than
+level interpretation.
+
+## Pointwise Analytical Intervals
+
+With `vartype = "robust"`, kernel pointwise intervals use stored analytical
+standard errors for each grid point. They are pointwise intervals, not uniform
+bands.
+
+## Bootstrap Pointwise Intervals
+
+With `vartype = "bootstrap"`, kernel pointwise intervals use stored bootstrap
+curve replicates.
+
+```{r kernel-bootstrap, eval=FALSE}
+fit_kernel_boot <- fdid(
+  s_cont,
+  tr_period = tr_period,
+  ref_period = ref_period,
+  method = "kernel",
+  eval_g = eval_g,
+  h0 = 0.18,
+  vartype = "bootstrap",
+  boot = 199,
+  parallel = FALSE
+)
+```
+
+Use substantially more replications in a final empirical report than in a fast
+tutorial render.
+
+## Bootstrap Quantile-Envelope Bands
+
+Kernel bootstrap bands are finite-grid quantile-envelope bands over stored
+bootstrap curves. They should not be described as studentized sup-`t` bands.
+
+```{r kernel-bands, eval=FALSE}
+plot(fit_kernel_boot, type = "curve", curve = "level",
+     interval = "both", show.uniform.CI = TRUE)
+```
+
+## Contrast And Derivative Reporting
+
+Use reporting helpers when the table needs a value, a level contrast, or a
+fixed-`G` derivative instead of the whole plot.
+
+```{r kernel-reporting, eval=FALSE}
+fdid_contrast(fit_kernel_boot, g0 = eval_g[2], g1 = eval_g[7])
+fdid_derivative(fit_kernel_boot, g0 = eval_g[5])
+plot(fit_kernel_boot, type = "contrast", ref.g = "median",
+     target.type = "quantile", target.g = 5)
+```
+
+Exact-grid reporting can use stored covariance or replicate information when
+available. Interpolated reporting should be labeled as interpolated.
+
+## Kernel Option Checklist
+
+- Choose an interior `eval_g` grid with enough support.
+- Compare at least one bandwidth sensitivity run.
+- Label analytical intervals as pointwise.
+- Label bootstrap bands as quantile-envelope bands.
+- Report fixed-reference contrasts through `fdid_contrast()` or
+  `plot(type = "contrast")`.

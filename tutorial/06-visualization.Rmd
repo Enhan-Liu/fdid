@@ -1,0 +1,102 @@
+# Visualization Options {#sec-visualization}
+
+```{r setup-visualization, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  cache = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+This chapter documents the current base-graphics plotting behavior. The
+package-wide ggplot/autoplot modernization is deferred and should not be
+promised as current behavior.
+
+## Raw, Dynamic, And Overlap Displays
+
+```{r plot-binary-displays, eval=FALSE}
+plot(fit_ols1, type = "raw", connected = TRUE)
+plot(fit_ols1, type = "dynamic", connected = TRUE)
+plot(fit_aipw, type = "overlap")
+```
+
+Raw plots show descriptive outcome means. Dynamic plots show time-indexed FDID
+estimates. Overlap plots are propensity-score diagnostics for binary methods
+that store propensity scores.
+
+## Continuous-G Curve Displays
+
+```{r plot-curves, eval=FALSE}
+plot(fit_kernel, type = "curve", curve = "level")
+plot(fit_flex, type = "curve", curve = "level")
+```
+
+For `kernel` and `dml_flex`, the curve plot displays stored `eval_g` rows. It
+does not re-estimate or densify the curve inside `plot()`.
+
+## Level, Derivative, And Both
+
+```{r plot-level-derivative, eval=FALSE}
+plot(fit_kernel, type = "curve", curve = "level")
+plot(fit_kernel, type = "curve", curve = "derivative")
+plot(fit_kernel, type = "curve", curve = "both")
+```
+
+Use explicit `curve` values in reports so readers know which target is being
+shown.
+
+## Pointwise Versus Stored Uniform/Simultaneous Intervals
+
+`interval = "pointwise"` displays pointwise intervals when available.
+`interval = "uniform"` or `show.uniform.CI = TRUE` uses stored bands when the
+fit contains them. Kernel bootstrap bands are quantile-envelope bands.
+Non-BLP `dml_flex` bands are practical signal-mapping multiplier bands.
+BLP-spline DML can use finite-grid covariance/Gaussian max-`t` bands when
+usable.
+
+## Support Displays: Rug, Density, Histogram, Separate Panel
+
+```{r plot-support, eval=FALSE}
+plot(fit_kernel, type = "curve", Xdistr = "rug")
+plot(fit_kernel, type = "curve", Xdistr = "density")
+plot(fit_kernel, type = "curve", Xdistr = "histogram",
+     support.panel = "separate")
+```
+
+Support displays are descriptive overlays or panels. They help identify sparse
+regions of `G`; they are not adjusted causal estimates.
+
+## Evaluation-Grid And Marked-G Displays
+
+```{r plot-markers, eval=FALSE}
+plot(fit_kernel, type = "curve", show.eval_g = TRUE,
+     diff.values = c(eval_g[2], eval_g[5], eval_g[8]))
+```
+
+Use evaluation-grid ticks and marked values to connect plot features with
+reported contrasts or derivative values.
+
+## Fixed-Reference Contrast Coefficient Plot
+
+```{r plot-contrast, eval=FALSE}
+plot(fit_kernel, type = "contrast", ref.g = "median",
+     target.type = "quantile", target.g = 5)
+```
+
+The contrast plot displays level differences relative to a reference value. It
+delegates estimates and intervals to `fdid_contrast()` and includes an
+algebraic-zero reference row by default.
+
+## Styling And Base-Graphics Arguments
+
+Plots use base graphics and accept ordinary arguments such as `main`, `xlab`,
+`ylab`, `xlim`, `ylim`, colors, line widths, point characters, and support
+display controls. Save and restore `par()` if you change multi-panel layout in
+your own scripts.
+
+## What Will Change If The Package-Wide Plotting Layer Is Implemented
+
+A future plotting-layer pass may add reusable plot-data builders and optional
+ggplot/autoplot outputs. Until that happens, the stable public contract is the
+current S3 `plot()` interface and its base-graphics output.

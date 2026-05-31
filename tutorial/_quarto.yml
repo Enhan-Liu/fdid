@@ -1,5 +1,6 @@
 project:
   type: book
+  output-dir: ../docs
 
 book:
   title: "fdid -- User Manual"
@@ -10,9 +11,12 @@ book:
     - index.qmd
     - 01-start.Rmd
     - 02-main.Rmd
-    - 03-continuous.Rmd
-    - 04-visualization.Rmd
-    - 05-sensitivity.Rmd
+    - 03-continuous-overview.Rmd
+    - 04-kernel-continuous-g.Rmd
+    - 05-dml-continuous-g.Rmd
+    - 06-visualization.Rmd
+    - 07-reporting-inference.Rmd
+    - 08-sensitivity.Rmd
     - references.qmd
 
 delete_merged_file: true
@@ -32,6 +36,6 @@ format:
     toc-depth: 3
 
 knitr:
-  opts_chunk: 
+  opts_chunk:
     collapse: true
     comment: "#>"

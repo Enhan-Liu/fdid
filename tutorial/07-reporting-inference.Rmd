@@ -1,0 +1,93 @@
+# Reporting And Inference {#sec-reporting-inference}
+
+```{r setup-reporting, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  cache = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+This chapter centralizes reporting and inference labels so the estimator
+chapters can stay focused on workflows.
+
+## `summary()`
+
+```{r summary-reporting, eval=FALSE}
+summary(fit_ols1)
+summary(fit_kernel)
+summary(fit_plr)
+summary(fit_incremental)
+```
+
+`summary()` reports the scalar event and dynamic summaries stored by the fitted
+object. For scalar DML methods, read the DML inference label rather than
+assuming a bootstrap or refit procedure.
+
+## `fdid_contrast()`
+
+```{r contrast-reporting, eval=FALSE}
+fdid_contrast(fit_kernel, g0 = eval_g[2], g1 = eval_g[7])
+fdid_contrast(fit_flex, g0 = eval_g[2], g1 = eval_g[7],
+              interpolate = TRUE)
+```
+
+`fdid_contrast()` reports a fixed-reference level contrast such as
+`mu(g1) - mu(g0)` for kernel or `theta(g1) - theta(g0)` for `dml_flex`.
+
+## `fdid_derivative()`
+
+```{r derivative-reporting, eval=FALSE}
+fdid_derivative(fit_kernel, g0 = eval_g[5])
+fdid_derivative(fit_flex, g0 = eval_g[5])
+```
+
+`fdid_derivative()` reports a derivative value at a fixed `G`. It is distinct
+from the scalar observed-population average derivative reported by
+`dml_incremental`.
+
+## When Contrast SEs Use Stored Covariance
+
+Exact-grid contrasts can use stored covariance matrices when the fit provides
+them. Kernel bootstrap fits may store curve covariance matrices. `dml_flex`
+with `signal_map = "blp_spline"` can store finite-grid covariance matrices for
+level and derivative curves.
+
+## When Contrast SEs Use Replicate Curves
+
+If stored replicate curves are available, contrast and value reporting can use
+the empirical replicate distribution. Kernel bootstrap fits and DML multiplier
+fits may provide these replicate arrays depending on options.
+
+## When Intervals Are Pointwise Fallbacks
+
+When covariance or replicate information is unavailable, reporting helpers may
+fall back to pointwise endpoint information. Label these as pointwise or
+approximate fallback intervals; do not present them as efficient contrast
+inference.
+
+## How To Interpret Simultaneous Bands
+
+Simultaneous bands are finite-grid statements over the stored `eval_g` grid.
+Kernel bootstrap bands are quantile-envelope bands. Non-BLP `dml_flex` bands
+are practical signal-mapping multiplier bands. BLP-spline bands use
+finite-grid covariance/Gaussian max-`t` calculations when available.
+
+## What Is Bootstrap, What Is Analytical, What Is Multiplier
+
+| Label | Meaning |
+|---|---|
+| Analytical | Standard errors computed from fitted analytical formulas |
+| Bootstrap | Stored resampled curve replicates or percentile intervals |
+| Multiplier | Multiplier draws over stored influence or signal values |
+| Gaussian max-`t` | Finite-grid critical value from a covariance matrix |
+
+The label should come from the fitted object whenever possible.
+
+## Known Open Research-Level Inference Items
+
+The package provides practical reporting for curves, contrasts, and
+derivatives. Research-level work remains for theorem-level efficient uniform
+DML bands and full influence-function storage for all non-BLP flexible curve
+paths. Until that changes, use conservative labels in reports.

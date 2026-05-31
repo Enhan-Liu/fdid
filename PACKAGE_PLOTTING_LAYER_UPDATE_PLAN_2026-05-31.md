@@ -45,6 +45,13 @@ plot now includes the reference row by default, supports character `ref.g`
 rules, and supports quantile target selection through
 `target.type = "quantile"`.
 
+Tutorial cleanup note, later on 2026-05-31: the canonical tutorial was
+rewritten into the final eight-chapter `tutorial/` structure and the rendered
+site was regenerated in `docs/`. Chapter 6 now documents the current
+base-graphics plotting behavior only. Package-wide plot-data,
+ggplot/autoplot, and `fdid_autoplot()` modernization remain deferred future
+work and are not promised as current tutorial behavior.
+
 The plan is based on a full package-level read of the current `fdid-main`
 plotting surface, continuous-G estimator outputs, package markdowns, FDID
 Notes, tutorials, and the local `interflex-master` plotting implementation.
@@ -160,12 +167,11 @@ Current documentation-only plotting surfaces:
 
 - `fdid-main/vignettes/fdid.Rmd` uses `plot(result, type = "raw")` and
   `plot(result, type = "dynamic")` in the package vignette;
-- `fdid-main/tutorial/04-visualization.Rmd` and the mirrored
-  `tutorial-full-continuous-g/04-visualization.Rmd` contain many base
-  `plot.fdid()` examples for raw, dynamic, overlap, and curve displays;
-- `fdid-main/tutorial/03-continuous.Rmd` and its full tutorial mirror include
-  a tutorial-only helper, `plot_curve_overlay()`, for overlaying stored curve
-  outputs and truth curves in synthetic examples.
+- `fdid-main/tutorial/06-visualization.Rmd` is now the canonical tutorial
+  reference for current base-graphics plotting behavior;
+- the previous mirrored tutorial source trees were removed during the
+  target-first tutorial cleanup, so future plotting documentation updates
+  should edit `tutorial/` only.
 
 These tutorial-only plotting helpers are not package API, but they should be
 reviewed during the tutorial rewrite and either replaced by the new plotting

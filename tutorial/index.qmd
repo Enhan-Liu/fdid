@@ -1,53 +1,49 @@
 # Welcome {.unnumbered}
 
-This Quarto book serves as a user tutorial for the `fdid` package in R, which implements the **Factorial Difference-in-Differences (FDID)** framework introduced by @xu2026factorial\[<a href="https://yiqingxu.org/papers/2025_fdid/fdid.pdf" target="_blank">Paper</a>\]. This design is tailored for panel data settings where all units are exposed to a universal event but vary in a baseline factor $G$, which can be binary or continuous depending on the estimator.
+This book is the public tutorial for the `fdid` R package, which implements
+Factorial Difference-in-Differences (FDID) for panel data settings where all
+units experience a common event and differ in a baseline factor `G`
+[@xu2026factorial].
 
-`fdid` provides four main user-facing functions:
+The tutorial is organized around the target the analyst wants to report. The
+binary and discrete-`G` workflow comes first. Continuous-`G` workflows then
+separate scalar slopes, level curves, derivative curves, observed-population
+average derivatives, fixed-reference contrasts, and support diagnostics.
 
--   `fdid_prepare()`: reshapes long format panel data into a wide `fdid()`-ready format.
--   `fdid()`: performs factorial difference-in-differences estimation using several methods.
--   `fdid_contrast()`: reports continuous-$G$ level contrasts from fitted curve objects.
--   `fdid_derivative()`: reports fixed-$G$ derivative values from fitted curve objects.
+Main user-facing functions:
 
-And two S3 methods:
-
--   `summary()`: summarizes the estimation results.
--   `plot()`: visualizes raw means, dynamic effects, continuous-$G$ curves, and model comparisons.
+- `fdid_prepare()` reshapes long panel data into the wide format used by
+  `fdid()`.
+- `fdid()` estimates binary, discrete, kernel continuous-`G`, and DML
+  continuous-`G` FDID models.
+- `fdid_contrast()` reports continuous-`G` level contrasts from stored curve
+  objects.
+- `fdid_derivative()` reports fixed-`G` derivative values from stored curve
+  objects.
+- `summary()` and `plot()` display fitted objects.
 
 ## Organization
 
-The user tutorial is structured into the following chapters:
-
--   [Chapter @sec-start]\
-    Installation instructions and dataset description.
-
--   [Chapter @sec-binary]\
-    Data preparation, estimation with binary $G$, and basic plots.
-
--   [Chapter @sec-continuous]\
-    Estimation with continuous $G$ using linear, kernel, and DML methods,
-    including level curves, level contrasts, and derivative estimands.
-
--   [Chapter @sec-visualization]\
-    Extended visualization options, continuous-$G$ level and derivative curves,
-    and method comparisons.
-
--   [Chapter @sec-sensitivity]\
-    Sensitivity analysis for unmeasured confounding using `sensemakr`.
+- [Chapter @sec-start] covers installation, loading, and the required data
+  shape.
+- [Chapter @sec-binary] covers the original binary/discrete-`G` workflow.
+- [Chapter @sec-continuous-overview] maps user targets to continuous-`G`
+  methods, support checks, and reporting views.
+- [Chapter @sec-kernel-continuous] covers kernel level and derivative curves.
+- [Chapter @sec-dml-continuous] covers DML scalar, flexible-curve, and
+  incremental targets.
+- [Chapter @sec-visualization] documents current base-graphics plotting.
+- [Chapter @sec-reporting-inference] centralizes summaries, contrasts,
+  derivatives, and interval labels.
+- [Chapter @sec-sensitivity] gives applied sensitivity checks.
 
 ## Contributors
 
--   [Rivka Lipkovitz](https://rivka.me/){target="_blank"} (MIT)\
--   [Enhan Liu](https://enhan-liu.github.io/){target="_blank"} (UChicago Harris)
--   [Yiqing Xu](https://yiqingxu.org/){target="_blank"} (Stanford)\
-
+- [Rivka Lipkovitz](https://rivka.me/){target="_blank"} (MIT)
+- [Enhan Liu](https://enhan-liu.github.io/){target="_blank"} (UChicago Harris)
+- [Yiqing Xu](https://yiqingxu.org/){target="_blank"} (Stanford)
 
 ## Report bugs
 
-Please report any bugs to me (yiqingxu \[at\] stanford.edu) or submit an issue on [GitHub](https://github.com/xuyiqing/fdid/issues). Please include your minimally replicable code and data files and a **panelView** treatment status plot. Your feedback is highly valued!
-
-<!-- badges: start -->
-
-fect: [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [<img src="https://cranlogs.r-pkg.org/badges/grand-total/fdid" alt="downloads: CRAN"/>](https://cran.r-project.org/web/packages/fdid/index.html)
-
-<!-- badges: end -->
+Please report bugs on [GitHub](https://github.com/xuyiqing/fdid/issues) with
+minimal replicable code, data, and a treatment-status plot when relevant.

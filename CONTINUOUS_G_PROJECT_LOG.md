@@ -21,6 +21,50 @@ The other active markdowns are:
 
 Package-standard `NEWS.md` and `LICENSE.md` remain separate.
 
+## 2026-05-31 Target-First Tutorial Cleanup
+
+Scope: tutorial source consolidation, rendered GitHub Pages refresh, project
+planning/log updates, and architecture/run artifacts. No R estimator,
+inference, plotting, `man/`, `tests/`, `NAMESPACE`, or `DESCRIPTION` files
+were edited.
+
+- Consolidated the public tutorial source into one canonical `tutorial/`
+  directory.
+- Rebuilt the tutorial as eight target-first chapters:
+  `01-start.Rmd`, `02-main.Rmd`, `03-continuous-overview.Rmd`,
+  `04-kernel-continuous-g.Rmd`, `05-dml-continuous-g.Rmd`,
+  `06-visualization.Rmd`, `07-reporting-inference.Rmd`, and
+  `08-sensitivity.Rmd`.
+- Removed obsolete tutorial source copies:
+  `tutorial-full-continuous-g/` and `tutorial-next-2026-05-30/`.
+- Removed stale placeholder `tutorial/summary.qmd`.
+- Updated `tutorial/_quarto.yml` to render directly into `docs/` and removed
+  references to deleted chapter names.
+- Regenerated `docs/` from the final tutorial source and restored
+  `docs/.nojekyll`.
+- Centralized conservative inference language: kernel bootstrap bands are
+  quantile-envelope bands, non-BLP `dml_flex` bands are practical
+  signal-mapping multiplier bands, and BLP-spline DML is a signal map with
+  finite-grid covariance/Gaussian max-`t` bands when available.
+- Updated `TUTORIAL_CLEANUP_PLAN_2026-05-31.md`, `TODO.md`,
+  `PACKAGE_PLOTTING_LAYER_UPDATE_PLAN_2026-05-31.md`, and architecture/run
+  artifacts.
+
+Verification:
+
+- `quarto render tutorial`: blocked because `quarto` was not on `PATH`.
+- `/Applications/RStudio.app/Contents/Resources/app/quarto/bin/quarto render tutorial`:
+  pass; output created in `docs/` with the final chapter names.
+- Stale rendered chapter scan: pass; no deleted chapter pages remain in
+  `docs/`.
+- `git diff --cached --check`: pass after trimming generated HTML trailing
+  whitespace.
+- File hygiene scan for `.DS_Store`, `.Rhistory`, and `Rplots.pdf`: pass.
+- Staged scope scan: pass; no `R/`, `man/`, `tests/`, `NAMESPACE`, or
+  `DESCRIPTION` files changed.
+- Package build/install/test/check validation: pending tester audit by design;
+  scriber did not run package validation commands in this docs-only pass.
+
 ## 2026-05-31 Review-Driven Package-Impact Fixes
 
 Scope: package operation and build-impact items from the StatsClaw

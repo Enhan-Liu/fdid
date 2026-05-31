@@ -1,0 +1,131 @@
+# DML Estimators for Continuous G {#sec-dml-continuous}
+
+```{r setup-dml, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  cache = FALSE,
+  message = FALSE,
+  warning = FALSE
+)
+```
+
+DML workflows in `fdid` are target-specific orthogonal-score workflows. Do not
+treat them as interchangeable estimators for one quantity.
+
+## DML Targets
+
+| Method | Target | Main output |
+|---|---|---|
+| `dml_plr` | Scalar partially linear dose slope | `summary()` |
+| `dml_flex` | Flexible level curve `theta(g)` and derivative `theta_prime(g)` | curve plots, `fdid_contrast()`, `fdid_derivative()` |
+| `dml_incremental` | Observed-population average derivative | `summary()` and density diagnostics |
+| `dml_binary` | Binary-`G` AIPW/IRM contrast | `summary()` |
+
+All continuous-treatment DML paths use the FDID first-difference outcome
+`Delta Y_i = mean(Y_i, event) - Y_i, ref` conceptually, then apply
+cross-fitted nuisance learning and target-specific orthogonal scores.
+
+## `dml_plr`: Scalar Linear Dose Slope
+
+```{r dml-plr, eval=FALSE}
+fit_plr <- fdid(
+  s_cont,
+  tr_period = tr_period,
+  ref_period = ref_period,
+  method = "dml_plr",
+  learner = "linear",
+  K = 3,
+  S = 1,
+  dml_inference = "score"
+)
+summary(fit_plr)
+```
+
+`dml_plr` is a scalar benchmark. It should not be described as the whole
+continuous-`G` curve.
+
+## `dml_flex`: Flexible Level And Derivative Curves
+
+```{r dml-flex, eval=FALSE}
+fit_flex <- fdid(
+  s_cont,
+  tr_period = tr_period,
+  ref_period = ref_period,
+  method = "dml_flex",
+  learner = "linear",
+  eval_g = eval_g,
+  K = 3,
+  S = 1,
+  density_method = "residual_kde",
+  signal_map = "spline",
+  boot = 199
+)
+
+plot(fit_flex, type = "curve", curve = "level")
+plot(fit_flex, type = "curve", curve = "derivative")
+```
+
+`dml_flex` targets a flexible level curve and derivative curve after nuisance
+adjustment. Derivative estimates are usually more fragile than level estimates.
+
+## `dml_incremental`: Observed Average Derivative
+
+```{r dml-incremental, eval=FALSE}
+fit_incremental <- fdid(
+  s_cont,
+  tr_period = tr_period,
+  ref_period = ref_period,
+  method = "dml_incremental",
+  learner = "linear",
+  K = 3,
+  S = 1,
+  density_method = "residual_kde"
+)
+summary(fit_incremental)
+```
+
+`dml_incremental` reports an observed-population average derivative. It is not
+merely the average of a plotted `dml_flex` derivative curve.
+
+## Learners, Cross-Fitting, And Repeated Splits
+
+`learner` controls nuisance models. Linear learners are fast and transparent;
+lasso, ridge, elasticnet, ranger, grf, gam, nnet, and xgboost are available
+when their packages are installed. `K` controls cross-fitting folds and `S`
+controls repeated splits. Use small values for exploratory checks and larger
+values for final robustness when runtime allows.
+
+## Conditional Density Choices
+
+`density_method` controls the conditional density `f_{G|X}(g|x)` for
+`dml_flex` and `dml_incremental`.
+
+| `density_method` | Practical role |
+|---|---|
+| `residual_kde` | Fast default; KDE of residualized `G` |
+| `location_scale` | Allows heteroskedastic `G | X` through a scale model |
+| `local_kde` | More local and more sensitive to covariate dimension |
+
+Treat density choice as a sensitivity dimension.
+
+## BLP Spline Is A Signal Map, Not A Density Estimator
+
+`signal_map` controls how the cross-fitted `dml_flex` signal is mapped to the
+evaluation grid. `signal_map = "blp_spline"` is a B-spline best linear
+projection signal map. It is not a `density_method`.
+
+## DML Inference Labels
+
+- Scalar DML robust intervals come from orthogonal-score variance.
+- Scalar score-multiplier intervals use multiplier draws over stored influence
+  values.
+- Non-BLP `dml_flex` bands are practical signal-mapping multiplier bands.
+- `signal_map = "blp_spline"` stores finite-grid covariance matrices and can
+  use Gaussian max-`t` bands when usable.
+
+## DML Diagnostics
+
+Check signal summaries, density diagnostics, low-density shares, derivative
+nuisance diagnostics, cluster counts when clustering is used, and repeated
+split stability. Diagnostics are part of the DML result object and should be
+reported when they explain a substantive choice.

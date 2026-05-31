@@ -2,5 +2,7 @@
 /_book/
 /*_cache/
 /*_files/
-
 **/*.quarto_ipynb
+.Rhistory
+.DS_Store
+Rplots.pdf
