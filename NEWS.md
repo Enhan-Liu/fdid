@@ -15,6 +15,10 @@
   derivative panels side-by-side with embedded support displays.
 * Updated the rendered tutorial so DML examples use `learner = "grf"` and
   kernel/DML estimator chapters use a consistent histogram support display.
+* Refined continuous-G tutorial figures: kernel bootstrap and contrast examples
+  now use the mortality application throughout, DML mortality derivative and
+  incremental displays emphasize point estimates, and a synthetic DML example
+  illustrates curve uncertainty.
 * Replaced `options(warn = -1)` with `suppressWarnings()` in internal helper
   `silent_ebalance()` for CRAN compliance (avoids global state modification).
 

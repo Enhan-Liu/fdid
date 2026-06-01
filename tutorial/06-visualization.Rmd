@@ -440,16 +440,16 @@ on the purpose of the figure.
 old_par <- par(mfrow = c(2, 2))
 plot(fdid_results_kernel_curve, type = "curve", curve = "level",
      Xdistr = "histogram", support.panel = "embedded",
-     main = "Xdistr = histogram")
+     main = "Histogram support display")
 plot(fdid_results_kernel_curve, type = "curve", curve = "level",
      Xdistr = "density", support.panel = "embedded",
-     main = "Xdistr = density")
+     main = "Density support display")
 plot(fdid_results_kernel_curve, type = "curve", curve = "level",
      Xdistr = "rug", support.panel = "embedded",
-     main = "Xdistr = rug")
+     main = "Rug support display")
 plot(fdid_results_kernel_curve, type = "curve", curve = "level",
      Xdistr = "none", support.panel = "embedded",
-     main = "Xdistr = none")
+     main = "No support display")
 par(old_par)
 ```
 

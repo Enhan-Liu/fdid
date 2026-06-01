@@ -186,18 +186,19 @@ if (!is_fit_error(fit_kernel_fast)) {
   plot(fit_kernel_fast, type = "curve", curve = "level",
        interval = "pointwise", Xdistr = "histogram",
        support.panel = "embedded",
-       main = "Xdistr = histogram")
+       main = "Kernel level curve (mortality)")
   plot(fit_kernel_fast, type = "curve", curve = "derivative",
        interval = "pointwise", Xdistr = "histogram",
        support.panel = "embedded",
-       main = "Xdistr = histogram")
+       main = "Kernel derivative curve (mortality)")
   par(old_par)
 }
 ```
 
 Support displays are descriptive. They show where observed values of `G` lie
 inside the plotted window; they do not change the stored estimates. This
-estimator chapter uses one consistent histogram display. Chapter
+estimator chapter uses one consistent histogram display, but its titles name
+the estimand rather than the display option. Chapter
 @sec-visualization shows the alternative density, rug, none, separate-panel,
 marker, and contrast plot options.
 
@@ -208,54 +209,23 @@ intervals. With `vartype = "bootstrap"`, the package stores bootstrap replicate
 curves, pointwise bootstrap percentile intervals, curve covariance matrices,
 and finite-grid bootstrap quantile-envelope bands.
 
-The rendered example below uses a small synthetic dataset so the bootstrap can
-run quickly. In an applied analysis, use many more bootstrap replications. The
-band shown by `interval = "both"` is a bootstrap quantile-envelope band; it is
-not a studentized sup-$t$ band.
-
-```{r kernel-synthetic-data}
-n_kernel <- 80
-time_kernel <- 1:4
-G_kernel <- runif(n_kernel)
-X_kernel <- rnorm(n_kernel)
-
-kernel_panel <- data.frame(
-  id = rep(seq_len(n_kernel), each = length(time_kernel)),
-  time = rep(time_kernel, times = n_kernel),
-  G = rep(G_kernel, each = length(time_kernel)),
-  x1 = rep(X_kernel, each = length(time_kernel))
-)
-
-kernel_panel$Y <- with(
-  kernel_panel,
-  0.5 * x1 + 0.1 * time +
-    ifelse(time >= 3, (time - 2) * (0.7 * G + 0.4 * G^2), 0) +
-    rnorm(nrow(kernel_panel), sd = 0.15)
-)
-
-s_kernel_sim <- fdid_prepare(
-  data = kernel_panel,
-  Y_label = "Y",
-  X_labels = "x1",
-  G_label = "G",
-  unit_label = "id",
-  time_label = "time"
-)
-
-eval_g_sim <- seq(0.2, 0.8, length.out = 7)
-```
+The rendered example below keeps the same mortality dataset and the same
+interior positive-support grid. In an applied analysis, use many more bootstrap
+replications. The band shown by `interval = "both"` is a bootstrap
+quantile-envelope band; it is not a studentized sup-$t$ band.
 
 ```{r kernel-bootstrap-fit}
 kernel_boot_draws <- if (identical(tolower(Sys.getenv("FDID_TUTORIAL_HEAVY")),
-                                   "true")) 99L else 9L
+                                   "true")) 199L else 19L
 
 fit_kernel_boot <- fit_fdid(
-  s_kernel_sim,
-  tr_period = 3:4,
-  ref_period = 2,
+  s_cont,
+  tr_period = tr_period,
+  ref_period = ref_period,
   method = "kernel",
-  eval_g = eval_g_sim,
-  h0 = 0.25,
+  eval_g = eval_g_kernel,
+  h0 = 0.18,
+  K_folds = 3,
   vartype = "bootstrap",
   boot = kernel_boot_draws
 )
@@ -270,21 +240,16 @@ if (!is_fit_error(fit_kernel_boot)) {
 
 ```{r kernel-bootstrap-plots, fig.width=9, fig.height=4.4}
 if (!is_fit_error(fit_kernel_boot)) {
-  true_level <- 1.5 * (0.7 * eval_g_sim + 0.4 * eval_g_sim^2)
-  true_deriv <- 1.5 * (0.7 + 0.8 * eval_g_sim)
-
   old_par <- par(mfrow = c(1, 2))
   plot(fit_kernel_boot, type = "curve", curve = "level",
        interval = "both", show.uniform.CI = TRUE,
        Xdistr = "histogram", support.panel = "embedded",
-       main = "Xdistr = histogram")
-  lines(eval_g_sim, true_level, col = "firebrick", lty = 2, lwd = 2)
+       main = "Kernel level bands (mortality)")
 
   plot(fit_kernel_boot, type = "curve", curve = "derivative",
        interval = "both", show.uniform.CI = TRUE,
        Xdistr = "histogram", support.panel = "embedded",
-       main = "Xdistr = histogram")
-  lines(eval_g_sim, true_deriv, col = "firebrick", lty = 2, lwd = 2)
+       main = "Kernel derivative bands (mortality)")
   par(old_par)
 }
 ```
@@ -297,7 +262,7 @@ if (!is_fit_error(fit_kernel_boot)) {
   plot(fit_kernel_boot, type = "curve", curve = "level",
        show.uniform.CI = FALSE,
        Xdistr = "histogram", support.panel = "embedded",
-       main = "Xdistr = histogram")
+       main = "Kernel pointwise intervals (mortality)")
 }
 ```
 
@@ -311,8 +276,9 @@ of quantities. `fdid_contrast()` reports level differences such as
 ```{r kernel-reporting}
 if (!is_fit_error(fit_kernel_boot)) {
   kernel_report <- rbind(
-    fdid_contrast(fit_kernel_boot, g0 = min(eval_g_sim), g1 = max(eval_g_sim)),
-    fdid_derivative(fit_kernel_boot, g0 = stats::median(eval_g_sim))
+    fdid_contrast(fit_kernel_boot, g0 = min(eval_g_kernel),
+                  g1 = max(eval_g_kernel)),
+    fdid_derivative(fit_kernel_boot, g0 = stats::median(eval_g_kernel))
   )
 
   knitr::kable(
@@ -320,6 +286,21 @@ if (!is_fit_error(fit_kernel_boot)) {
                       "std.error", "conf.low", "conf.high", "inference")],
     digits = 3
   )
+}
+```
+
+The fixed-reference coefficient plot gives the same reporting target in a
+visual form: choose a reference value of `G`, then display several
+`mu(g) - mu(g_ref)` contrasts and their 95% intervals. The reference row is the
+algebraic zero anchor.
+
+```{r kernel-contrast-plot, fig.width=7, fig.height=4.5}
+if (!is_fit_error(fit_kernel_boot)) {
+  plot(fit_kernel_boot, type = "contrast",
+       ref.g = "median",
+       target.type = "quantile",
+       target.g = 5,
+       main = "Kernel contrasts vs median G")
 }
 ```
 

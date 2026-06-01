@@ -295,17 +295,23 @@ knitr::kable(flex_table[, c("fit", "signal_map", "density_method",
              digits = 3)
 ```
 
+In the mortality application, the GRF-based derivative curve is much noisier
+than the level curve. The derivative panel below therefore suppresses intervals
+and should be read as a point-estimate diagnostic for comparison with the
+kernel derivative and scalar DML targets. A synthetic example later in this
+chapter shows the DML curve interval display more cleanly.
+
 ```{r dml-flex-plots, fig.width=9, fig.height=4.4}
 if (!is_fit_error(fit_flex_spline)) {
   old_par <- par(mfrow = c(1, 2))
   plot(fit_flex_spline, type = "curve", curve = "level",
        interval = "both", Xdistr = "histogram",
        support.panel = "embedded",
-       main = "Xdistr = histogram")
+       main = "DML level curve (mortality)")
   plot(fit_flex_spline, type = "curve", curve = "derivative",
-       interval = "both", Xdistr = "histogram",
+       interval = "none", ci = FALSE, Xdistr = "histogram",
        support.panel = "embedded",
-       main = "Xdistr = histogram")
+       main = "DML derivative points (mortality)")
   par(old_par)
 }
 ```
@@ -364,7 +370,96 @@ if (!is_fit_error(fit_flex_blp)) {
   plot(fit_flex_blp, type = "curve", curve = "level",
        interval = "both", Xdistr = "histogram",
        support.panel = "embedded",
-       main = "Xdistr = histogram")
+       main = "DML BLP-spline level band (mortality)")
+}
+```
+
+## Synthetic DML CI Illustration
+
+The mortality example is the applied running example, but its derivative bands
+are hard to read. The small synthetic example below is only for teaching the
+CI display: the data-generating process has a smooth continuous-treatment
+effect, so the pointwise intervals and finite-grid band are easier to inspect.
+
+```{r dml-synthetic-data}
+n_dml_sim <- 90
+time_dml_sim <- 1:4
+G_dml_sim <- runif(n_dml_sim)
+X1_dml_sim <- rnorm(n_dml_sim)
+X2_dml_sim <- rnorm(n_dml_sim)
+
+dml_sim_panel <- data.frame(
+  id = rep(seq_len(n_dml_sim), each = length(time_dml_sim)),
+  time = rep(time_dml_sim, times = n_dml_sim),
+  G = rep(G_dml_sim, each = length(time_dml_sim)),
+  x1 = rep(X1_dml_sim, each = length(time_dml_sim)),
+  x2 = rep(X2_dml_sim, each = length(time_dml_sim))
+)
+
+dml_tau <- function(g) 0.6 * g + 0.8 * g^2
+dml_tau_deriv <- function(g) 0.6 + 1.6 * g
+
+dml_sim_panel$Y <- with(
+  dml_sim_panel,
+  0.4 * x1 - 0.3 * x2 + 0.05 * time +
+    ifelse(time >= 3, (time - 2) * dml_tau(G), 0) +
+    rnorm(nrow(dml_sim_panel), sd = 0.20)
+)
+
+s_dml_sim <- fdid_prepare(
+  data = dml_sim_panel,
+  Y_label = "Y",
+  X_labels = c("x1", "x2"),
+  G_label = "G",
+  unit_label = "id",
+  time_label = "time"
+)
+
+eval_g_dml_sim <- seq(0.2, 0.8, length.out = 7)
+```
+
+```{r dml-synthetic-ci-fit}
+fit_flex_sim <- fit_fdid(
+  s_dml_sim,
+  tr_period = 3:4,
+  ref_period = 2,
+  method = "dml_flex",
+  learner = "grf",
+  K = 3,
+  S = 1,
+  eval_g = eval_g_dml_sim,
+  signal_map = "blp_spline",
+  density_method = "residual_kde",
+  boot = dml_curve_draws
+)
+
+if (!is_fit_error(fit_flex_sim)) {
+  data.frame(
+    signal_map = fit_flex_sim$signal_map,
+    density_method = fit_flex_sim$density_method,
+    band_method = fit_flex_sim$curve_event$simultaneous_band_method
+  )
+}
+```
+
+```{r dml-synthetic-ci-plots, fig.width=9, fig.height=4.4}
+if (!is_fit_error(fit_flex_sim)) {
+  true_level <- 1.5 * dml_tau(eval_g_dml_sim)
+  true_deriv <- 1.5 * dml_tau_deriv(eval_g_dml_sim)
+
+  old_par <- par(mfrow = c(1, 2))
+  plot(fit_flex_sim, type = "curve", curve = "level",
+       interval = "both", Xdistr = "histogram",
+       support.panel = "embedded",
+       main = "Synthetic DML level CI")
+  lines(eval_g_dml_sim, true_level, col = "firebrick", lty = 2, lwd = 2)
+
+  plot(fit_flex_sim, type = "curve", curve = "derivative",
+       interval = "both", Xdistr = "histogram",
+       support.panel = "embedded",
+       main = "Synthetic DML derivative CI")
+  lines(eval_g_dml_sim, true_deriv, col = "firebrick", lty = 2, lwd = 2)
+  par(old_par)
 }
 ```
 
@@ -447,6 +542,25 @@ knitr::kable(incremental_table[, c("fit", "density_method", "Estimate",
                                    "Std.Error", "CI_Lower", "CI_Upper",
                                    "note")],
              digits = 3)
+```
+
+For the mortality data, it is often easier to first compare the incremental
+point estimates across density-score approximations without drawing confidence
+intervals.
+
+```{r dml-incremental-point-plot, fig.width=7, fig.height=4.2}
+inc_plot <- incremental_table[is.finite(incremental_table$Estimate), ]
+if (nrow(inc_plot) > 0L) {
+  old_par <- par(mar = c(7.5, 4.5, 3, 1))
+  xpos <- seq_len(nrow(inc_plot))
+  plot(xpos, inc_plot$Estimate,
+       type = "b", pch = 16, xaxt = "n",
+       xlab = "", ylab = "Observed average derivative",
+       main = "DML incremental points (mortality)")
+  axis(1, at = xpos, labels = inc_plot$density_method, las = 2)
+  abline(h = 0, lty = 2, col = "gray50")
+  par(old_par)
+}
 ```
 
 ## Learner And Design Sensitivity

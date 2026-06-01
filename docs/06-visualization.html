@@ -779,16 +779,16 @@ window.Quarto = {
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_par</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fdid_results_kernel_curve</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"level"</span>,</span>
 <span>     Xdistr <span class="op">=</span> <span class="st">"histogram"</span>, support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Xdistr = histogram"</span><span class="op">)</span></span>
+<span>     main <span class="op">=</span> <span class="st">"Histogram support display"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fdid_results_kernel_curve</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"level"</span>,</span>
 <span>     Xdistr <span class="op">=</span> <span class="st">"density"</span>, support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Xdistr = density"</span><span class="op">)</span></span>
+<span>     main <span class="op">=</span> <span class="st">"Density support display"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fdid_results_kernel_curve</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"level"</span>,</span>
 <span>     Xdistr <span class="op">=</span> <span class="st">"rug"</span>, support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Xdistr = rug"</span><span class="op">)</span></span>
+<span>     main <span class="op">=</span> <span class="st">"Rug support display"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fdid_results_kernel_curve</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"level"</span>,</span>
 <span>     Xdistr <span class="op">=</span> <span class="st">"none"</span>, support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Xdistr = none"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>     main <span class="op">=</span> <span class="st">"No support display"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="06-visualization_files/figure-html/curve-support-displays-1.png" class="img-fluid figure-img" width="864"></p>
@@ -1843,16 +1843,16 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
 <span id="cb35-468"><a href="#cb35-468" aria-hidden="true" tabindex="-1"></a>old_par <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
 <span id="cb35-469"><a href="#cb35-469" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fdid_results_kernel_curve, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"level"</span>,</span>
 <span id="cb35-470"><a href="#cb35-470" aria-hidden="true" tabindex="-1"></a>     <span class="at">Xdistr =</span> <span class="st">"histogram"</span>, <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
-<span id="cb35-471"><a href="#cb35-471" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Xdistr = histogram"</span>)</span>
+<span id="cb35-471"><a href="#cb35-471" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Histogram support display"</span>)</span>
 <span id="cb35-472"><a href="#cb35-472" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fdid_results_kernel_curve, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"level"</span>,</span>
 <span id="cb35-473"><a href="#cb35-473" aria-hidden="true" tabindex="-1"></a>     <span class="at">Xdistr =</span> <span class="st">"density"</span>, <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
-<span id="cb35-474"><a href="#cb35-474" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Xdistr = density"</span>)</span>
+<span id="cb35-474"><a href="#cb35-474" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Density support display"</span>)</span>
 <span id="cb35-475"><a href="#cb35-475" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fdid_results_kernel_curve, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"level"</span>,</span>
 <span id="cb35-476"><a href="#cb35-476" aria-hidden="true" tabindex="-1"></a>     <span class="at">Xdistr =</span> <span class="st">"rug"</span>, <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
-<span id="cb35-477"><a href="#cb35-477" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Xdistr = rug"</span>)</span>
+<span id="cb35-477"><a href="#cb35-477" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Rug support display"</span>)</span>
 <span id="cb35-478"><a href="#cb35-478" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fdid_results_kernel_curve, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"level"</span>,</span>
 <span id="cb35-479"><a href="#cb35-479" aria-hidden="true" tabindex="-1"></a>     <span class="at">Xdistr =</span> <span class="st">"none"</span>, <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
-<span id="cb35-480"><a href="#cb35-480" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Xdistr = none"</span>)</span>
+<span id="cb35-480"><a href="#cb35-480" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"No support display"</span>)</span>
 <span id="cb35-481"><a href="#cb35-481" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(old_par)</span>
 <span id="cb35-482"><a href="#cb35-482" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb35-483"><a href="#cb35-483" aria-hidden="true" tabindex="-1"></a></span>
