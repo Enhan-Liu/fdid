@@ -247,9 +247,11 @@ event-period curve over the evaluation grid for $G$.
 
 The evaluation grid is part of estimation. If `eval_g` is supplied, `kernel`
 and `dml_flex` estimate curve values at exactly those grid points; if it is
-left as `NULL`, the package builds its default grid. The curve plot displays
-the stored `eval_g` rows and does not estimate additional points while
-plotting.
+left as `NULL`, the package builds its default 50-point grid from
+`quantile(G, trim)` to `quantile(G, 1 - trim)`. The curve plot displays the
+stored `eval_g` rows and does not estimate additional points while plotting.
+The `trim` argument controls this default grid construction only; it is not a
+sample-trimming or winsorization rule.
 
 Use the `curve` argument to choose the estimand. The only method-specific
 default is `curve = "auto"`: kernel plots default to the derivative curve,
@@ -278,7 +280,7 @@ The main continuous-G plot controls are:
 | `Xdistr` | `"histogram"`, `"density"`, `"rug"`, `"none"` | observed support display for continuous `G` |
 | `support.panel` | `"embedded"`, `"separate"` | whether support is drawn inside the curve panel or below it |
 | `show.eval_g` | `TRUE`, `FALSE` | ticks for the stored evaluation grid |
-| `legend.position` | `"auto"`, `"topright"`, `"topleft"`, `"bottomright"`, `"bottomleft"`, `"none"` | place or suppress plot legends |
+| `legend.position` | `"auto"`, `"topright"`, `"topleft"`, `"bottomright"`, `"bottomleft"`, `"none"` | place or suppress plot legends; `"auto"` draws a boxed legend below the plot |
 | `diff.values`, `contrast.values` | numeric vector | vertical reference lines at selected `G` values |
 | `line.color`, `line.size`, `ci.color`, `ci.alpha`, `band.color`, `band.lty`, `hist.color`, `density.color`, `support.alpha` | graphics values | base-graphics style controls |
 | `xlim`, `ylim`, `xlab`, `ylab`, `main` | graphics values | axis limits and labels |
@@ -305,9 +307,11 @@ specific: `"histogram"` draws many narrow bars, `"density"` draws a smoothed
 filled density, `"rug"` draws ticks, and `"none"` suppresses support entirely.
 When `curve = "both"`, support is embedded in each panel even if
 `support.panel = "separate"` is requested. The two panels are drawn
-side-by-side so the level and derivative curves remain readable. If the legend
-competes with the curve, use `legend.position` to move it or
-`legend.position = "none"` to suppress it.
+side-by-side so the level and derivative curves remain readable. By default,
+plot legends are drawn in a boxed area below the plot so they do not compete
+with the curve. Use an explicit corner value such as `"topright"` only when
+you intentionally want an inside-plot legend, or `legend.position = "none"` to
+suppress it.
 
 ```{r curve-data, include=FALSE}
 set.seed(101)
@@ -425,7 +429,7 @@ quantile-envelope bands. For `dml_flex`, the label printed in the legend tells
 whether the band is a practical signal-residual multiplier band or, for
 `signal_map = "blp_spline"`, a Gaussian max-$t$ BLP-spline covariance band.
 
-```{r curve-intervals, fig.width=9, fig.height=4.6}
+```{r curve-intervals, fig.width=9, fig.height=5.6}
 old_par <- par(mfrow = c(1, 2))
 plot(fdid_results_kernel_boot_curve, type = "curve", curve = "level",
      interval = "pointwise", Xdistr = "none",

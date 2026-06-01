@@ -388,6 +388,74 @@
   format(signif(as.numeric(x), 4L), trim = TRUE)
 }
 
+.fdid_legend_margin_lines <- function(labels) {
+  labels <- as.character(labels)
+  max_label <- if (length(labels) > 0L) max(nchar(labels), na.rm = TRUE) else 0L
+  label_factor <- if (is.finite(max_label) && max_label > 24L) 1.1 else 0.95
+  max(4.4, 2.2 + label_factor * max(1L, length(labels)))
+}
+
+.fdid_mar_with_bottom_legend <- function(mar, labels) {
+  mar[1L] <- max(mar[1L], mar[1L] + .fdid_legend_margin_lines(labels))
+  mar
+}
+
+.fdid_draw_bottom_legend <- function(legend, col = NULL, lty = NULL,
+                                     lwd = NULL, pch = NULL,
+                                     fill = NULL, pt.cex = NULL,
+                                     cex = 0.82) {
+  usr <- graphics::par("usr")
+  x_mid <- mean(usr[1:2])
+  y_gap <- 0.34 * diff(usr[3:4])
+  old_xpd <- graphics::par("xpd")
+  graphics::par(xpd = NA)
+  on.exit(graphics::par(xpd = old_xpd), add = TRUE)
+  legend_args <- list(
+    x = x_mid,
+    y = usr[3] - y_gap,
+    legend = legend,
+    xjust = 0.5,
+    yjust = 1,
+    bg = "white",
+    box.col = "gray70",
+    cex = cex
+  )
+  if (!is.null(col)) legend_args$col <- col
+  if (!is.null(lty)) legend_args$lty <- lty
+  if (!is.null(lwd)) legend_args$lwd <- lwd
+  if (!is.null(pch)) legend_args$pch <- pch
+  if (!is.null(fill)) legend_args$fill <- fill
+  if (!is.null(pt.cex)) legend_args$pt.cex <- pt.cex
+  do.call(graphics::legend, legend_args)
+  invisible(NULL)
+}
+
+.fdid_draw_legend_panel <- function(legend, col = NULL, lty = NULL,
+                                    lwd = NULL, pch = NULL,
+                                    fill = NULL, pt.cex = NULL,
+                                    cex = 0.82) {
+  graphics::plot.new()
+  graphics::plot.window(xlim = c(0, 1), ylim = c(0, 1))
+  legend_args <- list(
+    x = 0.5,
+    y = 0.55,
+    legend = legend,
+    xjust = 0.5,
+    yjust = 0.5,
+    bg = "white",
+    box.col = "gray70",
+    cex = cex
+  )
+  if (!is.null(col)) legend_args$col <- col
+  if (!is.null(lty)) legend_args$lty <- lty
+  if (!is.null(lwd)) legend_args$lwd <- lwd
+  if (!is.null(pch)) legend_args$pch <- pch
+  if (!is.null(fill)) legend_args$fill <- fill
+  if (!is.null(pt.cex)) legend_args$pt.cex <- pt.cex
+  do.call(graphics::legend, legend_args)
+  invisible(NULL)
+}
+
 .fdid_nearest_grid <- function(evg, value) {
   evg[which.min(abs(evg - value))]
 }
@@ -851,14 +919,62 @@
   embedded_support <- identical(support.panel, "embedded") &&
     support_available && !identical(Xdistr, "rug")
 
+  legend_labels <- "Estimate"
+  legend_col <- line.color
+  legend_lty <- 1
+  legend_lwd <- line.size
+  legend_pch <- NA
+  legend_pt_cex <- 1
+  if (flags$pointwise) {
+    point_idx <- which(!is.na(curve_df$pointwise_label) &
+                         nzchar(curve_df$pointwise_label))
+    point_label <- if (length(point_idx) > 0L) {
+      curve_df$pointwise_label[point_idx[1L]]
+    } else {
+      "Pointwise CI"
+    }
+    legend_labels <- c(legend_labels, point_label)
+    legend_col <- c(legend_col, grDevices::adjustcolor(ci.color, ci.alpha))
+    legend_lty <- c(legend_lty, NA)
+    legend_lwd <- c(legend_lwd, NA)
+    legend_pch <- c(legend_pch, 15)
+    legend_pt_cex <- c(legend_pt_cex, 1.8)
+  }
+  if (flags$uniform) {
+    band_idx <- which(!is.na(curve_df$band_label) &
+                        nzchar(curve_df$band_label))
+    band_label <- if (length(band_idx) > 0L) {
+      curve_df$band_label[band_idx[1L]]
+    } else {
+      "Uniform band"
+    }
+    legend_labels <- c(legend_labels, band_label)
+    legend_col <- c(legend_col, band.color)
+    legend_lty <- c(legend_lty, band.lty)
+    legend_lwd <- c(legend_lwd, 1.2)
+    legend_pch <- c(legend_pch, NA)
+    legend_pt_cex <- c(legend_pt_cex, 1)
+  }
+  draw_legend <- !identical(legend.position, "none") &&
+    (length(legend_labels) > 1L || !identical(legend.position, "auto"))
+  legend_below <- draw_legend && identical(legend.position, "auto")
+
   if (separate_support) {
     oldpar <- graphics::par(no.readonly = TRUE)
-    graphics::layout(matrix(c(1, 2), ncol = 1), heights = c(4, 1))
+    if (legend_below) {
+      graphics::layout(matrix(c(1, 2, 3), ncol = 1), heights = c(4, 1, 0.85))
+    } else {
+      graphics::layout(matrix(c(1, 2), ncol = 1), heights = c(4, 1))
+    }
     graphics::par(mar = c(2.2, 3.8, 2.2, 0.8))
     on.exit({
       try(graphics::layout(1), silent = TRUE)
       try(graphics::par(oldpar), silent = TRUE)
     }, add = TRUE)
+  } else if (legend_below) {
+    old_mar <- graphics::par("mar")
+    graphics::par(mar = .fdid_mar_with_bottom_legend(old_mar, legend_labels))
+    on.exit(graphics::par(mar = old_mar), add = TRUE)
   }
 
   plot_ylim <- curve_ylim
@@ -944,59 +1060,24 @@
                   ticksize = 0.025)
   }
 
-  legend_labels <- "Estimate"
-  legend_col <- line.color
-  legend_lty <- 1
-  legend_lwd <- line.size
-  legend_pch <- NA
-  legend_pt_cex <- 1
-  if (flags$pointwise) {
-    point_idx <- which(!is.na(curve_df$pointwise_label) &
-                         nzchar(curve_df$pointwise_label))
-    point_label <- if (length(point_idx) > 0L) {
-      curve_df$pointwise_label[point_idx[1L]]
-    } else {
-      "Pointwise CI"
-    }
-    legend_labels <- c(legend_labels, point_label)
-    legend_col <- c(legend_col, grDevices::adjustcolor(ci.color, ci.alpha))
-    legend_lty <- c(legend_lty, NA)
-    legend_lwd <- c(legend_lwd, NA)
-    legend_pch <- c(legend_pch, 15)
-    legend_pt_cex <- c(legend_pt_cex, 1.8)
-  }
-  if (flags$uniform) {
-    band_idx <- which(!is.na(curve_df$band_label) &
-                        nzchar(curve_df$band_label))
-    band_label <- if (length(band_idx) > 0L) {
-      curve_df$band_label[band_idx[1L]]
-    } else {
-      "Uniform band"
-    }
-    legend_labels <- c(legend_labels, band_label)
-    legend_col <- c(legend_col, band.color)
-    legend_lty <- c(legend_lty, band.lty)
-    legend_lwd <- c(legend_lwd, 1.2)
-    legend_pch <- c(legend_pch, NA)
-    legend_pt_cex <- c(legend_pt_cex, 1)
-  }
-  draw_legend <- !identical(legend.position, "none") &&
-    (length(legend_labels) > 1L || !identical(legend.position, "auto"))
   if (draw_legend) {
-    legend_pos <- if (identical(legend.position, "auto")) {
-      .fdid_auto_curve_legend_position(
-        curve_df, plot_xlim, plot_ylim,
-        embedded_support = embedded_support ||
-          (identical(support.panel, "embedded") && support_available)
-      )
-    } else {
-      legend.position
-    }
     legend_cex <- if (max(nchar(legend_labels), na.rm = TRUE) > 18L ||
                       length(legend_labels) > 2L) 0.78 else 0.85
-    graphics::legend(legend_pos, legend = legend_labels, col = legend_col,
-                     lty = legend_lty, lwd = legend_lwd, pch = legend_pch,
-                     pt.cex = legend_pt_cex, bty = "n", cex = legend_cex)
+    if (legend_below && !separate_support) {
+      .fdid_draw_bottom_legend(
+        legend = legend_labels,
+        col = legend_col,
+        lty = legend_lty,
+        lwd = legend_lwd,
+        pch = legend_pch,
+        pt.cex = legend_pt_cex,
+        cex = legend_cex
+      )
+    } else if (!legend_below) {
+      graphics::legend(legend.position, legend = legend_labels, col = legend_col,
+                       lty = legend_lty, lwd = legend_lwd, pch = legend_pch,
+                       pt.cex = legend_pt_cex, bty = "n", cex = legend_cex)
+    }
   }
 
   if (separate_support) {
@@ -1007,6 +1088,20 @@
       eval_g = if (isTRUE(show.eval_g)) curve_df$g else NULL,
       eval.color = line.color
     )
+    if (legend_below && draw_legend) {
+      legend_cex <- if (max(nchar(legend_labels), na.rm = TRUE) > 18L ||
+                        length(legend_labels) > 2L) 0.78 else 0.85
+      graphics::par(mar = c(0, 0, 0, 0))
+      .fdid_draw_legend_panel(
+        legend = legend_labels,
+        col = legend_col,
+        lty = legend_lty,
+        lwd = legend_lwd,
+        pch = legend_pch,
+        pt.cex = legend_pt_cex,
+        cex = legend_cex
+      )
+    }
   }
 
   invisible(NULL)
@@ -1104,8 +1199,9 @@
 #' @param show.grid Logical; if \code{TRUE}, draw a light background grid for
 #'   continuous-G curve and contrast plots.
 #' @param legend.position Legend placement for plots that draw a legend. Use
-#'   \code{"auto"} for continuous-G curve plots, one of the standard base
-#'   graphics corners, or \code{"none"} to suppress the legend.
+#'   \code{"auto"} to draw a boxed legend below the plot, one of the standard
+#'   base graphics corners for inside-plot placement, or \code{"none"} to
+#'   suppress the legend.
 #' @param theme.bw Reserved for compatibility with ggplot-style plotting
 #'   controls; currently ignored by the base graphics method.
 #' @param ...  Additional graphics parameters.
@@ -1263,6 +1359,14 @@ plot.fdid <- function(x,
       ylim <- c(min(tmp[1], 0.99 * tmp[1]), max(tmp[2], 1.01 * tmp[2]))
     }
 
+    raw_legend_below <- !identical(legend.position, "none") &&
+      identical(legend.position, "auto")
+    if (raw_legend_below) {
+      old_mar <- graphics::par("mar")
+      graphics::par(mar = .fdid_mar_with_bottom_legend(old_mar, group_labels))
+      on.exit(graphics::par(mar = old_mar), add = TRUE)
+    }
+
     plot(NULL, xlim = xlim %||% range(times), ylim = ylim,
          xlab = xlab %||% "Time",
          ylab = ylab %||% "Mean outcome",
@@ -1295,13 +1399,16 @@ plot.fdid <- function(x,
     points(g0$time, g0$meanY, pch = 16, col = group_colors[1])
 
     if (!identical(legend.position, "none")) {
-      raw_legend_pos <- if (identical(legend.position, "auto")) {
-        "topleft"
+      if (raw_legend_below) {
+        .fdid_draw_bottom_legend(
+          legend = group_labels,
+          col = group_colors,
+          pch = 16
+        )
       } else {
-        legend.position
+        legend(legend.position, legend = group_labels,
+               col = group_colors, pch = 16, bty = "n")
       }
-      legend(raw_legend_pos, legend = group_labels,
-             col = group_colors, pch = 16, bty = "n")
     }
     return(invisible(NULL))
   }
@@ -1469,6 +1576,14 @@ plot.fdid <- function(x,
   maxd <- max(h0$density, h1$density)
   ylim2 <- ylim %||% c(-maxd, maxd) * 1.1
 
+  overlap_legend_below <- !identical(legend.position, "none") &&
+    identical(legend.position, "auto")
+  if (overlap_legend_below) {
+    old_mar <- graphics::par("mar")
+    graphics::par(mar = .fdid_mar_with_bottom_legend(old_mar, group_labels))
+    on.exit(graphics::par(mar = old_mar), add = TRUE)
+  }
+
   plot(h0, freq = FALSE, col = adjustcolor(group_colors[1], .6), ylim = ylim2,
        xlab = xlab %||% "Propensity Score",
        main = main %||% "Overlap of Propensity Scores")
@@ -1477,13 +1592,15 @@ plot.fdid <- function(x,
        col = adjustcolor(group_colors[2], .6))
   abline(h = 0, lty = 2)
   if (!identical(legend.position, "none")) {
-    overlap_legend_pos <- if (identical(legend.position, "auto")) {
-      "topright"
+    if (overlap_legend_below) {
+      .fdid_draw_bottom_legend(
+        legend = group_labels,
+        fill = adjustcolor(group_colors, .6)
+      )
     } else {
-      legend.position
+      legend(legend.position, legend = group_labels,
+             fill = adjustcolor(group_colors, .6), bty = "n")
     }
-    legend(overlap_legend_pos, legend = group_labels,
-           fill = adjustcolor(group_colors, .6), bty = "n")
   }
 
   invisible(NULL)

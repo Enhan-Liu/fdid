@@ -163,8 +163,9 @@ for \code{type="contrast"}.}
 continuous-G curve and contrast plots.}
 
 \item{legend.position}{Legend placement for plots that draw a legend. Use
-\code{"auto"} for continuous-G curve plots, one of the standard base
-graphics corners, or \code{"none"} to suppress the legend.}
+\code{"auto"} to draw a boxed legend below the plot, one of the standard
+base graphics corners for inside-plot placement, or \code{"none"} to
+suppress the legend.}
 
 \item{theme.bw}{Reserved for compatibility with ggplot-style plotting
 controls; currently ignored by the base graphics method.}

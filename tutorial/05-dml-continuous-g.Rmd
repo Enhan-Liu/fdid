@@ -143,18 +143,13 @@ s_cont <- fdid_prepare(
   unit_label = "uniqueid",
   time_label = "year"
 )
-
-g_positive <- s_cont$G[s_cont$G > 0]
-eval_g_dml <- as.numeric(stats::quantile(
-  g_positive,
-  probs = c(0.20, 0.35, 0.50, 0.65, 0.80),
-  na.rm = TRUE
-))
 ```
 
-As in Chapter @sec-kernel-continuous, `eval_g` is an estimation grid for
-`dml_flex`. The scalar DML methods ignore it because they do not estimate a
-curve.
+As in Chapter @sec-kernel-continuous, `eval_g` is an estimation grid, not a
+plotting-only option. Scalar DML methods ignore it because they do not estimate
+a curve. For `method = "dml_flex"`, leaving `eval_g = NULL` uses the same
+default rule as the kernel estimator: 50 points between the `trim` and
+`1 - trim` quantiles of the observed continuous `G` support.
 
 ## Scalar PLR Benchmark
 
@@ -248,33 +243,87 @@ The density estimate enters the DML score, not just a plot. For this reason,
 `dml_incremental`, where the target is an observed-population average
 derivative and the conditional-density score is central.
 
+The mortality data are useful for scalar DML examples, but the GRF-based
+`dml_flex` mortality curves can be slow to render and their interval layers are
+often too wide to teach the curve workflow clearly. The full flexible-curve
+workflow below therefore uses a synthetic panel with a known smooth
+continuous-treatment effect. The fitted calls intentionally omit `eval_g`, so
+the stored curve grid is the package default 50-point trimmed grid.
+
+### Synthetic DGP For The Full Curve Workflow
+
+Each unit has a baseline continuous factor $G_i \sim U(0, 1)$ and two
+covariates. Outcomes are observed for four periods. Period 2 is the reference
+period, periods 3 and 4 are the event window, and the event-period effect is
+
+$$
+\tau(g) = 0.6g + 0.8g^2.
+$$
+
+Because period 3 receives $1\times\tau(G_i)$ and period 4 receives
+$2\times\tau(G_i)$, the event-average level target is
+$1.5\tau(g)$ and the derivative target is $1.5\tau'(g)$.
+
+```{r dml-synthetic-data}
+n_dml_sim <- 110
+time_dml_sim <- 1:4
+G_dml_sim <- runif(n_dml_sim)
+X1_dml_sim <- rnorm(n_dml_sim)
+X2_dml_sim <- rnorm(n_dml_sim)
+
+dml_sim_panel <- data.frame(
+  id = rep(seq_len(n_dml_sim), each = length(time_dml_sim)),
+  time = rep(time_dml_sim, times = n_dml_sim),
+  G = rep(G_dml_sim, each = length(time_dml_sim)),
+  x1 = rep(X1_dml_sim, each = length(time_dml_sim)),
+  x2 = rep(X2_dml_sim, each = length(time_dml_sim))
+)
+
+dml_tau <- function(g) 0.6 * g + 0.8 * g^2
+dml_tau_deriv <- function(g) 0.6 + 1.6 * g
+
+dml_sim_panel$Y <- with(
+  dml_sim_panel,
+  0.4 * x1 - 0.3 * x2 + 0.05 * time +
+    ifelse(time >= 3, (time - 2) * dml_tau(G), 0) +
+    rnorm(nrow(dml_sim_panel), sd = 0.20)
+)
+
+s_dml_sim <- fdid_prepare(
+  data = dml_sim_panel,
+  Y_label = "Y",
+  X_labels = c("x1", "x2"),
+  G_label = "G",
+  unit_label = "id",
+  time_label = "time"
+)
+```
+
 ```{r dml-flex-fit}
 dml_curve_draws <- if (identical(tolower(Sys.getenv("FDID_TUTORIAL_HEAVY")),
                                  "true")) 199L else 49L
 
 fit_flex_spline <- fit_fdid(
-  s_cont,
-  tr_period = tr_period,
-  ref_period = ref_period,
+  s_dml_sim,
+  tr_period = 3:4,
+  ref_period = 2,
   method = "dml_flex",
   learner = "grf",
   K = 3,
   S = 1,
-  eval_g = eval_g_dml,
   signal_map = "spline",
   density_method = "residual_kde",
   boot = dml_curve_draws
 )
 
 fit_flex_blp <- fit_fdid(
-  s_cont,
-  tr_period = tr_period,
-  ref_period = ref_period,
+  s_dml_sim,
+  tr_period = 3:4,
+  ref_period = 2,
   method = "dml_flex",
   learner = "grf",
   K = 3,
   S = 1,
-  eval_g = eval_g_dml,
   signal_map = "blp_spline",
   density_method = "location_scale",
   boot = dml_curve_draws
@@ -293,32 +342,19 @@ knitr::kable(flex_table[, c("fit", "signal_map", "density_method",
                             "Estimate", "Std.Error", "CI_Lower", "CI_Upper",
                             "note")],
              digits = 3)
-```
 
-In the mortality application, the GRF-based curve intervals are wide enough to
-obscure the fitted shape, especially for the derivative. The panels below
-therefore suppress intervals and should be read as point-estimate diagnostics
-for comparison with the kernel curves and scalar DML targets. A synthetic
-example later in this chapter shows the DML curve interval display more
-cleanly.
-
-```{r dml-flex-plots, fig.width=9, fig.height=4.4}
 if (!is_fit_error(fit_flex_spline)) {
-  old_par <- par(mfrow = c(1, 2))
-  plot(fit_flex_spline, type = "curve", curve = "level",
-       interval = "none", ci = FALSE, Xdistr = "histogram",
-       support.panel = "embedded",
-       main = "DML level points (mortality)")
-  plot(fit_flex_spline, type = "curve", curve = "derivative",
-       interval = "none", ci = FALSE, Xdistr = "histogram",
-       support.panel = "embedded",
-       main = "DML derivative points (mortality)")
-  par(old_par)
+  data.frame(
+    stored_eval_g_points = length(fit_flex_spline$eval_g),
+    stored_grid_min = min(fit_flex_spline$eval_g),
+    stored_grid_max = max(fit_flex_spline$eval_g)
+  )
 }
 ```
 
 The scalar event row for `dml_flex` is a compatibility summary. The curve fields
-are the primary output.
+are the primary output, so the table below prints a compact excerpt rather than
+all 50 grid rows.
 
 ```{r dml-flex-curve-table}
 if (!is_fit_error(fit_flex_spline)) {
@@ -329,7 +365,34 @@ if (!is_fit_error(fit_flex_spline)) {
     delta_hat = fit_flex_spline$curve_event$delta_hat,
     se_delta = fit_flex_spline$curve_event$se_delta
   )
-  knitr::kable(flex_curve, digits = 3)
+  flex_curve_excerpt <- flex_curve[
+    unique(round(seq(1, nrow(flex_curve), length.out = 8))),
+    ,
+    drop = FALSE
+  ]
+  knitr::kable(flex_curve_excerpt, digits = 3)
+}
+```
+
+```{r dml-flex-plots, fig.width=9, fig.height=5.2}
+if (!is_fit_error(fit_flex_spline)) {
+  dml_grid <- fit_flex_spline$eval_g
+  true_level <- 1.5 * dml_tau(dml_grid)
+  true_deriv <- 1.5 * dml_tau_deriv(dml_grid)
+
+  old_par <- par(mfrow = c(1, 2))
+  plot(fit_flex_spline, type = "curve", curve = "level",
+       interval = "none", ci = FALSE, Xdistr = "histogram",
+       support.panel = "embedded",
+       main = "DML synthetic level")
+  lines(dml_grid, true_level, col = "firebrick", lty = 2, lwd = 2)
+
+  plot(fit_flex_spline, type = "curve", curve = "derivative",
+       interval = "none", ci = FALSE, Xdistr = "histogram",
+       support.panel = "embedded",
+       main = "DML synthetic derivative")
+  lines(dml_grid, true_deriv, col = "firebrick", lty = 2, lwd = 2)
+  par(old_par)
 }
 ```
 
@@ -366,100 +429,42 @@ if (!is_fit_error(fit_flex_blp)) {
 }
 ```
 
-```{r dml-blp-band-plot, fig.width=7, fig.height=4.5}
+```{r dml-blp-band-plot, fig.width=7, fig.height=5.2}
 if (!is_fit_error(fit_flex_blp)) {
+  dml_grid_blp <- fit_flex_blp$eval_g
   plot(fit_flex_blp, type = "curve", curve = "level",
        interval = "both", Xdistr = "histogram",
-       support.panel = "separate",
-       main = "DML BLP-spline level band (mortality)")
+       support.panel = "embedded",
+       main = "DML BLP-spline level band")
+  lines(dml_grid_blp, 1.5 * dml_tau(dml_grid_blp),
+        col = "firebrick", lty = 2, lwd = 2)
 }
 ```
 
 ## Synthetic DML CI Illustration
 
-The mortality example is the applied running example, but its derivative bands
-are hard to read. The small synthetic example below is only for teaching the
-CI display: the data-generating process has a smooth continuous-treatment
-effect, so the pointwise intervals and finite-grid band are easier to inspect.
+The same synthetic fit also gives a cleaner view of DML curve uncertainty than
+the mortality application. The firebrick dashed line is the known event-average
+truth from the DGP, evaluated on the stored 50-point default grid.
 
-```{r dml-synthetic-data}
-n_dml_sim <- 90
-time_dml_sim <- 1:4
-G_dml_sim <- runif(n_dml_sim)
-X1_dml_sim <- rnorm(n_dml_sim)
-X2_dml_sim <- rnorm(n_dml_sim)
-
-dml_sim_panel <- data.frame(
-  id = rep(seq_len(n_dml_sim), each = length(time_dml_sim)),
-  time = rep(time_dml_sim, times = n_dml_sim),
-  G = rep(G_dml_sim, each = length(time_dml_sim)),
-  x1 = rep(X1_dml_sim, each = length(time_dml_sim)),
-  x2 = rep(X2_dml_sim, each = length(time_dml_sim))
-)
-
-dml_tau <- function(g) 0.6 * g + 0.8 * g^2
-dml_tau_deriv <- function(g) 0.6 + 1.6 * g
-
-dml_sim_panel$Y <- with(
-  dml_sim_panel,
-  0.4 * x1 - 0.3 * x2 + 0.05 * time +
-    ifelse(time >= 3, (time - 2) * dml_tau(G), 0) +
-    rnorm(nrow(dml_sim_panel), sd = 0.20)
-)
-
-s_dml_sim <- fdid_prepare(
-  data = dml_sim_panel,
-  Y_label = "Y",
-  X_labels = c("x1", "x2"),
-  G_label = "G",
-  unit_label = "id",
-  time_label = "time"
-)
-
-eval_g_dml_sim <- seq(0.2, 0.8, length.out = 7)
-```
-
-```{r dml-synthetic-ci-fit}
-fit_flex_sim <- fit_fdid(
-  s_dml_sim,
-  tr_period = 3:4,
-  ref_period = 2,
-  method = "dml_flex",
-  learner = "grf",
-  K = 3,
-  S = 1,
-  eval_g = eval_g_dml_sim,
-  signal_map = "blp_spline",
-  density_method = "residual_kde",
-  boot = dml_curve_draws
-)
-
-if (!is_fit_error(fit_flex_sim)) {
-  data.frame(
-    signal_map = fit_flex_sim$signal_map,
-    density_method = fit_flex_sim$density_method,
-    band_method = fit_flex_sim$curve_event$simultaneous_band_method
-  )
-}
-```
-
-```{r dml-synthetic-ci-plots, fig.width=9, fig.height=4.4}
-if (!is_fit_error(fit_flex_sim)) {
-  true_level <- 1.5 * dml_tau(eval_g_dml_sim)
-  true_deriv <- 1.5 * dml_tau_deriv(eval_g_dml_sim)
+```{r dml-synthetic-ci-plots, fig.width=9, fig.height=5.2}
+if (!is_fit_error(fit_flex_blp)) {
+  dml_grid_blp <- fit_flex_blp$eval_g
+  true_level <- 1.5 * dml_tau(dml_grid_blp)
+  true_deriv <- 1.5 * dml_tau_deriv(dml_grid_blp)
 
   old_par <- par(mfrow = c(1, 2))
-  plot(fit_flex_sim, type = "curve", curve = "level",
+  plot(fit_flex_blp, type = "curve", curve = "level",
        interval = "both", Xdistr = "histogram",
        support.panel = "embedded",
        main = "Synthetic DML level CI")
-  lines(eval_g_dml_sim, true_level, col = "firebrick", lty = 2, lwd = 2)
+  lines(dml_grid_blp, true_level, col = "firebrick", lty = 2, lwd = 2)
 
-  plot(fit_flex_sim, type = "curve", curve = "derivative",
+  plot(fit_flex_blp, type = "curve", curve = "derivative",
        interval = "both", Xdistr = "histogram",
        support.panel = "embedded",
        main = "Synthetic DML derivative CI")
-  lines(eval_g_dml_sim, true_deriv, col = "firebrick", lty = 2, lwd = 2)
+  lines(dml_grid_blp, true_deriv, col = "firebrick", lty = 2, lwd = 2)
   par(old_par)
 }
 ```
@@ -473,9 +478,11 @@ curve covariance matrix, so exact-grid contrasts reduce to the familiar
 
 ```{r dml-reporting}
 if (!is_fit_error(fit_flex_blp)) {
+  dml_eval_grid <- fit_flex_blp$eval_g
   dml_report <- rbind(
-    fdid_contrast(fit_flex_blp, g0 = min(eval_g_dml), g1 = max(eval_g_dml)),
-    fdid_derivative(fit_flex_blp, g0 = stats::median(eval_g_dml))
+    fdid_contrast(fit_flex_blp, g0 = min(dml_eval_grid),
+                  g1 = max(dml_eval_grid)),
+    fdid_derivative(fit_flex_blp, g0 = stats::median(dml_eval_grid))
   )
 
   knitr::kable(

@@ -22,6 +22,29 @@
 * Polished continuous-G plotting defaults with compact curve legend labels,
   automatic legend placement, suppressible legends via `legend.position`, and
   cleaner contrast-plot axis labels.
+* Updated the continuous-G tutorial to clarify that `eval_g = NULL` uses
+  `trim = 0.05` by default; the kernel chapter now deliberately sets
+  `trim = 0` to estimate the full observed mortality `G` support, while DML
+  curve examples keep the default 50-point grid.
+* Consolidated the synthetic DML curve workflow so one example carries the
+  data-generating process, flexible-curve fit, curve inference display, and
+  reporting workflow; restored learner choice and high-dimensional expansions
+  to top-level tutorial sections.
+* Updated the kernel tutorial bootstrap example to render with `boot = 200`
+  and revised the DML continuous-G chapter to use one synthetic DGP throughout
+  the scalar, curve, inference, reporting, incremental, learner, and
+  high-dimensional examples.
+* Clarified why kernel bootstrap uniform-band effective draw counts can be
+  smaller than `boot`: finite-grid uniform envelopes use only bootstrap curves
+  that are finite at every stored `eval_g` point.
+* Updated the kernel tutorial reporting examples so
+  `fdid_contrast()`/`fdid_derivative()` use the analytical robust kernel fit
+  with pointwise inference, while the bootstrap section remains the source for
+  bootstrap pointwise and uniform-band displays.
+* Hid manual table-construction code in the Chapter 4 and Chapter 5 rendered
+  tutorial while keeping substantive `fdid` calls visible.
+* Moved automatic plot legends into a boxed area below the plot so continuous-G
+  curve legends no longer cover fitted curves or interval layers.
 * Replaced `options(warn = -1)` with `suppressWarnings()` in internal helper
   `silent_ebalance()` for CRAN compliance (avoids global state modification).
 

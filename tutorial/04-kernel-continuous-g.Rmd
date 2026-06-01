@@ -98,60 +98,105 @@ s_cont <- fdid_prepare(
 )
 ```
 
-The famine mortality example has a mass point at zero in `lnpczupu`. The grid
-below keeps that lowest observed value as a reporting anchor, then adds
-positive-support landmarks where the smooth curve is more interpretable.
+The famine mortality example has a mass point at zero in `lnpczupu`. This is
+important because `eval_g` is an estimation grid, not a plotting-only option.
+When `eval_g = NULL`, `fdid()` constructs the grid internally:
 
-```{r kernel-support-grid}
+```r
+seq(quantile(G, trim), quantile(G, 1 - trim), length.out = 50)
+```
+
+The package default is `trim = 0.05`, so `eval_g = NULL` usually means 50
+points from the 5th to the 95th percentile of the observed `G` values after
+the estimation sample is formed. `trim` does not delete observations or
+winsorize `G`; it only chooses the endpoints of the evaluation grid. If more
+than 5 percent of units have `G = 0`, then the lower endpoint is still zero.
+
+In this chapter we deliberately set `trim = 0` while leaving `eval_g = NULL`.
+That keeps the convenient 50-point automatic grid but expands it to the full
+observed support of `G`. This is useful in the mortality example because the
+95%-100% upper tail contains substantively large observed baseline-factor
+values rather than a single isolated outlier. Supplying `eval_g` manually
+would override this rule and estimate exactly the points supplied.
+
+```{r kernel-support-grid, echo=FALSE}
+kernel_package_trim <- 0.05
+kernel_chapter_trim <- 0
+
+kernel_package_grid <- seq(
+  as.numeric(stats::quantile(s_cont$G, kernel_package_trim, na.rm = TRUE)),
+  as.numeric(stats::quantile(s_cont$G, 1 - kernel_package_trim, na.rm = TRUE)),
+  length.out = 50
+)
+
+kernel_chapter_grid <- seq(
+  as.numeric(stats::quantile(s_cont$G, kernel_chapter_trim, na.rm = TRUE)),
+  as.numeric(stats::quantile(s_cont$G, 1 - kernel_chapter_trim, na.rm = TRUE)),
+  length.out = 50
+)
+
 g_positive <- s_cont$G[s_cont$G > 0]
+g_tail_95 <- as.numeric(stats::quantile(s_cont$G, 0.95, na.rm = TRUE))
 
-eval_g_kernel <- c(0, as.numeric(stats::quantile(
-  g_positive,
-  probs = c(0.20, 0.35, 0.50, 0.65, 0.80),
-  na.rm = TRUE
-)))
-
-kernel_landmarks <- c(0, as.numeric(stats::quantile(
+kernel_landmarks <- as.numeric(stats::quantile(
   g_positive,
   probs = c(0.20, 0.50, 0.80),
   na.rm = TRUE
-)))
+))
 
 support_summary <- data.frame(
-  quantity = c("n units", "share G = 0", "20% positive support",
-               "80% positive support", "grid minimum", "grid maximum",
-               "grid size"),
+  quantity = c("n units", "share G = 0", "package default trim",
+               "chapter trim", "package default grid maximum",
+               "chapter grid minimum", "chapter grid maximum",
+               "chapter grid size", "units above package 95% endpoint",
+               "share above package 95% endpoint",
+               "20% positive support", "80% positive support"),
   value = c(nrow(s_cont), mean(s_cont$G == 0),
-            min(eval_g_kernel[eval_g_kernel > 0]),
-            max(eval_g_kernel), min(eval_g_kernel), max(eval_g_kernel),
-            length(eval_g_kernel))
+            kernel_package_trim, kernel_chapter_trim,
+            max(kernel_package_grid), min(kernel_chapter_grid),
+            max(kernel_chapter_grid), length(kernel_chapter_grid),
+            sum(s_cont$G > g_tail_95), mean(s_cont$G > g_tail_95),
+            min(kernel_landmarks),
+            max(kernel_landmarks))
 )
 
 knitr::kable(support_summary, digits = 4)
 ```
 
-```{r kernel-support-plot}
+The support plot below does not draw all 50 evaluation points. The table records
+the grid size, while the figure marks only the full-support upper endpoint, the
+package-default 95% endpoint, and a few positive-support landmarks.
+
+```{r kernel-support-plot, fig.width=7, fig.height=5.6}
+old_par_support <- par(no.readonly = TRUE)
+layout(matrix(c(1L, 2L), ncol = 1), heights = c(4, 1.05))
+par(mar = c(4.7, 4.2, 4, 2) + 0.1)
 hist(s_cont$G, breaks = 35, col = "gray85", border = "white",
+     xlim = c(0, max(kernel_chapter_grid) * 1.02),
      xlab = "Baseline factor G: lnpczupu",
      main = "Observed support for continuous G")
-abline(v = eval_g_kernel, col = "steelblue", lwd = 1.5)
+abline(v = max(kernel_package_grid), col = "gray40", lty = 2, lwd = 1.5)
 abline(v = kernel_landmarks, col = "firebrick", lty = 3, lwd = 1.5)
+points(max(kernel_chapter_grid), 0, pch = 17, col = "steelblue", cex = 1.4)
 rug(s_cont$G, col = grDevices::adjustcolor("black", 0.25))
-legend("topright",
-       legend = c("estimation grid", "reporting landmarks"),
-       col = c("steelblue", "firebrick"), lty = c(1, 3), lwd = 1.5,
-       bty = "n")
+par(mar = c(0, 4.2, 0.2, 2) + 0.1)
+plot.new()
+legend("center",
+       legend = c("full-support upper endpoint", "package trim = 0.05 upper end",
+                  "positive-support landmarks"),
+       col = c("steelblue", "gray40", "firebrick"), lty = c(NA, 2, 3),
+       pch = c(17, NA, NA), lwd = 1.5,
+       bty = "o", bg = "white", box.col = "gray75")
+layout(1)
+par(old_par_support)
 ```
-
-The `eval_g` grid is an estimation grid, not a plotting-only option. If five
-values are supplied, `fdid()` estimates five local curve points. For publication
-figures, use a denser grid over the region you intend to interpret.
 
 ## Basic Kernel Fit
 
 The next fit uses a fixed bandwidth `h0` so that the tutorial renders quickly
 and reproducibly. Leaving `h0 = NULL` asks the package to select the baseline
-bandwidth by cross-validation.
+bandwidth by cross-validation. We leave `eval_g = NULL` but set `trim = 0`, so
+the fitted object stores a 50-point grid over the full observed support of `G`.
 
 ```{r kernel-basic-fit}
 fit_kernel_fast <- fit_fdid(
@@ -159,19 +204,29 @@ fit_kernel_fast <- fit_fdid(
   tr_period = tr_period,
   ref_period = ref_period,
   method = "kernel",
-  eval_g = eval_g_kernel,
   h0 = 0.18,
   K_folds = 3,
+  trim = kernel_chapter_trim,
   vartype = "robust"
 )
+```
 
+```{r kernel-basic-summary, echo=FALSE}
 knitr::kable(event_table(fit_kernel_fast, "kernel robust"), digits = 3)
+
+if (!is_fit_error(fit_kernel_fast)) {
+  data.frame(
+    stored_eval_g_points = length(fit_kernel_fast$eval_g),
+    stored_grid_min = min(fit_kernel_fast$eval_g),
+    stored_grid_max = max(fit_kernel_fast$eval_g)
+  )
+}
 ```
 
 The scalar event row is a compact summary. For the kernel estimator, the main
 objects are the stored curve arrays.
 
-```{r kernel-curve-table}
+```{r kernel-curve-table, echo=FALSE}
 if (!is_fit_error(fit_kernel_fast)) {
   knitr::kable(kernel_curve_table(fit_kernel_fast), digits = 3)
 }
@@ -182,7 +237,7 @@ if (!is_fit_error(fit_kernel_fast)) {
 `plot(type = "curve")` draws the stored curve values. Use `curve = "level"` for
 the FDID response curve and `curve = "derivative"` for the local slope.
 
-```{r kernel-basic-plots, fig.width=9, fig.height=4.4}
+```{r kernel-basic-plots, fig.width=9, fig.height=5.2}
 if (!is_fit_error(fit_kernel_fast)) {
   old_par <- par(mfrow = c(1, 2))
   plot(fit_kernel_fast, type = "curve", curve = "level",
@@ -212,26 +267,40 @@ curves, pointwise bootstrap percentile intervals, curve covariance matrices,
 and finite-grid bootstrap quantile-envelope bands.
 
 The rendered example below keeps the same mortality dataset and the same
-zero-anchored reporting grid. In an applied analysis, use many more bootstrap
-replications. The band shown by `interval = "both"` is a bootstrap
-quantile-envelope band; it is not a studentized sup-$t$ band.
+full-support 50-point grid. It uses 200 bootstrap replications so the
+pointwise percentile intervals and finite-grid quantile-envelope band are much
+less dominated by a handful of extreme resamples than in a quick draft render.
+The band shown by `interval = "both"` is a bootstrap quantile-envelope band;
+it is not a studentized sup-$t$ band. Even with 200 replications, the
+full-support right tail and derivative curve can remain wide because support
+is thinner and local slopes are more sensitive than levels.
+
+The metadata row reports the number of bootstrap curves that are usable for the
+finite-grid uniform envelope. This count can be smaller than `boot` because the
+uniform envelope needs a whole bootstrap curve to be finite at every stored
+`eval_g` point. Pointwise percentile intervals are computed column by column
+with finite bootstrap draws, but a joint finite-grid envelope drops resampled
+curves that fail local-linear estimation at one or more grid points. This is not
+an additional trimming or winsorization step; it is a finite-value filter for the
+uniform-band calculation.
 
 ```{r kernel-bootstrap-fit}
-kernel_boot_draws <- if (identical(tolower(Sys.getenv("FDID_TUTORIAL_HEAVY")),
-                                   "true")) 199L else 19L
+kernel_boot_draws <- 200L
 
 fit_kernel_boot <- fit_fdid(
   s_cont,
   tr_period = tr_period,
   ref_period = ref_period,
   method = "kernel",
-  eval_g = eval_g_kernel,
   h0 = 0.18,
   K_folds = 3,
+  trim = kernel_chapter_trim,
   vartype = "bootstrap",
   boot = kernel_boot_draws
 )
+```
 
+```{r kernel-bootstrap-summary, echo=FALSE}
 if (!is_fit_error(fit_kernel_boot)) {
   data.frame(
     band_method = fit_kernel_boot$curve_event$simultaneous_band_method,
@@ -240,7 +309,7 @@ if (!is_fit_error(fit_kernel_boot)) {
 }
 ```
 
-```{r kernel-bootstrap-plots, fig.width=9, fig.height=4.4}
+```{r kernel-bootstrap-plots, fig.width=9, fig.height=5.2}
 if (!is_fit_error(fit_kernel_boot)) {
   old_par <- par(mfrow = c(1, 2))
   plot(fit_kernel_boot, type = "curve", curve = "level",
@@ -275,12 +344,23 @@ of quantities. `fdid_contrast()` reports level differences such as
 `mu(g1) - mu(g0)`. `fdid_derivative()` reports a derivative at a fixed value of
 `G`.
 
-```{r kernel-reporting}
-if (!is_fit_error(fit_kernel_boot)) {
+For these compact reporting examples, we use the analytical `vartype = "robust"`
+fit from the basic kernel section. This keeps the table and coefficient plot
+tied to robust pointwise normal inference rather than the bootstrap covariance
+object used for the full uniform-band display above. For a fixed derivative
+value, the standard error is the analytical pointwise derivative SE. For a level
+contrast, the robust fit does not currently store a cross-grid covariance
+matrix, so `inference = "pointwise"` reports an endpoint pointwise approximation
+rather than the full covariance formula.
+
+```{r kernel-reporting, echo=FALSE}
+if (!is_fit_error(fit_kernel_fast)) {
+  kernel_eval_grid <- fit_kernel_fast$eval_g
   kernel_report <- rbind(
-    fdid_contrast(fit_kernel_boot, g0 = min(eval_g_kernel),
-                  g1 = max(eval_g_kernel)),
-    fdid_derivative(fit_kernel_boot, g0 = stats::median(eval_g_kernel))
+    fdid_contrast(fit_kernel_fast, g0 = min(kernel_eval_grid),
+                  g1 = max(kernel_eval_grid), inference = "pointwise"),
+    fdid_derivative(fit_kernel_fast, g0 = stats::median(kernel_eval_grid),
+                    inference = "pointwise")
   )
 
   knitr::kable(
@@ -297,28 +377,32 @@ visual form: choose a reference value of `G`, then display several
 algebraic zero anchor.
 
 ```{r kernel-contrast-plot, fig.width=7, fig.height=4.5}
-if (!is_fit_error(fit_kernel_boot)) {
-  plot(fit_kernel_boot, type = "contrast",
-       ref.g = 0,
-       target.g = eval_g_kernel,
-       main = "Kernel contrasts vs G = 0")
+if (!is_fit_error(fit_kernel_fast)) {
+  plot(fit_kernel_fast, type = "contrast",
+       ref.g = "min",
+       target.g = "5",
+       inference = "pointwise",
+       main = "Kernel analytical contrasts vs lowest grid point")
 }
 ```
 
-When bootstrap covariance matrices are available, exact-grid contrasts use the
-covariance identity `V22 + V11 - 2 * V12`. Otherwise the helper falls back to
-replicate curves, stored bands, or pointwise endpoint intervals and labels the
-inference source.
+When the helper is applied to a bootstrap kernel object, exact-grid contrasts
+can use the stored bootstrap curve covariance matrix and the covariance identity
+`V22 + V11 - 2 * V12`. The analytical robust object shown here does not store
+that cross-grid covariance, so the contrast row and coefficient plot are labeled
+`pointwise_approx`. Use the bootstrap object when the covariance contrast is the
+target; use the robust object when the goal is a stable analytical reporting
+summary.
 
 ## Option Checklist
 
-```{r kernel-option-checklist}
+```{r kernel-option-checklist, echo=FALSE}
 kernel_options <- data.frame(
   option = c("eval_g", "h0", "K_folds", "vartype", "boot",
              "cluster_label", "curve", "interval", "show.uniform.CI",
              "Xdistr", "support.panel", "diff.values"),
   role = c(
-    "Evaluation grid; this is part of estimation.",
+    "Evaluation grid; NULL uses a 50-point grid controlled by trim.",
     "Baseline bandwidth; NULL selects by cross-validation.",
     "Number of folds for bandwidth cross-validation.",
     "Use robust pointwise intervals or bootstrap curve inference.",
