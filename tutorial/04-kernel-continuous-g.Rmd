@@ -184,30 +184,22 @@ the FDID response curve and `curve = "derivative"` for the local slope.
 if (!is_fit_error(fit_kernel_fast)) {
   old_par <- par(mfrow = c(1, 2))
   plot(fit_kernel_fast, type = "curve", curve = "level",
-       interval = "pointwise", Xdistr = "rug",
-       main = "Kernel level curve")
+       interval = "pointwise", Xdistr = "histogram",
+       support.panel = "embedded",
+       main = "Xdistr = histogram")
   plot(fit_kernel_fast, type = "curve", curve = "derivative",
-       interval = "pointwise", Xdistr = "rug",
-       main = "Kernel derivative curve")
+       interval = "pointwise", Xdistr = "histogram",
+       support.panel = "embedded",
+       main = "Xdistr = histogram")
   par(old_par)
 }
 ```
 
 Support displays are descriptive. They show where observed values of `G` lie
-inside the plotted window; they do not change the stored estimates.
-
-```{r kernel-support-display-options, fig.width=9, fig.height=4.4}
-if (!is_fit_error(fit_kernel_fast)) {
-  old_par <- par(mfrow = c(1, 2))
-  plot(fit_kernel_fast, type = "curve", curve = "level",
-       Xdistr = "density", support.panel = "embedded",
-       main = "Embedded density")
-  plot(fit_kernel_fast, type = "curve", curve = "level",
-       Xdistr = "histogram", support.panel = "separate",
-       main = "Separate support panel")
-  par(old_par)
-}
-```
+inside the plotted window; they do not change the stored estimates. This
+estimator chapter uses one consistent histogram display. Chapter
+@sec-visualization shows the alternative density, rug, none, separate-panel,
+marker, and contrast plot options.
 
 ## Bootstrap Pointwise And Uniform Bands
 
@@ -284,12 +276,14 @@ if (!is_fit_error(fit_kernel_boot)) {
   old_par <- par(mfrow = c(1, 2))
   plot(fit_kernel_boot, type = "curve", curve = "level",
        interval = "both", show.uniform.CI = TRUE,
-       Xdistr = "density", main = "Pointwise and uniform bands")
+       Xdistr = "histogram", support.panel = "embedded",
+       main = "Xdistr = histogram")
   lines(eval_g_sim, true_level, col = "firebrick", lty = 2, lwd = 2)
 
   plot(fit_kernel_boot, type = "curve", curve = "derivative",
        interval = "both", show.uniform.CI = TRUE,
-       Xdistr = "density", main = "Derivative bands")
+       Xdistr = "histogram", support.panel = "embedded",
+       main = "Xdistr = histogram")
   lines(eval_g_sim, true_deriv, col = "firebrick", lty = 2, lwd = 2)
   par(old_par)
 }
@@ -302,7 +296,8 @@ To hide the uniform band while keeping pointwise intervals, use
 if (!is_fit_error(fit_kernel_boot)) {
   plot(fit_kernel_boot, type = "curve", curve = "level",
        show.uniform.CI = FALSE,
-       main = "Pointwise intervals only")
+       Xdistr = "histogram", support.panel = "embedded",
+       main = "Xdistr = histogram")
 }
 ```
 

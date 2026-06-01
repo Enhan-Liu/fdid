@@ -11,6 +11,10 @@
   `plot(type = "curve")` displays stored curve estimates.
 * Aligned continuous-curve support overlays with the displayed curve window by
   using observed `G` values restricted to the plotted range.
+* Improved continuous-G curve plotting by drawing `curve = "both"` level and
+  derivative panels side-by-side with embedded support displays.
+* Updated the rendered tutorial so DML examples use `learner = "grf"` and
+  kernel/DML estimator chapters use a consistent histogram support display.
 * Replaced `options(warn = -1)` with `suppressWarnings()` in internal helper
   `silent_ebalance()` for CRAN compliance (avoids global state modification).
 

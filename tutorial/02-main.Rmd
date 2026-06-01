@@ -1,7 +1,7 @@
 # Binary G {#sec-binary}
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache = TRUE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, message = FALSE, warning = FALSE)
 ```
 
 In this chapter, we outline the complete workflow for an FDID analysis, which includes preparing the dataset, performing the estimation, and plotting the results.
@@ -154,9 +154,11 @@ For fitted continuous-$G$ curve objects, use `fdid_contrast()` to report
 level comparisons such as $\theta(g_1)-\theta(g_0)$ and `fdid_derivative()` to
 report fixed-$g$ derivative values such as $\theta'(g_0)$.
 
-The DML methods use `learner = "linear"` by default. Optional nuisance learners
-include `learner = "glmnet"`/`"lasso"`, `"ridge"`, `"elasticnet"`,
-`"ranger"`/`"rf"`, `"grf"`, `"gam"`, `"nnet"`, and
+The DML methods use `learner = "linear"` by default for lightweight,
+reproducible runs. The rendered DML examples in this tutorial use
+`learner = "grf"` to show the flexible nuisance-learning path more clearly.
+Other optional learners include `learner = "glmnet"`/`"lasso"`, `"ridge"`,
+`"elasticnet"`, `"ranger"`/`"rf"`, `"gam"`, `"nnet"`, and
 `"xgboost"`/`"boosting"` when the corresponding backend package is installed.
 
 ### Difference-in-Differences
@@ -299,18 +301,19 @@ often written in code-oriented shorthand as `mu0(X)`, `mu1(X)`, and `pi(X)`:
 The `learner` argument chooses how these nuisance functions are fit. The
 `K` argument controls the number of cross-fitting folds, and `S` controls the
 number of repeated random splits whose estimates are aggregated. The example
-below uses the stable linear learner and small split settings so the tutorial
-renders quickly. Flexible learners such as `"ranger"`, `"glmnet"`, or
-`"xgboost"` are available when their backend packages are installed.
+below uses `learner = "grf"` so the binary-DML section mirrors a modern
+machine-learning AIPW workflow: cross-fitted outcome regressions and propensity
+scores, estimated with generalized random forests, enter an orthogonal score.
+The small split settings keep the tutorial render manageable.
 
-```{r dml-binary, cache=TRUE}
+```{r dml-binary, cache=FALSE}
 set.seed(20260601)
 fdid_results_dml_binary <- fdid(
   s = prepared_d,
   tr_period = tr_period,
   ref_period = ref_period,
   method = "dml_binary",
-  learner = "linear",
+  learner = "grf",
   K = 3,
   S = 1,
   vartype = "robust",
@@ -318,7 +321,7 @@ fdid_results_dml_binary <- fdid(
 )
 ```
 
-```{r dml-binary-sum, cache=TRUE}
+```{r dml-binary-sum, cache=FALSE}
 summary(fdid_results_dml_binary)
 ```
 
@@ -329,7 +332,7 @@ with `dml_boot` and `dml_multiplier` controlling the number and type of
 multiplier draws. That multiplier step uses stored score contributions; it is
 not a refit bootstrap over all nuisance learners.
 
-```{r dml-binary-optional-learners, cache=TRUE}
+```{r dml-binary-optional-learners, cache=FALSE}
 optional_binary_learners <- c(ranger = "ranger", glmnet = "glmnet",
                               xgboost = "xgboost")
 data.frame(

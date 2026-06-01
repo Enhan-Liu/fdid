@@ -341,6 +341,7 @@ window.Quarto = {
 <li>Aggregate or map the signal to the target scale: a scalar slope, a smooth curve in <code>G</code>, or an observed-population average derivative.</li>
 </ol>
 <p>Binary <code>method = "dml_binary"</code> is covered in Chapter <a href="02-main.html" class="quarto-xref"><span>Chapter 2</span></a> because it targets a binary contrast, not a continuous-<code>G</code> scalar or curve.</p>
+<p>The package default is <code>learner = "linear"</code> because it is fast and has few backend requirements. The rendered examples in this chapter use <code>learner = "grf"</code> throughout to show the flexible DML workflow: generalized random forests fit the nuisance functions inside the cross-fitting loop, while the target is still estimated through the method-specific orthogonal score. Because these examples fit multiple forests across folds and targets, this chapter takes noticeably longer to render than the earlier linear-learner version. That is expected and reflects the heavier GRF workflow.</p>
 </section><section id="data-setup" class="level2" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="data-setup">
 <span class="header-section-number">5.2</span> Data Setup</h2>
 <div class="cell">
@@ -384,7 +385,7 @@ window.Quarto = {
 <span>  tr_period <span class="op">=</span> <span class="va">tr_period</span>,</span>
 <span>  ref_period <span class="op">=</span> <span class="va">ref_period</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"dml_plr"</span>,</span>
-<span>  learner <span class="op">=</span> <span class="st">"linear"</span>,</span>
+<span>  learner <span class="op">=</span> <span class="st">"grf"</span>,</span>
 <span>  K <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  S <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  dml_inference <span class="op">=</span> <span class="st">"score"</span></span>
@@ -395,7 +396,7 @@ window.Quarto = {
 <span>  tr_period <span class="op">=</span> <span class="va">tr_period</span>,</span>
 <span>  ref_period <span class="op">=</span> <span class="va">ref_period</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"dml_plr"</span>,</span>
-<span>  learner <span class="op">=</span> <span class="st">"linear"</span>,</span>
+<span>  learner <span class="op">=</span> <span class="st">"grf"</span>,</span>
 <span>  K <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  S <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  dml_inference <span class="op">=</span> <span class="st">"score_multiplier"</span>,</span>
@@ -404,9 +405,9 @@ window.Quarto = {
 <span></span>
 <span><span class="va">plr_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span></span>
 <span>  <span class="fu">event_row</span><span class="op">(</span><span class="va">fit_plr_score</span>, <span class="st">"PLR score"</span>, <span class="st">"partially linear slope"</span>,</span>
-<span>            learner <span class="op">=</span> <span class="st">"linear"</span><span class="op">)</span>,</span>
+<span>            learner <span class="op">=</span> <span class="st">"grf"</span><span class="op">)</span>,</span>
 <span>  <span class="fu">event_row</span><span class="op">(</span><span class="va">fit_plr_multiplier</span>, <span class="st">"PLR score multiplier"</span>,</span>
-<span>            <span class="st">"partially linear slope"</span>, learner <span class="op">=</span> <span class="st">"linear"</span><span class="op">)</span></span>
+<span>            <span class="st">"partially linear slope"</span>, learner <span class="op">=</span> <span class="st">"grf"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">plr_table</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"fit"</span>, <span class="st">"target"</span>, <span class="st">"learner"</span>, <span class="st">"Estimate"</span>,</span>
@@ -438,21 +439,21 @@ window.Quarto = {
 <tr class="odd">
 <td style="text-align: left;">PLR score</td>
 <td style="text-align: left;">partially linear slope</td>
-<td style="text-align: left;">linear</td>
-<td style="text-align: right;">-10.008</td>
-<td style="text-align: right;">1.447</td>
-<td style="text-align: right;">-12.844</td>
-<td style="text-align: right;">-7.171</td>
+<td style="text-align: left;">grf</td>
+<td style="text-align: right;">-7.946</td>
+<td style="text-align: right;">1.124</td>
+<td style="text-align: right;">-10.149</td>
+<td style="text-align: right;">-5.744</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">PLR score multiplier</td>
 <td style="text-align: left;">partially linear slope</td>
-<td style="text-align: left;">linear</td>
-<td style="text-align: right;">-9.862</td>
-<td style="text-align: right;">1.425</td>
-<td style="text-align: right;">-12.793</td>
-<td style="text-align: right;">-6.932</td>
+<td style="text-align: left;">grf</td>
+<td style="text-align: right;">-8.119</td>
+<td style="text-align: right;">1.121</td>
+<td style="text-align: right;">-10.339</td>
+<td style="text-align: right;">-5.900</td>
 <td style="text-align: left;"></td>
 </tr>
 </tbody>
@@ -570,7 +571,7 @@ window.Quarto = {
 <span>  tr_period <span class="op">=</span> <span class="va">tr_period</span>,</span>
 <span>  ref_period <span class="op">=</span> <span class="va">ref_period</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"dml_flex"</span>,</span>
-<span>  learner <span class="op">=</span> <span class="st">"linear"</span>,</span>
+<span>  learner <span class="op">=</span> <span class="st">"grf"</span>,</span>
 <span>  K <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  S <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  eval_g <span class="op">=</span> <span class="va">eval_g_dml</span>,</span>
@@ -584,7 +585,7 @@ window.Quarto = {
 <span>  tr_period <span class="op">=</span> <span class="va">tr_period</span>,</span>
 <span>  ref_period <span class="op">=</span> <span class="va">ref_period</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"dml_flex"</span>,</span>
-<span>  learner <span class="op">=</span> <span class="st">"linear"</span>,</span>
+<span>  learner <span class="op">=</span> <span class="st">"grf"</span>,</span>
 <span>  K <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  S <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  eval_g <span class="op">=</span> <span class="va">eval_g_dml</span>,</span>
@@ -595,10 +596,10 @@ window.Quarto = {
 <span></span>
 <span><span class="va">flex_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span></span>
 <span>  <span class="fu">event_row</span><span class="op">(</span><span class="va">fit_flex_spline</span>, <span class="st">"dml_flex spline"</span>, <span class="st">"average level summary"</span>,</span>
-<span>            learner <span class="op">=</span> <span class="st">"linear"</span>, density_method <span class="op">=</span> <span class="st">"residual_kde"</span>,</span>
+<span>            learner <span class="op">=</span> <span class="st">"grf"</span>, density_method <span class="op">=</span> <span class="st">"residual_kde"</span>,</span>
 <span>            signal_map <span class="op">=</span> <span class="st">"spline"</span><span class="op">)</span>,</span>
 <span>  <span class="fu">event_row</span><span class="op">(</span><span class="va">fit_flex_blp</span>, <span class="st">"dml_flex BLP spline"</span>, <span class="st">"average level summary"</span>,</span>
-<span>            learner <span class="op">=</span> <span class="st">"linear"</span>, density_method <span class="op">=</span> <span class="st">"location_scale"</span>,</span>
+<span>            learner <span class="op">=</span> <span class="st">"grf"</span>, density_method <span class="op">=</span> <span class="st">"location_scale"</span>,</span>
 <span>            signal_map <span class="op">=</span> <span class="st">"blp_spline"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -611,10 +612,10 @@ window.Quarto = {
 <colgroup>
 <col style="width: 22%">
 <col style="width: 12%">
-<col style="width: 17%">
+<col style="width: 16%">
 <col style="width: 10%">
 <col style="width: 11%">
-<col style="width: 10%">
+<col style="width: 11%">
 <col style="width: 10%">
 <col style="width: 5%">
 </colgroup>
@@ -633,20 +634,20 @@ window.Quarto = {
 <td style="text-align: left;">dml_flex spline</td>
 <td style="text-align: left;">spline</td>
 <td style="text-align: left;">residual_kde</td>
-<td style="text-align: right;">7.287</td>
-<td style="text-align: right;">139.111</td>
-<td style="text-align: right;">-265.366</td>
-<td style="text-align: right;">279.940</td>
+<td style="text-align: right;">-25.433</td>
+<td style="text-align: right;">586.467</td>
+<td style="text-align: right;">-1174.887</td>
+<td style="text-align: right;">1124.021</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">dml_flex BLP spline</td>
 <td style="text-align: left;">blp_spline</td>
 <td style="text-align: left;">location_scale</td>
-<td style="text-align: right;">8.429</td>
-<td style="text-align: right;">0.982</td>
-<td style="text-align: right;">6.505</td>
-<td style="text-align: right;">10.354</td>
+<td style="text-align: right;">7.726</td>
+<td style="text-align: right;">2.102</td>
+<td style="text-align: right;">3.606</td>
+<td style="text-align: right;">11.846</td>
 <td style="text-align: left;"></td>
 </tr>
 </tbody>
@@ -657,11 +658,13 @@ window.Quarto = {
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">is_fit_error</span><span class="op">(</span><span class="va">fit_flex_spline</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">old_par</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_flex_spline</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"level"</span>,</span>
-<span>       interval <span class="op">=</span> <span class="st">"both"</span>, Xdistr <span class="op">=</span> <span class="st">"rug"</span>,</span>
-<span>       main <span class="op">=</span> <span class="st">"DML flexible level curve"</span><span class="op">)</span></span>
+<span>       interval <span class="op">=</span> <span class="st">"both"</span>, Xdistr <span class="op">=</span> <span class="st">"histogram"</span>,</span>
+<span>       support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
+<span>       main <span class="op">=</span> <span class="st">"Xdistr = histogram"</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_flex_spline</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"derivative"</span>,</span>
-<span>       interval <span class="op">=</span> <span class="st">"both"</span>, Xdistr <span class="op">=</span> <span class="st">"rug"</span>,</span>
-<span>       main <span class="op">=</span> <span class="st">"DML flexible derivative curve"</span><span class="op">)</span></span>
+<span>       interval <span class="op">=</span> <span class="st">"both"</span>, Xdistr <span class="op">=</span> <span class="st">"histogram"</span>,</span>
+<span>       support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
+<span>       main <span class="op">=</span> <span class="st">"Xdistr = histogram"</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span><span class="va">old_par</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -695,38 +698,38 @@ window.Quarto = {
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">0.037</td>
-<td style="text-align: right;">8.288</td>
-<td style="text-align: right;">160.262</td>
-<td style="text-align: right;">-10.835</td>
-<td style="text-align: right;">6895.415</td>
+<td style="text-align: right;">-19.356</td>
+<td style="text-align: right;">675.635</td>
+<td style="text-align: right;">-651.444</td>
+<td style="text-align: right;">29069.780</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">0.060</td>
-<td style="text-align: right;">8.043</td>
-<td style="text-align: right;">116.290</td>
-<td style="text-align: right;">-10.890</td>
-<td style="text-align: right;">4458.750</td>
+<td style="text-align: right;">-31.012</td>
+<td style="text-align: right;">490.258</td>
+<td style="text-align: right;">-384.504</td>
+<td style="text-align: right;">18797.257</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">0.095</td>
-<td style="text-align: right;">7.656</td>
-<td style="text-align: right;">151.870</td>
-<td style="text-align: right;">-10.977</td>
-<td style="text-align: right;">880.136</td>
+<td style="text-align: right;">-37.190</td>
+<td style="text-align: right;">640.257</td>
+<td style="text-align: right;">35.671</td>
+<td style="text-align: right;">3710.487</td>
 </tr>
 <tr class="even">
 <td style="text-align: right;">0.156</td>
-<td style="text-align: right;">6.995</td>
-<td style="text-align: right;">131.538</td>
-<td style="text-align: right;">-10.702</td>
-<td style="text-align: right;">784.717</td>
+<td style="text-align: right;">-29.043</td>
+<td style="text-align: right;">554.538</td>
+<td style="text-align: right;">136.961</td>
+<td style="text-align: right;">3308.220</td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;">0.306</td>
-<td style="text-align: right;">5.451</td>
-<td style="text-align: right;">135.596</td>
-<td style="text-align: right;">-9.831</td>
-<td style="text-align: right;">607.860</td>
+<td style="text-align: right;">-10.566</td>
+<td style="text-align: right;">571.646</td>
+<td style="text-align: right;">108.703</td>
+<td style="text-align: right;">2562.626</td>
 </tr>
 </tbody>
 </table>
@@ -788,11 +791,11 @@ window.Quarto = {
 </tr>
 <tr class="even">
 <td style="text-align: left;">gaussian_crit_theta</td>
-<td style="text-align: left;">2.232</td>
+<td style="text-align: left;">2.526</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">simultaneous_crit_theta</td>
-<td style="text-align: left;">2.232</td>
+<td style="text-align: left;">2.526</td>
 </tr>
 </tbody>
 </table>
@@ -801,8 +804,9 @@ window.Quarto = {
 <div class="cell">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">is_fit_error</span><span class="op">(</span><span class="va">fit_flex_blp</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_flex_blp</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"level"</span>,</span>
-<span>       interval <span class="op">=</span> <span class="st">"both"</span>, Xdistr <span class="op">=</span> <span class="st">"density"</span>,</span>
-<span>       main <span class="op">=</span> <span class="st">"BLP-spline Gaussian max-t band"</span><span class="op">)</span></span>
+<span>       interval <span class="op">=</span> <span class="st">"both"</span>, Xdistr <span class="op">=</span> <span class="st">"histogram"</span>,</span>
+<span>       support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
+<span>       main <span class="op">=</span> <span class="st">"Xdistr = histogram"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
@@ -857,10 +861,10 @@ window.Quarto = {
 <td style="text-align: left;">dml_flex</td>
 <td style="text-align: right;">0.037</td>
 <td style="text-align: right;">0.306</td>
-<td style="text-align: right;">-2.926</td>
-<td style="text-align: right;">1.675</td>
-<td style="text-align: right;">-6.209</td>
-<td style="text-align: right;">0.357</td>
+<td style="text-align: right;">-4.416</td>
+<td style="text-align: right;">4.581</td>
+<td style="text-align: right;">-13.394</td>
+<td style="text-align: right;">4.561</td>
 <td style="text-align: left;">vcov</td>
 </tr>
 <tr class="even">
@@ -868,10 +872,10 @@ window.Quarto = {
 <td style="text-align: left;">dml_flex</td>
 <td style="text-align: right;">0.095</td>
 <td style="text-align: right;">NA</td>
-<td style="text-align: right;">-10.941</td>
-<td style="text-align: right;">6.996</td>
-<td style="text-align: right;">-24.653</td>
-<td style="text-align: right;">2.771</td>
+<td style="text-align: right;">-17.226</td>
+<td style="text-align: right;">18.361</td>
+<td style="text-align: right;">-53.213</td>
+<td style="text-align: right;">18.762</td>
 <td style="text-align: left;">vcov</td>
 </tr>
 </tbody>
@@ -887,7 +891,7 @@ window.Quarto = {
 <span>  tr_period <span class="op">=</span> <span class="va">tr_period</span>,</span>
 <span>  ref_period <span class="op">=</span> <span class="va">ref_period</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"dml_incremental"</span>,</span>
-<span>  learner <span class="op">=</span> <span class="st">"linear"</span>,</span>
+<span>  learner <span class="op">=</span> <span class="st">"grf"</span>,</span>
 <span>  K <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  S <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  density_method <span class="op">=</span> <span class="st">"residual_kde"</span></span>
@@ -898,7 +902,7 @@ window.Quarto = {
 <span>  tr_period <span class="op">=</span> <span class="va">tr_period</span>,</span>
 <span>  ref_period <span class="op">=</span> <span class="va">ref_period</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"dml_incremental"</span>,</span>
-<span>  learner <span class="op">=</span> <span class="st">"linear"</span>,</span>
+<span>  learner <span class="op">=</span> <span class="st">"grf"</span>,</span>
 <span>  K <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  S <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  density_method <span class="op">=</span> <span class="st">"location_scale"</span></span>
@@ -909,7 +913,7 @@ window.Quarto = {
 <span>  tr_period <span class="op">=</span> <span class="va">tr_period</span>,</span>
 <span>  ref_period <span class="op">=</span> <span class="va">ref_period</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"dml_incremental"</span>,</span>
-<span>  learner <span class="op">=</span> <span class="st">"linear"</span>,</span>
+<span>  learner <span class="op">=</span> <span class="st">"grf"</span>,</span>
 <span>  K <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  S <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  density_method <span class="op">=</span> <span class="st">"local_kde"</span></span>
@@ -917,13 +921,13 @@ window.Quarto = {
 <span></span>
 <span><span class="va">incremental_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span></span>
 <span>  <span class="fu">event_row</span><span class="op">(</span><span class="va">fit_inc_residual</span>, <span class="st">"incremental residual KDE"</span>,</span>
-<span>            <span class="st">"observed average derivative"</span>, learner <span class="op">=</span> <span class="st">"linear"</span>,</span>
+<span>            <span class="st">"observed average derivative"</span>, learner <span class="op">=</span> <span class="st">"grf"</span>,</span>
 <span>            density_method <span class="op">=</span> <span class="st">"residual_kde"</span><span class="op">)</span>,</span>
 <span>  <span class="fu">event_row</span><span class="op">(</span><span class="va">fit_inc_location</span>, <span class="st">"incremental location-scale"</span>,</span>
-<span>            <span class="st">"observed average derivative"</span>, learner <span class="op">=</span> <span class="st">"linear"</span>,</span>
+<span>            <span class="st">"observed average derivative"</span>, learner <span class="op">=</span> <span class="st">"grf"</span>,</span>
 <span>            density_method <span class="op">=</span> <span class="st">"location_scale"</span><span class="op">)</span>,</span>
 <span>  <span class="fu">event_row</span><span class="op">(</span><span class="va">fit_inc_local</span>, <span class="st">"incremental local KDE"</span>,</span>
-<span>            <span class="st">"observed average derivative"</span>, learner <span class="op">=</span> <span class="st">"linear"</span>,</span>
+<span>            <span class="st">"observed average derivative"</span>, learner <span class="op">=</span> <span class="st">"grf"</span>,</span>
 <span>            density_method <span class="op">=</span> <span class="st">"local_kde"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -955,28 +959,28 @@ window.Quarto = {
 <tr class="odd">
 <td style="text-align: left;">incremental residual KDE</td>
 <td style="text-align: left;">residual_kde</td>
-<td style="text-align: right;">-14.202</td>
-<td style="text-align: right;">3.669</td>
-<td style="text-align: right;">-21.394</td>
-<td style="text-align: right;">-7.011</td>
+<td style="text-align: right;">-563.635</td>
+<td style="text-align: right;">51.860</td>
+<td style="text-align: right;">-665.278</td>
+<td style="text-align: right;">-461.991</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">incremental location-scale</td>
 <td style="text-align: left;">location_scale</td>
-<td style="text-align: right;">-20.618</td>
-<td style="text-align: right;">5.562</td>
-<td style="text-align: right;">-31.518</td>
-<td style="text-align: right;">-9.717</td>
+<td style="text-align: right;">-364.852</td>
+<td style="text-align: right;">40.506</td>
+<td style="text-align: right;">-444.242</td>
+<td style="text-align: right;">-285.462</td>
 <td style="text-align: left;"></td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">incremental local KDE</td>
 <td style="text-align: left;">local_kde</td>
-<td style="text-align: right;">146.524</td>
-<td style="text-align: right;">201.065</td>
-<td style="text-align: right;">-247.555</td>
-<td style="text-align: right;">540.604</td>
+<td style="text-align: right;">-377.153</td>
+<td style="text-align: right;">215.910</td>
+<td style="text-align: right;">-800.329</td>
+<td style="text-align: right;">46.024</td>
 <td style="text-align: left;"></td>
 </tr>
 </tbody>
@@ -1717,408 +1721,420 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
 <span id="cb14-109"><a href="#cb14-109" aria-hidden="true" tabindex="-1"></a>Binary <span class="in">`method = "dml_binary"`</span> is covered in Chapter @sec-binary because it</span>
 <span id="cb14-110"><a href="#cb14-110" aria-hidden="true" tabindex="-1"></a>targets a binary contrast, not a continuous-<span class="in">`G`</span> scalar or curve.</span>
 <span id="cb14-111"><a href="#cb14-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-112"><a href="#cb14-112" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Setup</span></span>
-<span id="cb14-113"><a href="#cb14-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-library-data}</span></span>
-<span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fdid)</span>
-<span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(fdid)</span>
-<span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-118"><a href="#cb14-118" aria-hidden="true" tabindex="-1"></a>mortality<span class="sc">$</span>uniqueid <span class="ot">&lt;-</span> <span class="fu">paste</span>(</span>
-<span id="cb14-119"><a href="#cb14-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>(mortality<span class="sc">$</span>provid),</span>
-<span id="cb14-120"><a href="#cb14-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>(mortality<span class="sc">$</span>countyid),</span>
-<span id="cb14-121"><a href="#cb14-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep =</span> <span class="st">"-"</span></span>
-<span id="cb14-122"><a href="#cb14-122" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-123"><a href="#cb14-123" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-124"><a href="#cb14-124" aria-hidden="true" tabindex="-1"></a>covar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"avggrain"</span>, <span class="st">"nograin"</span>, <span class="st">"urban"</span>, <span class="st">"dis_bj"</span>, <span class="st">"dis_pc"</span>,</span>
-<span id="cb14-125"><a href="#cb14-125" aria-hidden="true" tabindex="-1"></a>           <span class="st">"rice"</span>, <span class="st">"minority"</span>, <span class="st">"edu"</span>, <span class="st">"lnpop"</span>)</span>
-<span id="cb14-126"><a href="#cb14-126" aria-hidden="true" tabindex="-1"></a>tr_period <span class="ot">&lt;-</span> <span class="dv">1958</span><span class="sc">:</span><span class="dv">1961</span></span>
-<span id="cb14-127"><a href="#cb14-127" aria-hidden="true" tabindex="-1"></a>ref_period <span class="ot">&lt;-</span> <span class="dv">1957</span></span>
-<span id="cb14-128"><a href="#cb14-128" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-129"><a href="#cb14-129" aria-hidden="true" tabindex="-1"></a>s_cont <span class="ot">&lt;-</span> <span class="fu">fdid_prepare</span>(</span>
-<span id="cb14-130"><a href="#cb14-130" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">transform</span>(mortality, <span class="at">G_cont =</span> lnpczupu),</span>
-<span id="cb14-131"><a href="#cb14-131" aria-hidden="true" tabindex="-1"></a>  <span class="at">Y_label =</span> <span class="st">"mortality"</span>,</span>
-<span id="cb14-132"><a href="#cb14-132" aria-hidden="true" tabindex="-1"></a>  <span class="at">X_labels =</span> covar,</span>
-<span id="cb14-133"><a href="#cb14-133" aria-hidden="true" tabindex="-1"></a>  <span class="at">G_label =</span> <span class="st">"G_cont"</span>,</span>
-<span id="cb14-134"><a href="#cb14-134" aria-hidden="true" tabindex="-1"></a>  <span class="at">unit_label =</span> <span class="st">"uniqueid"</span>,</span>
-<span id="cb14-135"><a href="#cb14-135" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_label =</span> <span class="st">"year"</span></span>
-<span id="cb14-136"><a href="#cb14-136" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-112"><a href="#cb14-112" aria-hidden="true" tabindex="-1"></a>The package default is <span class="in">`learner = "linear"`</span> because it is fast and has few</span>
+<span id="cb14-113"><a href="#cb14-113" aria-hidden="true" tabindex="-1"></a>backend requirements. The rendered examples in this chapter use</span>
+<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a><span class="in">`learner = "grf"`</span> throughout to show the flexible DML workflow: generalized</span>
+<span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a>random forests fit the nuisance functions inside the cross-fitting loop, while</span>
+<span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a>the target is still estimated through the method-specific orthogonal score.</span>
+<span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a>Because these examples fit multiple forests across folds and targets, this</span>
+<span id="cb14-118"><a href="#cb14-118" aria-hidden="true" tabindex="-1"></a>chapter takes noticeably longer to render than the earlier linear-learner</span>
+<span id="cb14-119"><a href="#cb14-119" aria-hidden="true" tabindex="-1"></a>version. That is expected and reflects the heavier GRF workflow.</span>
+<span id="cb14-120"><a href="#cb14-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-121"><a href="#cb14-121" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Setup</span></span>
+<span id="cb14-122"><a href="#cb14-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-123"><a href="#cb14-123" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-library-data}</span></span>
+<span id="cb14-124"><a href="#cb14-124" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fdid)</span>
+<span id="cb14-125"><a href="#cb14-125" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(fdid)</span>
+<span id="cb14-126"><a href="#cb14-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-127"><a href="#cb14-127" aria-hidden="true" tabindex="-1"></a>mortality<span class="sc">$</span>uniqueid <span class="ot">&lt;-</span> <span class="fu">paste</span>(</span>
+<span id="cb14-128"><a href="#cb14-128" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>(mortality<span class="sc">$</span>provid),</span>
+<span id="cb14-129"><a href="#cb14-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>(mortality<span class="sc">$</span>countyid),</span>
+<span id="cb14-130"><a href="#cb14-130" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep =</span> <span class="st">"-"</span></span>
+<span id="cb14-131"><a href="#cb14-131" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-132"><a href="#cb14-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-133"><a href="#cb14-133" aria-hidden="true" tabindex="-1"></a>covar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"avggrain"</span>, <span class="st">"nograin"</span>, <span class="st">"urban"</span>, <span class="st">"dis_bj"</span>, <span class="st">"dis_pc"</span>,</span>
+<span id="cb14-134"><a href="#cb14-134" aria-hidden="true" tabindex="-1"></a>           <span class="st">"rice"</span>, <span class="st">"minority"</span>, <span class="st">"edu"</span>, <span class="st">"lnpop"</span>)</span>
+<span id="cb14-135"><a href="#cb14-135" aria-hidden="true" tabindex="-1"></a>tr_period <span class="ot">&lt;-</span> <span class="dv">1958</span><span class="sc">:</span><span class="dv">1961</span></span>
+<span id="cb14-136"><a href="#cb14-136" aria-hidden="true" tabindex="-1"></a>ref_period <span class="ot">&lt;-</span> <span class="dv">1957</span></span>
 <span id="cb14-137"><a href="#cb14-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-138"><a href="#cb14-138" aria-hidden="true" tabindex="-1"></a>g_positive <span class="ot">&lt;-</span> s_cont<span class="sc">$</span>G[s_cont<span class="sc">$</span>G <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
-<span id="cb14-139"><a href="#cb14-139" aria-hidden="true" tabindex="-1"></a>eval_g_dml <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(stats<span class="sc">::</span><span class="fu">quantile</span>(</span>
-<span id="cb14-140"><a href="#cb14-140" aria-hidden="true" tabindex="-1"></a>  g_positive,</span>
-<span id="cb14-141"><a href="#cb14-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.20</span>, <span class="fl">0.35</span>, <span class="fl">0.50</span>, <span class="fl">0.65</span>, <span class="fl">0.80</span>),</span>
-<span id="cb14-142"><a href="#cb14-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">na.rm =</span> <span class="cn">TRUE</span></span>
-<span id="cb14-143"><a href="#cb14-143" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb14-144"><a href="#cb14-144" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-145"><a href="#cb14-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-146"><a href="#cb14-146" aria-hidden="true" tabindex="-1"></a>As in Chapter @sec-kernel-continuous, <span class="in">`eval_g`</span> is an estimation grid for</span>
-<span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a><span class="in">`dml_flex`</span>. The scalar DML methods ignore it because they do not estimate a</span>
-<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a>curve.</span>
-<span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a><span class="fu">## Scalar PLR Benchmark</span></span>
-<span id="cb14-151"><a href="#cb14-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-152"><a href="#cb14-152" aria-hidden="true" tabindex="-1"></a><span class="in">`method = "dml_plr"`</span> estimates a partially linear scalar slope. It is a useful</span>
-<span id="cb14-153"><a href="#cb14-153" aria-hidden="true" tabindex="-1"></a>benchmark when the question is whether the first-difference outcome has one</span>
-<span id="cb14-154"><a href="#cb14-154" aria-hidden="true" tabindex="-1"></a>average adjusted relationship with continuous <span class="in">`G`</span>.</span>
-<span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-156"><a href="#cb14-156" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-plr-fit}</span></span>
-<span id="cb14-157"><a href="#cb14-157" aria-hidden="true" tabindex="-1"></a>fit_plr_score <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
-<span id="cb14-158"><a href="#cb14-158" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
-<span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
-<span id="cb14-160"><a href="#cb14-160" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
-<span id="cb14-161"><a href="#cb14-161" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_plr"</span>,</span>
-<span id="cb14-162"><a href="#cb14-162" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"linear"</span>,</span>
-<span id="cb14-163"><a href="#cb14-163" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
-<span id="cb14-164"><a href="#cb14-164" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
-<span id="cb14-165"><a href="#cb14-165" aria-hidden="true" tabindex="-1"></a>  <span class="at">dml_inference =</span> <span class="st">"score"</span></span>
-<span id="cb14-166"><a href="#cb14-166" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-167"><a href="#cb14-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-168"><a href="#cb14-168" aria-hidden="true" tabindex="-1"></a>fit_plr_multiplier <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
-<span id="cb14-169"><a href="#cb14-169" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
-<span id="cb14-170"><a href="#cb14-170" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
-<span id="cb14-171"><a href="#cb14-171" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
-<span id="cb14-172"><a href="#cb14-172" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_plr"</span>,</span>
-<span id="cb14-173"><a href="#cb14-173" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"linear"</span>,</span>
-<span id="cb14-174"><a href="#cb14-174" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
-<span id="cb14-175"><a href="#cb14-175" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
-<span id="cb14-176"><a href="#cb14-176" aria-hidden="true" tabindex="-1"></a>  <span class="at">dml_inference =</span> <span class="st">"score_multiplier"</span>,</span>
-<span id="cb14-177"><a href="#cb14-177" aria-hidden="true" tabindex="-1"></a>  <span class="at">dml_boot =</span> <span class="dv">99</span></span>
-<span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-179"><a href="#cb14-179" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a>plr_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_plr_score, <span class="st">"PLR score"</span>, <span class="st">"partially linear slope"</span>,</span>
-<span id="cb14-182"><a href="#cb14-182" aria-hidden="true" tabindex="-1"></a>            <span class="at">learner =</span> <span class="st">"linear"</span>),</span>
-<span id="cb14-183"><a href="#cb14-183" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_plr_multiplier, <span class="st">"PLR score multiplier"</span>,</span>
-<span id="cb14-184"><a href="#cb14-184" aria-hidden="true" tabindex="-1"></a>            <span class="st">"partially linear slope"</span>, <span class="at">learner =</span> <span class="st">"linear"</span>)</span>
-<span id="cb14-185"><a href="#cb14-185" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-186"><a href="#cb14-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-187"><a href="#cb14-187" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(plr_table[, <span class="fu">c</span>(<span class="st">"fit"</span>, <span class="st">"target"</span>, <span class="st">"learner"</span>, <span class="st">"Estimate"</span>,</span>
-<span id="cb14-188"><a href="#cb14-188" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"Std.Error"</span>, <span class="st">"CI_Lower"</span>, <span class="st">"CI_Upper"</span>, <span class="st">"note"</span>)],</span>
-<span id="cb14-189"><a href="#cb14-189" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">3</span>)</span>
-<span id="cb14-190"><a href="#cb14-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-191"><a href="#cb14-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-192"><a href="#cb14-192" aria-hidden="true" tabindex="-1"></a>The default scalar DML interval is analytical score inference. The</span>
-<span id="cb14-193"><a href="#cb14-193" aria-hidden="true" tabindex="-1"></a><span class="in">`score_multiplier`</span> option changes the critical value using a scalar multiplier</span>
-<span id="cb14-194"><a href="#cb14-194" aria-hidden="true" tabindex="-1"></a>process based on stored score contributions. It is not a nonparametric refit</span>
-<span id="cb14-195"><a href="#cb14-195" aria-hidden="true" tabindex="-1"></a>bootstrap.</span>
-<span id="cb14-196"><a href="#cb14-196" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-197"><a href="#cb14-197" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-plr-metadata}</span></span>
-<span id="cb14-198"><a href="#cb14-198" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_plr_multiplier)) {</span>
-<span id="cb14-199"><a href="#cb14-199" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">metadata_table</span>(fit_plr_multiplier))</span>
-<span id="cb14-200"><a href="#cb14-200" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-201"><a href="#cb14-201" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-202"><a href="#cb14-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-203"><a href="#cb14-203" aria-hidden="true" tabindex="-1"></a><span class="fu">## Flexible DML Curves</span></span>
-<span id="cb14-204"><a href="#cb14-204" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-205"><a href="#cb14-205" aria-hidden="true" tabindex="-1"></a><span class="in">`method = "dml_flex"`</span> targets the flexible level curve</span>
-<span id="cb14-206"><a href="#cb14-206" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-207"><a href="#cb14-207" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb14-208"><a href="#cb14-208" aria-hidden="true" tabindex="-1"></a>\theta(g) = E_X<span class="co">[</span><span class="ot">\mu(g, X)</span><span class="co">]</span></span>
-<span id="cb14-209"><a href="#cb14-209" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb14-210"><a href="#cb14-210" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-211"><a href="#cb14-211" aria-hidden="true" tabindex="-1"></a>and its derivative with respect to <span class="in">`G`</span>. The implementation cross-fits nuisance</span>
-<span id="cb14-212"><a href="#cb14-212" aria-hidden="true" tabindex="-1"></a>models, builds orthogonal pseudo-outcomes, and maps those pseudo-outcomes back</span>
-<span id="cb14-213"><a href="#cb14-213" aria-hidden="true" tabindex="-1"></a>to the <span class="in">`eval_g`</span> grid using <span class="in">`signal_map`</span>.</span>
-<span id="cb14-214"><a href="#cb14-214" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-215"><a href="#cb14-215" aria-hidden="true" tabindex="-1"></a>Two option families are easy to confuse:</span>
-<span id="cb14-216"><a href="#cb14-216" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-217"><a href="#cb14-217" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`density_method`</span> estimates the conditional density $f_{G \mid X}(g \mid x)$</span>
-<span id="cb14-218"><a href="#cb14-218" aria-hidden="true" tabindex="-1"></a>  needed by the orthogonal continuous-treatment score. It is used by</span>
-<span id="cb14-219"><a href="#cb14-219" aria-hidden="true" tabindex="-1"></a>  <span class="in">`dml_flex`</span> and <span class="in">`dml_incremental`</span>.</span>
-<span id="cb14-220"><a href="#cb14-220" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`signal_map`</span> maps the cross-fitted <span class="in">`dml_flex`</span> signal back to the <span class="in">`eval_g`</span></span>
-<span id="cb14-221"><a href="#cb14-221" aria-hidden="true" tabindex="-1"></a>  grid. It is used by <span class="in">`dml_flex`</span> only.</span>
-<span id="cb14-222"><a href="#cb14-222" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-223"><a href="#cb14-223" aria-hidden="true" tabindex="-1"></a><span class="in">`signal_map = "blp_spline"`</span> is therefore not a fourth density algorithm. It is</span>
-<span id="cb14-224"><a href="#cb14-224" aria-hidden="true" tabindex="-1"></a>a B-spline best linear projection mapping path that also stores finite-grid</span>
-<span id="cb14-225"><a href="#cb14-225" aria-hidden="true" tabindex="-1"></a>covariance matrices for level and derivative curves.</span>
-<span id="cb14-226"><a href="#cb14-226" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-227"><a href="#cb14-227" aria-hidden="true" tabindex="-1"></a><span class="fu">### Conditional-density options</span></span>
-<span id="cb14-228"><a href="#cb14-228" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-229"><a href="#cb14-229" aria-hidden="true" tabindex="-1"></a>The package currently exposes three conditional-density approximations.</span>
-<span id="cb14-230"><a href="#cb14-230" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-231"><a href="#cb14-231" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`density_method`</span> <span class="pp">|</span> Algorithm <span class="pp">|</span> Practical reading <span class="pp">|</span></span>
-<span id="cb14-232"><a href="#cb14-232" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb14-233"><a href="#cb14-233" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"residual_kde"`</span> <span class="pp">|</span> Fit $E<span class="co">[</span><span class="ot">G \mid X</span><span class="co">]</span>$, compute residuals, and apply a univariate KDE to $G - \hat m(X)$ <span class="pp">|</span> fast default; works best when <span class="in">`G | X`</span> is close to a location-shift model <span class="pp">|</span></span>
-<span id="cb14-234"><a href="#cb14-234" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"location_scale"`</span> <span class="pp">|</span> Fit $E<span class="co">[</span><span class="ot">G \mid X</span><span class="co">]</span>$, fit a residual-scale model, standardize residuals, and KDE the standardized residual <span class="pp">|</span> allows heteroskedastic <span class="in">`G | X`</span>; often preferable in heteroskedastic designs <span class="pp">|</span></span>
-<span id="cb14-235"><a href="#cb14-235" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"local_kde"`</span> <span class="pp">|</span> Product Gaussian kernel over scaled covariates and a Gaussian KDE over <span class="in">`G`</span> <span class="pp">|</span> most nonparametric of the three; sensitive to covariate dimension <span class="pp">|</span></span>
-<span id="cb14-236"><a href="#cb14-236" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-237"><a href="#cb14-237" aria-hidden="true" tabindex="-1"></a>The density estimate enters the DML score, not just a plot. For this reason,</span>
-<span id="cb14-238"><a href="#cb14-238" aria-hidden="true" tabindex="-1"></a><span class="in">`density_method`</span> should be treated as a sensitivity dimension, especially for</span>
-<span id="cb14-239"><a href="#cb14-239" aria-hidden="true" tabindex="-1"></a><span class="in">`dml_incremental`</span>, where the target is an observed-population average</span>
-<span id="cb14-240"><a href="#cb14-240" aria-hidden="true" tabindex="-1"></a>derivative and the conditional-density score is central.</span>
-<span id="cb14-241"><a href="#cb14-241" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-242"><a href="#cb14-242" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-flex-fit}</span></span>
-<span id="cb14-243"><a href="#cb14-243" aria-hidden="true" tabindex="-1"></a>dml_curve_draws <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">identical</span>(<span class="fu">tolower</span>(<span class="fu">Sys.getenv</span>(<span class="st">"FDID_TUTORIAL_HEAVY"</span>)),</span>
-<span id="cb14-244"><a href="#cb14-244" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"true"</span>)) <span class="dv">199</span>L <span class="cf">else</span> <span class="dv">49</span>L</span>
+<span id="cb14-138"><a href="#cb14-138" aria-hidden="true" tabindex="-1"></a>s_cont <span class="ot">&lt;-</span> <span class="fu">fdid_prepare</span>(</span>
+<span id="cb14-139"><a href="#cb14-139" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">transform</span>(mortality, <span class="at">G_cont =</span> lnpczupu),</span>
+<span id="cb14-140"><a href="#cb14-140" aria-hidden="true" tabindex="-1"></a>  <span class="at">Y_label =</span> <span class="st">"mortality"</span>,</span>
+<span id="cb14-141"><a href="#cb14-141" aria-hidden="true" tabindex="-1"></a>  <span class="at">X_labels =</span> covar,</span>
+<span id="cb14-142"><a href="#cb14-142" aria-hidden="true" tabindex="-1"></a>  <span class="at">G_label =</span> <span class="st">"G_cont"</span>,</span>
+<span id="cb14-143"><a href="#cb14-143" aria-hidden="true" tabindex="-1"></a>  <span class="at">unit_label =</span> <span class="st">"uniqueid"</span>,</span>
+<span id="cb14-144"><a href="#cb14-144" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_label =</span> <span class="st">"year"</span></span>
+<span id="cb14-145"><a href="#cb14-145" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-146"><a href="#cb14-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a>g_positive <span class="ot">&lt;-</span> s_cont<span class="sc">$</span>G[s_cont<span class="sc">$</span>G <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
+<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a>eval_g_dml <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(stats<span class="sc">::</span><span class="fu">quantile</span>(</span>
+<span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a>  g_positive,</span>
+<span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a>  <span class="at">probs =</span> <span class="fu">c</span>(<span class="fl">0.20</span>, <span class="fl">0.35</span>, <span class="fl">0.50</span>, <span class="fl">0.65</span>, <span class="fl">0.80</span>),</span>
+<span id="cb14-151"><a href="#cb14-151" aria-hidden="true" tabindex="-1"></a>  <span class="at">na.rm =</span> <span class="cn">TRUE</span></span>
+<span id="cb14-152"><a href="#cb14-152" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb14-153"><a href="#cb14-153" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-154"><a href="#cb14-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a>As in Chapter @sec-kernel-continuous, <span class="in">`eval_g`</span> is an estimation grid for</span>
+<span id="cb14-156"><a href="#cb14-156" aria-hidden="true" tabindex="-1"></a><span class="in">`dml_flex`</span>. The scalar DML methods ignore it because they do not estimate a</span>
+<span id="cb14-157"><a href="#cb14-157" aria-hidden="true" tabindex="-1"></a>curve.</span>
+<span id="cb14-158"><a href="#cb14-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a><span class="fu">## Scalar PLR Benchmark</span></span>
+<span id="cb14-160"><a href="#cb14-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-161"><a href="#cb14-161" aria-hidden="true" tabindex="-1"></a><span class="in">`method = "dml_plr"`</span> estimates a partially linear scalar slope. It is a useful</span>
+<span id="cb14-162"><a href="#cb14-162" aria-hidden="true" tabindex="-1"></a>benchmark when the question is whether the first-difference outcome has one</span>
+<span id="cb14-163"><a href="#cb14-163" aria-hidden="true" tabindex="-1"></a>average adjusted relationship with continuous <span class="in">`G`</span>.</span>
+<span id="cb14-164"><a href="#cb14-164" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-165"><a href="#cb14-165" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-plr-fit}</span></span>
+<span id="cb14-166"><a href="#cb14-166" aria-hidden="true" tabindex="-1"></a>fit_plr_score <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
+<span id="cb14-167"><a href="#cb14-167" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
+<span id="cb14-168"><a href="#cb14-168" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
+<span id="cb14-169"><a href="#cb14-169" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
+<span id="cb14-170"><a href="#cb14-170" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_plr"</span>,</span>
+<span id="cb14-171"><a href="#cb14-171" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"grf"</span>,</span>
+<span id="cb14-172"><a href="#cb14-172" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
+<span id="cb14-173"><a href="#cb14-173" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
+<span id="cb14-174"><a href="#cb14-174" aria-hidden="true" tabindex="-1"></a>  <span class="at">dml_inference =</span> <span class="st">"score"</span></span>
+<span id="cb14-175"><a href="#cb14-175" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-176"><a href="#cb14-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-177"><a href="#cb14-177" aria-hidden="true" tabindex="-1"></a>fit_plr_multiplier <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
+<span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
+<span id="cb14-179"><a href="#cb14-179" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
+<span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
+<span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_plr"</span>,</span>
+<span id="cb14-182"><a href="#cb14-182" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"grf"</span>,</span>
+<span id="cb14-183"><a href="#cb14-183" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
+<span id="cb14-184"><a href="#cb14-184" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
+<span id="cb14-185"><a href="#cb14-185" aria-hidden="true" tabindex="-1"></a>  <span class="at">dml_inference =</span> <span class="st">"score_multiplier"</span>,</span>
+<span id="cb14-186"><a href="#cb14-186" aria-hidden="true" tabindex="-1"></a>  <span class="at">dml_boot =</span> <span class="dv">99</span></span>
+<span id="cb14-187"><a href="#cb14-187" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-188"><a href="#cb14-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-189"><a href="#cb14-189" aria-hidden="true" tabindex="-1"></a>plr_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb14-190"><a href="#cb14-190" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_plr_score, <span class="st">"PLR score"</span>, <span class="st">"partially linear slope"</span>,</span>
+<span id="cb14-191"><a href="#cb14-191" aria-hidden="true" tabindex="-1"></a>            <span class="at">learner =</span> <span class="st">"grf"</span>),</span>
+<span id="cb14-192"><a href="#cb14-192" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_plr_multiplier, <span class="st">"PLR score multiplier"</span>,</span>
+<span id="cb14-193"><a href="#cb14-193" aria-hidden="true" tabindex="-1"></a>            <span class="st">"partially linear slope"</span>, <span class="at">learner =</span> <span class="st">"grf"</span>)</span>
+<span id="cb14-194"><a href="#cb14-194" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-195"><a href="#cb14-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-196"><a href="#cb14-196" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(plr_table[, <span class="fu">c</span>(<span class="st">"fit"</span>, <span class="st">"target"</span>, <span class="st">"learner"</span>, <span class="st">"Estimate"</span>,</span>
+<span id="cb14-197"><a href="#cb14-197" aria-hidden="true" tabindex="-1"></a>                           <span class="st">"Std.Error"</span>, <span class="st">"CI_Lower"</span>, <span class="st">"CI_Upper"</span>, <span class="st">"note"</span>)],</span>
+<span id="cb14-198"><a href="#cb14-198" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">3</span>)</span>
+<span id="cb14-199"><a href="#cb14-199" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-200"><a href="#cb14-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-201"><a href="#cb14-201" aria-hidden="true" tabindex="-1"></a>The default scalar DML interval is analytical score inference. The</span>
+<span id="cb14-202"><a href="#cb14-202" aria-hidden="true" tabindex="-1"></a><span class="in">`score_multiplier`</span> option changes the critical value using a scalar multiplier</span>
+<span id="cb14-203"><a href="#cb14-203" aria-hidden="true" tabindex="-1"></a>process based on stored score contributions. It is not a nonparametric refit</span>
+<span id="cb14-204"><a href="#cb14-204" aria-hidden="true" tabindex="-1"></a>bootstrap.</span>
+<span id="cb14-205"><a href="#cb14-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-206"><a href="#cb14-206" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-plr-metadata}</span></span>
+<span id="cb14-207"><a href="#cb14-207" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_plr_multiplier)) {</span>
+<span id="cb14-208"><a href="#cb14-208" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="fu">metadata_table</span>(fit_plr_multiplier))</span>
+<span id="cb14-209"><a href="#cb14-209" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-210"><a href="#cb14-210" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-211"><a href="#cb14-211" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-212"><a href="#cb14-212" aria-hidden="true" tabindex="-1"></a><span class="fu">## Flexible DML Curves</span></span>
+<span id="cb14-213"><a href="#cb14-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-214"><a href="#cb14-214" aria-hidden="true" tabindex="-1"></a><span class="in">`method = "dml_flex"`</span> targets the flexible level curve</span>
+<span id="cb14-215"><a href="#cb14-215" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-216"><a href="#cb14-216" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb14-217"><a href="#cb14-217" aria-hidden="true" tabindex="-1"></a>\theta(g) = E_X<span class="co">[</span><span class="ot">\mu(g, X)</span><span class="co">]</span></span>
+<span id="cb14-218"><a href="#cb14-218" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb14-219"><a href="#cb14-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-220"><a href="#cb14-220" aria-hidden="true" tabindex="-1"></a>and its derivative with respect to <span class="in">`G`</span>. The implementation cross-fits nuisance</span>
+<span id="cb14-221"><a href="#cb14-221" aria-hidden="true" tabindex="-1"></a>models, builds orthogonal pseudo-outcomes, and maps those pseudo-outcomes back</span>
+<span id="cb14-222"><a href="#cb14-222" aria-hidden="true" tabindex="-1"></a>to the <span class="in">`eval_g`</span> grid using <span class="in">`signal_map`</span>.</span>
+<span id="cb14-223"><a href="#cb14-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-224"><a href="#cb14-224" aria-hidden="true" tabindex="-1"></a>Two option families are easy to confuse:</span>
+<span id="cb14-225"><a href="#cb14-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-226"><a href="#cb14-226" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`density_method`</span> estimates the conditional density $f_{G \mid X}(g \mid x)$</span>
+<span id="cb14-227"><a href="#cb14-227" aria-hidden="true" tabindex="-1"></a>  needed by the orthogonal continuous-treatment score. It is used by</span>
+<span id="cb14-228"><a href="#cb14-228" aria-hidden="true" tabindex="-1"></a>  <span class="in">`dml_flex`</span> and <span class="in">`dml_incremental`</span>.</span>
+<span id="cb14-229"><a href="#cb14-229" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="in">`signal_map`</span> maps the cross-fitted <span class="in">`dml_flex`</span> signal back to the <span class="in">`eval_g`</span></span>
+<span id="cb14-230"><a href="#cb14-230" aria-hidden="true" tabindex="-1"></a>  grid. It is used by <span class="in">`dml_flex`</span> only.</span>
+<span id="cb14-231"><a href="#cb14-231" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-232"><a href="#cb14-232" aria-hidden="true" tabindex="-1"></a><span class="in">`signal_map = "blp_spline"`</span> is therefore not a fourth density algorithm. It is</span>
+<span id="cb14-233"><a href="#cb14-233" aria-hidden="true" tabindex="-1"></a>a B-spline best linear projection mapping path that also stores finite-grid</span>
+<span id="cb14-234"><a href="#cb14-234" aria-hidden="true" tabindex="-1"></a>covariance matrices for level and derivative curves.</span>
+<span id="cb14-235"><a href="#cb14-235" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-236"><a href="#cb14-236" aria-hidden="true" tabindex="-1"></a><span class="fu">### Conditional-density options</span></span>
+<span id="cb14-237"><a href="#cb14-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-238"><a href="#cb14-238" aria-hidden="true" tabindex="-1"></a>The package currently exposes three conditional-density approximations.</span>
+<span id="cb14-239"><a href="#cb14-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-240"><a href="#cb14-240" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`density_method`</span> <span class="pp">|</span> Algorithm <span class="pp">|</span> Practical reading <span class="pp">|</span></span>
+<span id="cb14-241"><a href="#cb14-241" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb14-242"><a href="#cb14-242" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"residual_kde"`</span> <span class="pp">|</span> Fit $E<span class="co">[</span><span class="ot">G \mid X</span><span class="co">]</span>$, compute residuals, and apply a univariate KDE to $G - \hat m(X)$ <span class="pp">|</span> fast default; works best when <span class="in">`G | X`</span> is close to a location-shift model <span class="pp">|</span></span>
+<span id="cb14-243"><a href="#cb14-243" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"location_scale"`</span> <span class="pp">|</span> Fit $E<span class="co">[</span><span class="ot">G \mid X</span><span class="co">]</span>$, fit a residual-scale model, standardize residuals, and KDE the standardized residual <span class="pp">|</span> allows heteroskedastic <span class="in">`G | X`</span>; often preferable in heteroskedastic designs <span class="pp">|</span></span>
+<span id="cb14-244"><a href="#cb14-244" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"local_kde"`</span> <span class="pp">|</span> Product Gaussian kernel over scaled covariates and a Gaussian KDE over <span class="in">`G`</span> <span class="pp">|</span> most nonparametric of the three; sensitive to covariate dimension <span class="pp">|</span></span>
 <span id="cb14-245"><a href="#cb14-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-246"><a href="#cb14-246" aria-hidden="true" tabindex="-1"></a>fit_flex_spline <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
-<span id="cb14-247"><a href="#cb14-247" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
-<span id="cb14-248"><a href="#cb14-248" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
-<span id="cb14-249"><a href="#cb14-249" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
-<span id="cb14-250"><a href="#cb14-250" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_flex"</span>,</span>
-<span id="cb14-251"><a href="#cb14-251" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"linear"</span>,</span>
-<span id="cb14-252"><a href="#cb14-252" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
-<span id="cb14-253"><a href="#cb14-253" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
-<span id="cb14-254"><a href="#cb14-254" aria-hidden="true" tabindex="-1"></a>  <span class="at">eval_g =</span> eval_g_dml,</span>
-<span id="cb14-255"><a href="#cb14-255" aria-hidden="true" tabindex="-1"></a>  <span class="at">signal_map =</span> <span class="st">"spline"</span>,</span>
-<span id="cb14-256"><a href="#cb14-256" aria-hidden="true" tabindex="-1"></a>  <span class="at">density_method =</span> <span class="st">"residual_kde"</span>,</span>
-<span id="cb14-257"><a href="#cb14-257" aria-hidden="true" tabindex="-1"></a>  <span class="at">boot =</span> dml_curve_draws</span>
-<span id="cb14-258"><a href="#cb14-258" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-259"><a href="#cb14-259" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-260"><a href="#cb14-260" aria-hidden="true" tabindex="-1"></a>fit_flex_blp <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
-<span id="cb14-261"><a href="#cb14-261" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
-<span id="cb14-262"><a href="#cb14-262" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
-<span id="cb14-263"><a href="#cb14-263" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
-<span id="cb14-264"><a href="#cb14-264" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_flex"</span>,</span>
-<span id="cb14-265"><a href="#cb14-265" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"linear"</span>,</span>
-<span id="cb14-266"><a href="#cb14-266" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
-<span id="cb14-267"><a href="#cb14-267" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
-<span id="cb14-268"><a href="#cb14-268" aria-hidden="true" tabindex="-1"></a>  <span class="at">eval_g =</span> eval_g_dml,</span>
-<span id="cb14-269"><a href="#cb14-269" aria-hidden="true" tabindex="-1"></a>  <span class="at">signal_map =</span> <span class="st">"blp_spline"</span>,</span>
-<span id="cb14-270"><a href="#cb14-270" aria-hidden="true" tabindex="-1"></a>  <span class="at">density_method =</span> <span class="st">"location_scale"</span>,</span>
-<span id="cb14-271"><a href="#cb14-271" aria-hidden="true" tabindex="-1"></a>  <span class="at">boot =</span> dml_curve_draws</span>
-<span id="cb14-272"><a href="#cb14-272" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-273"><a href="#cb14-273" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-274"><a href="#cb14-274" aria-hidden="true" tabindex="-1"></a>flex_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb14-275"><a href="#cb14-275" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_flex_spline, <span class="st">"dml_flex spline"</span>, <span class="st">"average level summary"</span>,</span>
-<span id="cb14-276"><a href="#cb14-276" aria-hidden="true" tabindex="-1"></a>            <span class="at">learner =</span> <span class="st">"linear"</span>, <span class="at">density_method =</span> <span class="st">"residual_kde"</span>,</span>
-<span id="cb14-277"><a href="#cb14-277" aria-hidden="true" tabindex="-1"></a>            <span class="at">signal_map =</span> <span class="st">"spline"</span>),</span>
-<span id="cb14-278"><a href="#cb14-278" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_flex_blp, <span class="st">"dml_flex BLP spline"</span>, <span class="st">"average level summary"</span>,</span>
-<span id="cb14-279"><a href="#cb14-279" aria-hidden="true" tabindex="-1"></a>            <span class="at">learner =</span> <span class="st">"linear"</span>, <span class="at">density_method =</span> <span class="st">"location_scale"</span>,</span>
-<span id="cb14-280"><a href="#cb14-280" aria-hidden="true" tabindex="-1"></a>            <span class="at">signal_map =</span> <span class="st">"blp_spline"</span>)</span>
+<span id="cb14-246"><a href="#cb14-246" aria-hidden="true" tabindex="-1"></a>The density estimate enters the DML score, not just a plot. For this reason,</span>
+<span id="cb14-247"><a href="#cb14-247" aria-hidden="true" tabindex="-1"></a><span class="in">`density_method`</span> should be treated as a sensitivity dimension, especially for</span>
+<span id="cb14-248"><a href="#cb14-248" aria-hidden="true" tabindex="-1"></a><span class="in">`dml_incremental`</span>, where the target is an observed-population average</span>
+<span id="cb14-249"><a href="#cb14-249" aria-hidden="true" tabindex="-1"></a>derivative and the conditional-density score is central.</span>
+<span id="cb14-250"><a href="#cb14-250" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-251"><a href="#cb14-251" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-flex-fit}</span></span>
+<span id="cb14-252"><a href="#cb14-252" aria-hidden="true" tabindex="-1"></a>dml_curve_draws <span class="ot">&lt;-</span> <span class="cf">if</span> (<span class="fu">identical</span>(<span class="fu">tolower</span>(<span class="fu">Sys.getenv</span>(<span class="st">"FDID_TUTORIAL_HEAVY"</span>)),</span>
+<span id="cb14-253"><a href="#cb14-253" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">"true"</span>)) <span class="dv">199</span>L <span class="cf">else</span> <span class="dv">49</span>L</span>
+<span id="cb14-254"><a href="#cb14-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-255"><a href="#cb14-255" aria-hidden="true" tabindex="-1"></a>fit_flex_spline <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
+<span id="cb14-256"><a href="#cb14-256" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
+<span id="cb14-257"><a href="#cb14-257" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
+<span id="cb14-258"><a href="#cb14-258" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
+<span id="cb14-259"><a href="#cb14-259" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_flex"</span>,</span>
+<span id="cb14-260"><a href="#cb14-260" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"grf"</span>,</span>
+<span id="cb14-261"><a href="#cb14-261" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
+<span id="cb14-262"><a href="#cb14-262" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
+<span id="cb14-263"><a href="#cb14-263" aria-hidden="true" tabindex="-1"></a>  <span class="at">eval_g =</span> eval_g_dml,</span>
+<span id="cb14-264"><a href="#cb14-264" aria-hidden="true" tabindex="-1"></a>  <span class="at">signal_map =</span> <span class="st">"spline"</span>,</span>
+<span id="cb14-265"><a href="#cb14-265" aria-hidden="true" tabindex="-1"></a>  <span class="at">density_method =</span> <span class="st">"residual_kde"</span>,</span>
+<span id="cb14-266"><a href="#cb14-266" aria-hidden="true" tabindex="-1"></a>  <span class="at">boot =</span> dml_curve_draws</span>
+<span id="cb14-267"><a href="#cb14-267" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-268"><a href="#cb14-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-269"><a href="#cb14-269" aria-hidden="true" tabindex="-1"></a>fit_flex_blp <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
+<span id="cb14-270"><a href="#cb14-270" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
+<span id="cb14-271"><a href="#cb14-271" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
+<span id="cb14-272"><a href="#cb14-272" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
+<span id="cb14-273"><a href="#cb14-273" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_flex"</span>,</span>
+<span id="cb14-274"><a href="#cb14-274" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"grf"</span>,</span>
+<span id="cb14-275"><a href="#cb14-275" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
+<span id="cb14-276"><a href="#cb14-276" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
+<span id="cb14-277"><a href="#cb14-277" aria-hidden="true" tabindex="-1"></a>  <span class="at">eval_g =</span> eval_g_dml,</span>
+<span id="cb14-278"><a href="#cb14-278" aria-hidden="true" tabindex="-1"></a>  <span class="at">signal_map =</span> <span class="st">"blp_spline"</span>,</span>
+<span id="cb14-279"><a href="#cb14-279" aria-hidden="true" tabindex="-1"></a>  <span class="at">density_method =</span> <span class="st">"location_scale"</span>,</span>
+<span id="cb14-280"><a href="#cb14-280" aria-hidden="true" tabindex="-1"></a>  <span class="at">boot =</span> dml_curve_draws</span>
 <span id="cb14-281"><a href="#cb14-281" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-282"><a href="#cb14-282" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-283"><a href="#cb14-283" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(flex_table[, <span class="fu">c</span>(<span class="st">"fit"</span>, <span class="st">"signal_map"</span>, <span class="st">"density_method"</span>,</span>
-<span id="cb14-284"><a href="#cb14-284" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Estimate"</span>, <span class="st">"Std.Error"</span>, <span class="st">"CI_Lower"</span>, <span class="st">"CI_Upper"</span>,</span>
-<span id="cb14-285"><a href="#cb14-285" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"note"</span>)],</span>
-<span id="cb14-286"><a href="#cb14-286" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">3</span>)</span>
-<span id="cb14-287"><a href="#cb14-287" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-288"><a href="#cb14-288" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-289"><a href="#cb14-289" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-flex-plots, fig.width=9, fig.height=4.4}</span></span>
-<span id="cb14-290"><a href="#cb14-290" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_flex_spline)) {</span>
-<span id="cb14-291"><a href="#cb14-291" aria-hidden="true" tabindex="-1"></a>  old_par <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
-<span id="cb14-292"><a href="#cb14-292" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_flex_spline, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"level"</span>,</span>
-<span id="cb14-293"><a href="#cb14-293" aria-hidden="true" tabindex="-1"></a>       <span class="at">interval =</span> <span class="st">"both"</span>, <span class="at">Xdistr =</span> <span class="st">"rug"</span>,</span>
-<span id="cb14-294"><a href="#cb14-294" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"DML flexible level curve"</span>)</span>
-<span id="cb14-295"><a href="#cb14-295" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_flex_spline, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"derivative"</span>,</span>
-<span id="cb14-296"><a href="#cb14-296" aria-hidden="true" tabindex="-1"></a>       <span class="at">interval =</span> <span class="st">"both"</span>, <span class="at">Xdistr =</span> <span class="st">"rug"</span>,</span>
-<span id="cb14-297"><a href="#cb14-297" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"DML flexible derivative curve"</span>)</span>
-<span id="cb14-298"><a href="#cb14-298" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(old_par)</span>
-<span id="cb14-299"><a href="#cb14-299" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-300"><a href="#cb14-300" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-301"><a href="#cb14-301" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-302"><a href="#cb14-302" aria-hidden="true" tabindex="-1"></a>The scalar event row for <span class="in">`dml_flex`</span> is a compatibility summary. The curve fields</span>
-<span id="cb14-303"><a href="#cb14-303" aria-hidden="true" tabindex="-1"></a>are the primary output.</span>
-<span id="cb14-304"><a href="#cb14-304" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-305"><a href="#cb14-305" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-flex-curve-table}</span></span>
-<span id="cb14-306"><a href="#cb14-306" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_flex_spline)) {</span>
-<span id="cb14-307"><a href="#cb14-307" aria-hidden="true" tabindex="-1"></a>  flex_curve <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb14-308"><a href="#cb14-308" aria-hidden="true" tabindex="-1"></a>    <span class="at">G =</span> fit_flex_spline<span class="sc">$</span>eval_g,</span>
-<span id="cb14-309"><a href="#cb14-309" aria-hidden="true" tabindex="-1"></a>    <span class="at">theta_hat =</span> fit_flex_spline<span class="sc">$</span>curve_event<span class="sc">$</span>theta_hat,</span>
-<span id="cb14-310"><a href="#cb14-310" aria-hidden="true" tabindex="-1"></a>    <span class="at">se_theta =</span> fit_flex_spline<span class="sc">$</span>curve_event<span class="sc">$</span>se_theta,</span>
-<span id="cb14-311"><a href="#cb14-311" aria-hidden="true" tabindex="-1"></a>    <span class="at">delta_hat =</span> fit_flex_spline<span class="sc">$</span>curve_event<span class="sc">$</span>delta_hat,</span>
-<span id="cb14-312"><a href="#cb14-312" aria-hidden="true" tabindex="-1"></a>    <span class="at">se_delta =</span> fit_flex_spline<span class="sc">$</span>curve_event<span class="sc">$</span>se_delta</span>
-<span id="cb14-313"><a href="#cb14-313" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb14-314"><a href="#cb14-314" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(flex_curve, <span class="at">digits =</span> <span class="dv">3</span>)</span>
-<span id="cb14-315"><a href="#cb14-315" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-316"><a href="#cb14-316" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-317"><a href="#cb14-317" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-318"><a href="#cb14-318" aria-hidden="true" tabindex="-1"></a><span class="fu">## DML Curve Inference</span></span>
-<span id="cb14-319"><a href="#cb14-319" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-320"><a href="#cb14-320" aria-hidden="true" tabindex="-1"></a>The DML curve inference labels are deliberately method-specific.</span>
-<span id="cb14-321"><a href="#cb14-321" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-322"><a href="#cb14-322" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pointwise intervals for <span class="in">`dml_flex`</span> are second-stage mapping intervals.</span>
-<span id="cb14-323"><a href="#cb14-323" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>With <span class="in">`signal_map = "spline"`</span>, the simultaneous band is a practical residual</span>
-<span id="cb14-324"><a href="#cb14-324" aria-hidden="true" tabindex="-1"></a>  multiplier band over cross-fitted signal-mapping residuals.</span>
-<span id="cb14-325"><a href="#cb14-325" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>With <span class="in">`signal_map = "blp_spline"`</span>, the object stores spline-basis covariance</span>
-<span id="cb14-326"><a href="#cb14-326" aria-hidden="true" tabindex="-1"></a>  matrices and uses a Gaussian max-$t$ critical value for finite-grid bands</span>
-<span id="cb14-327"><a href="#cb14-327" aria-hidden="true" tabindex="-1"></a>  when the covariance is usable.</span>
-<span id="cb14-328"><a href="#cb14-328" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Neither path is a full nonparametric DML refit bootstrap over all nuisance</span>
-<span id="cb14-329"><a href="#cb14-329" aria-hidden="true" tabindex="-1"></a>  stages.</span>
+<span id="cb14-283"><a href="#cb14-283" aria-hidden="true" tabindex="-1"></a>flex_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb14-284"><a href="#cb14-284" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_flex_spline, <span class="st">"dml_flex spline"</span>, <span class="st">"average level summary"</span>,</span>
+<span id="cb14-285"><a href="#cb14-285" aria-hidden="true" tabindex="-1"></a>            <span class="at">learner =</span> <span class="st">"grf"</span>, <span class="at">density_method =</span> <span class="st">"residual_kde"</span>,</span>
+<span id="cb14-286"><a href="#cb14-286" aria-hidden="true" tabindex="-1"></a>            <span class="at">signal_map =</span> <span class="st">"spline"</span>),</span>
+<span id="cb14-287"><a href="#cb14-287" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_flex_blp, <span class="st">"dml_flex BLP spline"</span>, <span class="st">"average level summary"</span>,</span>
+<span id="cb14-288"><a href="#cb14-288" aria-hidden="true" tabindex="-1"></a>            <span class="at">learner =</span> <span class="st">"grf"</span>, <span class="at">density_method =</span> <span class="st">"location_scale"</span>,</span>
+<span id="cb14-289"><a href="#cb14-289" aria-hidden="true" tabindex="-1"></a>            <span class="at">signal_map =</span> <span class="st">"blp_spline"</span>)</span>
+<span id="cb14-290"><a href="#cb14-290" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-291"><a href="#cb14-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-292"><a href="#cb14-292" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(flex_table[, <span class="fu">c</span>(<span class="st">"fit"</span>, <span class="st">"signal_map"</span>, <span class="st">"density_method"</span>,</span>
+<span id="cb14-293"><a href="#cb14-293" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"Estimate"</span>, <span class="st">"Std.Error"</span>, <span class="st">"CI_Lower"</span>, <span class="st">"CI_Upper"</span>,</span>
+<span id="cb14-294"><a href="#cb14-294" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"note"</span>)],</span>
+<span id="cb14-295"><a href="#cb14-295" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">3</span>)</span>
+<span id="cb14-296"><a href="#cb14-296" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-297"><a href="#cb14-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-298"><a href="#cb14-298" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-flex-plots, fig.width=9, fig.height=4.4}</span></span>
+<span id="cb14-299"><a href="#cb14-299" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_flex_spline)) {</span>
+<span id="cb14-300"><a href="#cb14-300" aria-hidden="true" tabindex="-1"></a>  old_par <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb14-301"><a href="#cb14-301" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_flex_spline, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"level"</span>,</span>
+<span id="cb14-302"><a href="#cb14-302" aria-hidden="true" tabindex="-1"></a>       <span class="at">interval =</span> <span class="st">"both"</span>, <span class="at">Xdistr =</span> <span class="st">"histogram"</span>,</span>
+<span id="cb14-303"><a href="#cb14-303" aria-hidden="true" tabindex="-1"></a>       <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
+<span id="cb14-304"><a href="#cb14-304" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Xdistr = histogram"</span>)</span>
+<span id="cb14-305"><a href="#cb14-305" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_flex_spline, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"derivative"</span>,</span>
+<span id="cb14-306"><a href="#cb14-306" aria-hidden="true" tabindex="-1"></a>       <span class="at">interval =</span> <span class="st">"both"</span>, <span class="at">Xdistr =</span> <span class="st">"histogram"</span>,</span>
+<span id="cb14-307"><a href="#cb14-307" aria-hidden="true" tabindex="-1"></a>       <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
+<span id="cb14-308"><a href="#cb14-308" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Xdistr = histogram"</span>)</span>
+<span id="cb14-309"><a href="#cb14-309" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(old_par)</span>
+<span id="cb14-310"><a href="#cb14-310" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-311"><a href="#cb14-311" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-312"><a href="#cb14-312" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-313"><a href="#cb14-313" aria-hidden="true" tabindex="-1"></a>The scalar event row for <span class="in">`dml_flex`</span> is a compatibility summary. The curve fields</span>
+<span id="cb14-314"><a href="#cb14-314" aria-hidden="true" tabindex="-1"></a>are the primary output.</span>
+<span id="cb14-315"><a href="#cb14-315" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-316"><a href="#cb14-316" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-flex-curve-table}</span></span>
+<span id="cb14-317"><a href="#cb14-317" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_flex_spline)) {</span>
+<span id="cb14-318"><a href="#cb14-318" aria-hidden="true" tabindex="-1"></a>  flex_curve <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb14-319"><a href="#cb14-319" aria-hidden="true" tabindex="-1"></a>    <span class="at">G =</span> fit_flex_spline<span class="sc">$</span>eval_g,</span>
+<span id="cb14-320"><a href="#cb14-320" aria-hidden="true" tabindex="-1"></a>    <span class="at">theta_hat =</span> fit_flex_spline<span class="sc">$</span>curve_event<span class="sc">$</span>theta_hat,</span>
+<span id="cb14-321"><a href="#cb14-321" aria-hidden="true" tabindex="-1"></a>    <span class="at">se_theta =</span> fit_flex_spline<span class="sc">$</span>curve_event<span class="sc">$</span>se_theta,</span>
+<span id="cb14-322"><a href="#cb14-322" aria-hidden="true" tabindex="-1"></a>    <span class="at">delta_hat =</span> fit_flex_spline<span class="sc">$</span>curve_event<span class="sc">$</span>delta_hat,</span>
+<span id="cb14-323"><a href="#cb14-323" aria-hidden="true" tabindex="-1"></a>    <span class="at">se_delta =</span> fit_flex_spline<span class="sc">$</span>curve_event<span class="sc">$</span>se_delta</span>
+<span id="cb14-324"><a href="#cb14-324" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-325"><a href="#cb14-325" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(flex_curve, <span class="at">digits =</span> <span class="dv">3</span>)</span>
+<span id="cb14-326"><a href="#cb14-326" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-327"><a href="#cb14-327" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-328"><a href="#cb14-328" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-329"><a href="#cb14-329" aria-hidden="true" tabindex="-1"></a><span class="fu">## DML Curve Inference</span></span>
 <span id="cb14-330"><a href="#cb14-330" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-331"><a href="#cb14-331" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-flex-inference-metadata}</span></span>
-<span id="cb14-332"><a href="#cb14-332" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_flex_blp)) {</span>
-<span id="cb14-333"><a href="#cb14-333" aria-hidden="true" tabindex="-1"></a>  inference_rows <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb14-334"><a href="#cb14-334" aria-hidden="true" tabindex="-1"></a>    <span class="at">field =</span> <span class="fu">c</span>(<span class="st">"signal_map"</span>, <span class="st">"density_method"</span>, <span class="st">"band_method"</span>,</span>
-<span id="cb14-335"><a href="#cb14-335" aria-hidden="true" tabindex="-1"></a>              <span class="st">"theta_vcov_available"</span>, <span class="st">"delta_vcov_available"</span>,</span>
-<span id="cb14-336"><a href="#cb14-336" aria-hidden="true" tabindex="-1"></a>              <span class="st">"gaussian_crit_theta"</span>, <span class="st">"simultaneous_crit_theta"</span>),</span>
-<span id="cb14-337"><a href="#cb14-337" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> <span class="fu">c</span>(</span>
-<span id="cb14-338"><a href="#cb14-338" aria-hidden="true" tabindex="-1"></a>      fit_flex_blp<span class="sc">$</span>signal_map,</span>
-<span id="cb14-339"><a href="#cb14-339" aria-hidden="true" tabindex="-1"></a>      fit_flex_blp<span class="sc">$</span>density_method,</span>
-<span id="cb14-340"><a href="#cb14-340" aria-hidden="true" tabindex="-1"></a>      fit_flex_blp<span class="sc">$</span>curve_event<span class="sc">$</span>simultaneous_band_method,</span>
-<span id="cb14-341"><a href="#cb14-341" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.null</span>(fit_flex_blp<span class="sc">$</span>curve_event<span class="sc">$</span>theta_vcov),</span>
-<span id="cb14-342"><a href="#cb14-342" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.null</span>(fit_flex_blp<span class="sc">$</span>curve_event<span class="sc">$</span>delta_vcov),</span>
-<span id="cb14-343"><a href="#cb14-343" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(fit_flex_blp<span class="sc">$</span>curve_event<span class="sc">$</span>gaussian_crit_theta, <span class="dv">3</span>),</span>
-<span id="cb14-344"><a href="#cb14-344" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(fit_flex_blp<span class="sc">$</span>curve_event<span class="sc">$</span>simultaneous_crit_theta, <span class="dv">3</span>)</span>
-<span id="cb14-345"><a href="#cb14-345" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb14-346"><a href="#cb14-346" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb14-347"><a href="#cb14-347" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(inference_rows)</span>
-<span id="cb14-348"><a href="#cb14-348" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-349"><a href="#cb14-349" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-350"><a href="#cb14-350" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-351"><a href="#cb14-351" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-blp-band-plot, fig.width=7, fig.height=4.5}</span></span>
-<span id="cb14-352"><a href="#cb14-352" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_flex_blp)) {</span>
-<span id="cb14-353"><a href="#cb14-353" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_flex_blp, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"level"</span>,</span>
-<span id="cb14-354"><a href="#cb14-354" aria-hidden="true" tabindex="-1"></a>       <span class="at">interval =</span> <span class="st">"both"</span>, <span class="at">Xdistr =</span> <span class="st">"density"</span>,</span>
-<span id="cb14-355"><a href="#cb14-355" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"BLP-spline Gaussian max-t band"</span>)</span>
-<span id="cb14-356"><a href="#cb14-356" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-357"><a href="#cb14-357" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-358"><a href="#cb14-358" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-359"><a href="#cb14-359" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reporting Curve Quantities</span></span>
-<span id="cb14-360"><a href="#cb14-360" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-361"><a href="#cb14-361" aria-hidden="true" tabindex="-1"></a>Use the reporting helpers when the estimand is a specific level contrast or</span>
-<span id="cb14-362"><a href="#cb14-362" aria-hidden="true" tabindex="-1"></a>derivative value. For BLP-spline curves, <span class="in">`fdid_contrast()`</span> can use the stored</span>
-<span id="cb14-363"><a href="#cb14-363" aria-hidden="true" tabindex="-1"></a>curve covariance matrix, so exact-grid contrasts reduce to the familiar</span>
-<span id="cb14-364"><a href="#cb14-364" aria-hidden="true" tabindex="-1"></a><span class="in">`V22 + V11 - 2 * V12`</span> identity.</span>
-<span id="cb14-365"><a href="#cb14-365" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-366"><a href="#cb14-366" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-reporting}</span></span>
-<span id="cb14-367"><a href="#cb14-367" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_flex_blp)) {</span>
-<span id="cb14-368"><a href="#cb14-368" aria-hidden="true" tabindex="-1"></a>  dml_report <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb14-369"><a href="#cb14-369" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fdid_contrast</span>(fit_flex_blp, <span class="at">g0 =</span> <span class="fu">min</span>(eval_g_dml), <span class="at">g1 =</span> <span class="fu">max</span>(eval_g_dml)),</span>
-<span id="cb14-370"><a href="#cb14-370" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fdid_derivative</span>(fit_flex_blp, <span class="at">g0 =</span> stats<span class="sc">::</span><span class="fu">median</span>(eval_g_dml))</span>
-<span id="cb14-371"><a href="#cb14-371" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-331"><a href="#cb14-331" aria-hidden="true" tabindex="-1"></a>The DML curve inference labels are deliberately method-specific.</span>
+<span id="cb14-332"><a href="#cb14-332" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-333"><a href="#cb14-333" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pointwise intervals for <span class="in">`dml_flex`</span> are second-stage mapping intervals.</span>
+<span id="cb14-334"><a href="#cb14-334" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>With <span class="in">`signal_map = "spline"`</span>, the simultaneous band is a practical residual</span>
+<span id="cb14-335"><a href="#cb14-335" aria-hidden="true" tabindex="-1"></a>  multiplier band over cross-fitted signal-mapping residuals.</span>
+<span id="cb14-336"><a href="#cb14-336" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>With <span class="in">`signal_map = "blp_spline"`</span>, the object stores spline-basis covariance</span>
+<span id="cb14-337"><a href="#cb14-337" aria-hidden="true" tabindex="-1"></a>  matrices and uses a Gaussian max-$t$ critical value for finite-grid bands</span>
+<span id="cb14-338"><a href="#cb14-338" aria-hidden="true" tabindex="-1"></a>  when the covariance is usable.</span>
+<span id="cb14-339"><a href="#cb14-339" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Neither path is a full nonparametric DML refit bootstrap over all nuisance</span>
+<span id="cb14-340"><a href="#cb14-340" aria-hidden="true" tabindex="-1"></a>  stages.</span>
+<span id="cb14-341"><a href="#cb14-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-342"><a href="#cb14-342" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-flex-inference-metadata}</span></span>
+<span id="cb14-343"><a href="#cb14-343" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_flex_blp)) {</span>
+<span id="cb14-344"><a href="#cb14-344" aria-hidden="true" tabindex="-1"></a>  inference_rows <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb14-345"><a href="#cb14-345" aria-hidden="true" tabindex="-1"></a>    <span class="at">field =</span> <span class="fu">c</span>(<span class="st">"signal_map"</span>, <span class="st">"density_method"</span>, <span class="st">"band_method"</span>,</span>
+<span id="cb14-346"><a href="#cb14-346" aria-hidden="true" tabindex="-1"></a>              <span class="st">"theta_vcov_available"</span>, <span class="st">"delta_vcov_available"</span>,</span>
+<span id="cb14-347"><a href="#cb14-347" aria-hidden="true" tabindex="-1"></a>              <span class="st">"gaussian_crit_theta"</span>, <span class="st">"simultaneous_crit_theta"</span>),</span>
+<span id="cb14-348"><a href="#cb14-348" aria-hidden="true" tabindex="-1"></a>    <span class="at">value =</span> <span class="fu">c</span>(</span>
+<span id="cb14-349"><a href="#cb14-349" aria-hidden="true" tabindex="-1"></a>      fit_flex_blp<span class="sc">$</span>signal_map,</span>
+<span id="cb14-350"><a href="#cb14-350" aria-hidden="true" tabindex="-1"></a>      fit_flex_blp<span class="sc">$</span>density_method,</span>
+<span id="cb14-351"><a href="#cb14-351" aria-hidden="true" tabindex="-1"></a>      fit_flex_blp<span class="sc">$</span>curve_event<span class="sc">$</span>simultaneous_band_method,</span>
+<span id="cb14-352"><a href="#cb14-352" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.null</span>(fit_flex_blp<span class="sc">$</span>curve_event<span class="sc">$</span>theta_vcov),</span>
+<span id="cb14-353"><a href="#cb14-353" aria-hidden="true" tabindex="-1"></a>      <span class="sc">!</span><span class="fu">is.null</span>(fit_flex_blp<span class="sc">$</span>curve_event<span class="sc">$</span>delta_vcov),</span>
+<span id="cb14-354"><a href="#cb14-354" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(fit_flex_blp<span class="sc">$</span>curve_event<span class="sc">$</span>gaussian_crit_theta, <span class="dv">3</span>),</span>
+<span id="cb14-355"><a href="#cb14-355" aria-hidden="true" tabindex="-1"></a>      <span class="fu">round</span>(fit_flex_blp<span class="sc">$</span>curve_event<span class="sc">$</span>simultaneous_crit_theta, <span class="dv">3</span>)</span>
+<span id="cb14-356"><a href="#cb14-356" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-357"><a href="#cb14-357" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-358"><a href="#cb14-358" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(inference_rows)</span>
+<span id="cb14-359"><a href="#cb14-359" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-360"><a href="#cb14-360" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-361"><a href="#cb14-361" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-362"><a href="#cb14-362" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-blp-band-plot, fig.width=7, fig.height=4.5}</span></span>
+<span id="cb14-363"><a href="#cb14-363" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_flex_blp)) {</span>
+<span id="cb14-364"><a href="#cb14-364" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_flex_blp, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"level"</span>,</span>
+<span id="cb14-365"><a href="#cb14-365" aria-hidden="true" tabindex="-1"></a>       <span class="at">interval =</span> <span class="st">"both"</span>, <span class="at">Xdistr =</span> <span class="st">"histogram"</span>,</span>
+<span id="cb14-366"><a href="#cb14-366" aria-hidden="true" tabindex="-1"></a>       <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
+<span id="cb14-367"><a href="#cb14-367" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Xdistr = histogram"</span>)</span>
+<span id="cb14-368"><a href="#cb14-368" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-369"><a href="#cb14-369" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-370"><a href="#cb14-370" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-371"><a href="#cb14-371" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reporting Curve Quantities</span></span>
 <span id="cb14-372"><a href="#cb14-372" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-373"><a href="#cb14-373" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb14-374"><a href="#cb14-374" aria-hidden="true" tabindex="-1"></a>    dml_report[, <span class="fu">c</span>(<span class="st">"target"</span>, <span class="st">"method"</span>, <span class="st">"g0"</span>, <span class="st">"g1"</span>, <span class="st">"estimate"</span>,</span>
-<span id="cb14-375"><a href="#cb14-375" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"std.error"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"inference"</span>)],</span>
-<span id="cb14-376"><a href="#cb14-376" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">3</span></span>
-<span id="cb14-377"><a href="#cb14-377" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb14-378"><a href="#cb14-378" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-379"><a href="#cb14-379" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-380"><a href="#cb14-380" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-381"><a href="#cb14-381" aria-hidden="true" tabindex="-1"></a><span class="fu">## Incremental Average Derivative</span></span>
-<span id="cb14-382"><a href="#cb14-382" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-383"><a href="#cb14-383" aria-hidden="true" tabindex="-1"></a><span class="in">`method = "dml_incremental"`</span> is not the average of the <span class="in">`dml_flex`</span> derivative</span>
-<span id="cb14-384"><a href="#cb14-384" aria-hidden="true" tabindex="-1"></a>curve. It targets the observed-population average derivative directly, using an</span>
-<span id="cb14-385"><a href="#cb14-385" aria-hidden="true" tabindex="-1"></a>orthogonal score that includes the conditional density score for <span class="in">`G | X`</span>.</span>
-<span id="cb14-386"><a href="#cb14-386" aria-hidden="true" tabindex="-1"></a>Therefore <span class="in">`density_method`</span> is a substantive sensitivity choice.</span>
-<span id="cb14-387"><a href="#cb14-387" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-388"><a href="#cb14-388" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-incremental-fit}</span></span>
-<span id="cb14-389"><a href="#cb14-389" aria-hidden="true" tabindex="-1"></a>fit_inc_residual <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
-<span id="cb14-390"><a href="#cb14-390" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
-<span id="cb14-391"><a href="#cb14-391" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
-<span id="cb14-392"><a href="#cb14-392" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
-<span id="cb14-393"><a href="#cb14-393" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_incremental"</span>,</span>
-<span id="cb14-394"><a href="#cb14-394" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"linear"</span>,</span>
-<span id="cb14-395"><a href="#cb14-395" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
-<span id="cb14-396"><a href="#cb14-396" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
-<span id="cb14-397"><a href="#cb14-397" aria-hidden="true" tabindex="-1"></a>  <span class="at">density_method =</span> <span class="st">"residual_kde"</span></span>
-<span id="cb14-398"><a href="#cb14-398" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-373"><a href="#cb14-373" aria-hidden="true" tabindex="-1"></a>Use the reporting helpers when the estimand is a specific level contrast or</span>
+<span id="cb14-374"><a href="#cb14-374" aria-hidden="true" tabindex="-1"></a>derivative value. For BLP-spline curves, <span class="in">`fdid_contrast()`</span> can use the stored</span>
+<span id="cb14-375"><a href="#cb14-375" aria-hidden="true" tabindex="-1"></a>curve covariance matrix, so exact-grid contrasts reduce to the familiar</span>
+<span id="cb14-376"><a href="#cb14-376" aria-hidden="true" tabindex="-1"></a><span class="in">`V22 + V11 - 2 * V12`</span> identity.</span>
+<span id="cb14-377"><a href="#cb14-377" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-378"><a href="#cb14-378" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-reporting}</span></span>
+<span id="cb14-379"><a href="#cb14-379" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_flex_blp)) {</span>
+<span id="cb14-380"><a href="#cb14-380" aria-hidden="true" tabindex="-1"></a>  dml_report <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb14-381"><a href="#cb14-381" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fdid_contrast</span>(fit_flex_blp, <span class="at">g0 =</span> <span class="fu">min</span>(eval_g_dml), <span class="at">g1 =</span> <span class="fu">max</span>(eval_g_dml)),</span>
+<span id="cb14-382"><a href="#cb14-382" aria-hidden="true" tabindex="-1"></a>    <span class="fu">fdid_derivative</span>(fit_flex_blp, <span class="at">g0 =</span> stats<span class="sc">::</span><span class="fu">median</span>(eval_g_dml))</span>
+<span id="cb14-383"><a href="#cb14-383" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-384"><a href="#cb14-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-385"><a href="#cb14-385" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb14-386"><a href="#cb14-386" aria-hidden="true" tabindex="-1"></a>    dml_report[, <span class="fu">c</span>(<span class="st">"target"</span>, <span class="st">"method"</span>, <span class="st">"g0"</span>, <span class="st">"g1"</span>, <span class="st">"estimate"</span>,</span>
+<span id="cb14-387"><a href="#cb14-387" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"std.error"</span>, <span class="st">"conf.low"</span>, <span class="st">"conf.high"</span>, <span class="st">"inference"</span>)],</span>
+<span id="cb14-388"><a href="#cb14-388" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">3</span></span>
+<span id="cb14-389"><a href="#cb14-389" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-390"><a href="#cb14-390" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-391"><a href="#cb14-391" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-392"><a href="#cb14-392" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-393"><a href="#cb14-393" aria-hidden="true" tabindex="-1"></a><span class="fu">## Incremental Average Derivative</span></span>
+<span id="cb14-394"><a href="#cb14-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-395"><a href="#cb14-395" aria-hidden="true" tabindex="-1"></a><span class="in">`method = "dml_incremental"`</span> is not the average of the <span class="in">`dml_flex`</span> derivative</span>
+<span id="cb14-396"><a href="#cb14-396" aria-hidden="true" tabindex="-1"></a>curve. It targets the observed-population average derivative directly, using an</span>
+<span id="cb14-397"><a href="#cb14-397" aria-hidden="true" tabindex="-1"></a>orthogonal score that includes the conditional density score for <span class="in">`G | X`</span>.</span>
+<span id="cb14-398"><a href="#cb14-398" aria-hidden="true" tabindex="-1"></a>Therefore <span class="in">`density_method`</span> is a substantive sensitivity choice.</span>
 <span id="cb14-399"><a href="#cb14-399" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-400"><a href="#cb14-400" aria-hidden="true" tabindex="-1"></a>fit_inc_location <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
-<span id="cb14-401"><a href="#cb14-401" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
-<span id="cb14-402"><a href="#cb14-402" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
-<span id="cb14-403"><a href="#cb14-403" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
-<span id="cb14-404"><a href="#cb14-404" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_incremental"</span>,</span>
-<span id="cb14-405"><a href="#cb14-405" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"linear"</span>,</span>
-<span id="cb14-406"><a href="#cb14-406" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
-<span id="cb14-407"><a href="#cb14-407" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
-<span id="cb14-408"><a href="#cb14-408" aria-hidden="true" tabindex="-1"></a>  <span class="at">density_method =</span> <span class="st">"location_scale"</span></span>
-<span id="cb14-409"><a href="#cb14-409" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-410"><a href="#cb14-410" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-411"><a href="#cb14-411" aria-hidden="true" tabindex="-1"></a>fit_inc_local <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
-<span id="cb14-412"><a href="#cb14-412" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
-<span id="cb14-413"><a href="#cb14-413" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
-<span id="cb14-414"><a href="#cb14-414" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
-<span id="cb14-415"><a href="#cb14-415" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_incremental"</span>,</span>
-<span id="cb14-416"><a href="#cb14-416" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"linear"</span>,</span>
-<span id="cb14-417"><a href="#cb14-417" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
-<span id="cb14-418"><a href="#cb14-418" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
-<span id="cb14-419"><a href="#cb14-419" aria-hidden="true" tabindex="-1"></a>  <span class="at">density_method =</span> <span class="st">"local_kde"</span></span>
-<span id="cb14-420"><a href="#cb14-420" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-421"><a href="#cb14-421" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-422"><a href="#cb14-422" aria-hidden="true" tabindex="-1"></a>incremental_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
-<span id="cb14-423"><a href="#cb14-423" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_inc_residual, <span class="st">"incremental residual KDE"</span>,</span>
-<span id="cb14-424"><a href="#cb14-424" aria-hidden="true" tabindex="-1"></a>            <span class="st">"observed average derivative"</span>, <span class="at">learner =</span> <span class="st">"linear"</span>,</span>
-<span id="cb14-425"><a href="#cb14-425" aria-hidden="true" tabindex="-1"></a>            <span class="at">density_method =</span> <span class="st">"residual_kde"</span>),</span>
-<span id="cb14-426"><a href="#cb14-426" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_inc_location, <span class="st">"incremental location-scale"</span>,</span>
-<span id="cb14-427"><a href="#cb14-427" aria-hidden="true" tabindex="-1"></a>            <span class="st">"observed average derivative"</span>, <span class="at">learner =</span> <span class="st">"linear"</span>,</span>
-<span id="cb14-428"><a href="#cb14-428" aria-hidden="true" tabindex="-1"></a>            <span class="at">density_method =</span> <span class="st">"location_scale"</span>),</span>
-<span id="cb14-429"><a href="#cb14-429" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_inc_local, <span class="st">"incremental local KDE"</span>,</span>
-<span id="cb14-430"><a href="#cb14-430" aria-hidden="true" tabindex="-1"></a>            <span class="st">"observed average derivative"</span>, <span class="at">learner =</span> <span class="st">"linear"</span>,</span>
-<span id="cb14-431"><a href="#cb14-431" aria-hidden="true" tabindex="-1"></a>            <span class="at">density_method =</span> <span class="st">"local_kde"</span>)</span>
+<span id="cb14-400"><a href="#cb14-400" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-incremental-fit}</span></span>
+<span id="cb14-401"><a href="#cb14-401" aria-hidden="true" tabindex="-1"></a>fit_inc_residual <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
+<span id="cb14-402"><a href="#cb14-402" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
+<span id="cb14-403"><a href="#cb14-403" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
+<span id="cb14-404"><a href="#cb14-404" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
+<span id="cb14-405"><a href="#cb14-405" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_incremental"</span>,</span>
+<span id="cb14-406"><a href="#cb14-406" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"grf"</span>,</span>
+<span id="cb14-407"><a href="#cb14-407" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
+<span id="cb14-408"><a href="#cb14-408" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
+<span id="cb14-409"><a href="#cb14-409" aria-hidden="true" tabindex="-1"></a>  <span class="at">density_method =</span> <span class="st">"residual_kde"</span></span>
+<span id="cb14-410"><a href="#cb14-410" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-411"><a href="#cb14-411" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-412"><a href="#cb14-412" aria-hidden="true" tabindex="-1"></a>fit_inc_location <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
+<span id="cb14-413"><a href="#cb14-413" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
+<span id="cb14-414"><a href="#cb14-414" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
+<span id="cb14-415"><a href="#cb14-415" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
+<span id="cb14-416"><a href="#cb14-416" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_incremental"</span>,</span>
+<span id="cb14-417"><a href="#cb14-417" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"grf"</span>,</span>
+<span id="cb14-418"><a href="#cb14-418" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
+<span id="cb14-419"><a href="#cb14-419" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
+<span id="cb14-420"><a href="#cb14-420" aria-hidden="true" tabindex="-1"></a>  <span class="at">density_method =</span> <span class="st">"location_scale"</span></span>
+<span id="cb14-421"><a href="#cb14-421" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-422"><a href="#cb14-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-423"><a href="#cb14-423" aria-hidden="true" tabindex="-1"></a>fit_inc_local <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
+<span id="cb14-424"><a href="#cb14-424" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
+<span id="cb14-425"><a href="#cb14-425" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
+<span id="cb14-426"><a href="#cb14-426" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
+<span id="cb14-427"><a href="#cb14-427" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"dml_incremental"</span>,</span>
+<span id="cb14-428"><a href="#cb14-428" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="st">"grf"</span>,</span>
+<span id="cb14-429"><a href="#cb14-429" aria-hidden="true" tabindex="-1"></a>  <span class="at">K =</span> <span class="dv">3</span>,</span>
+<span id="cb14-430"><a href="#cb14-430" aria-hidden="true" tabindex="-1"></a>  <span class="at">S =</span> <span class="dv">1</span>,</span>
+<span id="cb14-431"><a href="#cb14-431" aria-hidden="true" tabindex="-1"></a>  <span class="at">density_method =</span> <span class="st">"local_kde"</span></span>
 <span id="cb14-432"><a href="#cb14-432" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-433"><a href="#cb14-433" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-434"><a href="#cb14-434" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(incremental_table[, <span class="fu">c</span>(<span class="st">"fit"</span>, <span class="st">"density_method"</span>, <span class="st">"Estimate"</span>,</span>
-<span id="cb14-435"><a href="#cb14-435" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"Std.Error"</span>, <span class="st">"CI_Lower"</span>, <span class="st">"CI_Upper"</span>,</span>
-<span id="cb14-436"><a href="#cb14-436" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"note"</span>)],</span>
-<span id="cb14-437"><a href="#cb14-437" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">3</span>)</span>
-<span id="cb14-438"><a href="#cb14-438" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-439"><a href="#cb14-439" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-440"><a href="#cb14-440" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learner And Design Sensitivity</span></span>
-<span id="cb14-441"><a href="#cb14-441" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-442"><a href="#cb14-442" aria-hidden="true" tabindex="-1"></a>The DML estimators support several nuisance learners. Optional learner packages</span>
-<span id="cb14-443"><a href="#cb14-443" aria-hidden="true" tabindex="-1"></a>are loaded only when requested, so a tutorial should check availability before</span>
-<span id="cb14-444"><a href="#cb14-444" aria-hidden="true" tabindex="-1"></a>running a large grid.</span>
+<span id="cb14-434"><a href="#cb14-434" aria-hidden="true" tabindex="-1"></a>incremental_table <span class="ot">&lt;-</span> <span class="fu">rbind</span>(</span>
+<span id="cb14-435"><a href="#cb14-435" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_inc_residual, <span class="st">"incremental residual KDE"</span>,</span>
+<span id="cb14-436"><a href="#cb14-436" aria-hidden="true" tabindex="-1"></a>            <span class="st">"observed average derivative"</span>, <span class="at">learner =</span> <span class="st">"grf"</span>,</span>
+<span id="cb14-437"><a href="#cb14-437" aria-hidden="true" tabindex="-1"></a>            <span class="at">density_method =</span> <span class="st">"residual_kde"</span>),</span>
+<span id="cb14-438"><a href="#cb14-438" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_inc_location, <span class="st">"incremental location-scale"</span>,</span>
+<span id="cb14-439"><a href="#cb14-439" aria-hidden="true" tabindex="-1"></a>            <span class="st">"observed average derivative"</span>, <span class="at">learner =</span> <span class="st">"grf"</span>,</span>
+<span id="cb14-440"><a href="#cb14-440" aria-hidden="true" tabindex="-1"></a>            <span class="at">density_method =</span> <span class="st">"location_scale"</span>),</span>
+<span id="cb14-441"><a href="#cb14-441" aria-hidden="true" tabindex="-1"></a>  <span class="fu">event_row</span>(fit_inc_local, <span class="st">"incremental local KDE"</span>,</span>
+<span id="cb14-442"><a href="#cb14-442" aria-hidden="true" tabindex="-1"></a>            <span class="st">"observed average derivative"</span>, <span class="at">learner =</span> <span class="st">"grf"</span>,</span>
+<span id="cb14-443"><a href="#cb14-443" aria-hidden="true" tabindex="-1"></a>            <span class="at">density_method =</span> <span class="st">"local_kde"</span>)</span>
+<span id="cb14-444"><a href="#cb14-444" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-445"><a href="#cb14-445" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-446"><a href="#cb14-446" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-learner-availability}</span></span>
-<span id="cb14-447"><a href="#cb14-447" aria-hidden="true" tabindex="-1"></a>learner_package <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb14-448"><a href="#cb14-448" aria-hidden="true" tabindex="-1"></a>  <span class="at">linear =</span> <span class="cn">NA_character_</span>,</span>
-<span id="cb14-449"><a href="#cb14-449" aria-hidden="true" tabindex="-1"></a>  <span class="at">gam =</span> <span class="st">"mgcv"</span>,</span>
-<span id="cb14-450"><a href="#cb14-450" aria-hidden="true" tabindex="-1"></a>  <span class="at">lasso =</span> <span class="st">"glmnet"</span>,</span>
-<span id="cb14-451"><a href="#cb14-451" aria-hidden="true" tabindex="-1"></a>  <span class="at">ridge =</span> <span class="st">"glmnet"</span>,</span>
-<span id="cb14-452"><a href="#cb14-452" aria-hidden="true" tabindex="-1"></a>  <span class="at">elasticnet =</span> <span class="st">"glmnet"</span>,</span>
-<span id="cb14-453"><a href="#cb14-453" aria-hidden="true" tabindex="-1"></a>  <span class="at">ranger =</span> <span class="st">"ranger"</span>,</span>
-<span id="cb14-454"><a href="#cb14-454" aria-hidden="true" tabindex="-1"></a>  <span class="at">grf =</span> <span class="st">"grf"</span>,</span>
-<span id="cb14-455"><a href="#cb14-455" aria-hidden="true" tabindex="-1"></a>  <span class="at">nnet =</span> <span class="st">"nnet"</span>,</span>
-<span id="cb14-456"><a href="#cb14-456" aria-hidden="true" tabindex="-1"></a>  <span class="at">xgboost =</span> <span class="st">"xgboost"</span></span>
-<span id="cb14-457"><a href="#cb14-457" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-458"><a href="#cb14-458" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-459"><a href="#cb14-459" aria-hidden="true" tabindex="-1"></a>learner_available <span class="ot">&lt;-</span> <span class="cf">function</span>(learner) {</span>
-<span id="cb14-460"><a href="#cb14-460" aria-hidden="true" tabindex="-1"></a>  pkg <span class="ot">&lt;-</span> learner_package[[learner]]</span>
-<span id="cb14-461"><a href="#cb14-461" aria-hidden="true" tabindex="-1"></a>  <span class="fu">is.na</span>(pkg) <span class="sc">||</span> <span class="fu">requireNamespace</span>(pkg, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb14-462"><a href="#cb14-462" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-463"><a href="#cb14-463" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-464"><a href="#cb14-464" aria-hidden="true" tabindex="-1"></a>learner_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb14-465"><a href="#cb14-465" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="fu">names</span>(learner_package),</span>
-<span id="cb14-466"><a href="#cb14-466" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="fu">unname</span>(learner_package),</span>
-<span id="cb14-467"><a href="#cb14-467" aria-hidden="true" tabindex="-1"></a>  <span class="at">available =</span> <span class="fu">vapply</span>(<span class="fu">names</span>(learner_package), learner_available, <span class="fu">logical</span>(<span class="dv">1</span>)),</span>
-<span id="cb14-468"><a href="#cb14-468" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb14-446"><a href="#cb14-446" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(incremental_table[, <span class="fu">c</span>(<span class="st">"fit"</span>, <span class="st">"density_method"</span>, <span class="st">"Estimate"</span>,</span>
+<span id="cb14-447"><a href="#cb14-447" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"Std.Error"</span>, <span class="st">"CI_Lower"</span>, <span class="st">"CI_Upper"</span>,</span>
+<span id="cb14-448"><a href="#cb14-448" aria-hidden="true" tabindex="-1"></a>                                   <span class="st">"note"</span>)],</span>
+<span id="cb14-449"><a href="#cb14-449" aria-hidden="true" tabindex="-1"></a>             <span class="at">digits =</span> <span class="dv">3</span>)</span>
+<span id="cb14-450"><a href="#cb14-450" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-451"><a href="#cb14-451" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-452"><a href="#cb14-452" aria-hidden="true" tabindex="-1"></a><span class="fu">## Learner And Design Sensitivity</span></span>
+<span id="cb14-453"><a href="#cb14-453" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-454"><a href="#cb14-454" aria-hidden="true" tabindex="-1"></a>The DML estimators support several nuisance learners. Optional learner packages</span>
+<span id="cb14-455"><a href="#cb14-455" aria-hidden="true" tabindex="-1"></a>are loaded only when requested, so a tutorial should check availability before</span>
+<span id="cb14-456"><a href="#cb14-456" aria-hidden="true" tabindex="-1"></a>running a large grid.</span>
+<span id="cb14-457"><a href="#cb14-457" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-458"><a href="#cb14-458" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-learner-availability}</span></span>
+<span id="cb14-459"><a href="#cb14-459" aria-hidden="true" tabindex="-1"></a>learner_package <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb14-460"><a href="#cb14-460" aria-hidden="true" tabindex="-1"></a>  <span class="at">linear =</span> <span class="cn">NA_character_</span>,</span>
+<span id="cb14-461"><a href="#cb14-461" aria-hidden="true" tabindex="-1"></a>  <span class="at">gam =</span> <span class="st">"mgcv"</span>,</span>
+<span id="cb14-462"><a href="#cb14-462" aria-hidden="true" tabindex="-1"></a>  <span class="at">lasso =</span> <span class="st">"glmnet"</span>,</span>
+<span id="cb14-463"><a href="#cb14-463" aria-hidden="true" tabindex="-1"></a>  <span class="at">ridge =</span> <span class="st">"glmnet"</span>,</span>
+<span id="cb14-464"><a href="#cb14-464" aria-hidden="true" tabindex="-1"></a>  <span class="at">elasticnet =</span> <span class="st">"glmnet"</span>,</span>
+<span id="cb14-465"><a href="#cb14-465" aria-hidden="true" tabindex="-1"></a>  <span class="at">ranger =</span> <span class="st">"ranger"</span>,</span>
+<span id="cb14-466"><a href="#cb14-466" aria-hidden="true" tabindex="-1"></a>  <span class="at">grf =</span> <span class="st">"grf"</span>,</span>
+<span id="cb14-467"><a href="#cb14-467" aria-hidden="true" tabindex="-1"></a>  <span class="at">nnet =</span> <span class="st">"nnet"</span>,</span>
+<span id="cb14-468"><a href="#cb14-468" aria-hidden="true" tabindex="-1"></a>  <span class="at">xgboost =</span> <span class="st">"xgboost"</span></span>
 <span id="cb14-469"><a href="#cb14-469" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-470"><a href="#cb14-470" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-471"><a href="#cb14-471" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(learner_table)</span>
-<span id="cb14-472"><a href="#cb14-472" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-473"><a href="#cb14-473" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-474"><a href="#cb14-474" aria-hidden="true" tabindex="-1"></a>High-dimensional expansions are another sensitivity dimension. The example</span>
-<span id="cb14-475"><a href="#cb14-475" aria-hidden="true" tabindex="-1"></a>below creates a polynomial and interaction basis without running the full</span>
-<span id="cb14-476"><a href="#cb14-476" aria-hidden="true" tabindex="-1"></a>learner grid.</span>
-<span id="cb14-477"><a href="#cb14-477" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-478"><a href="#cb14-478" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-hd-design}</span></span>
-<span id="cb14-479"><a href="#cb14-479" aria-hidden="true" tabindex="-1"></a>s_cont_hd <span class="ot">&lt;-</span> <span class="fu">fdid_expand_covariates</span>(</span>
-<span id="cb14-480"><a href="#cb14-480" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
-<span id="cb14-481"><a href="#cb14-481" aria-hidden="true" tabindex="-1"></a>  <span class="at">basis_type =</span> <span class="st">"polynomial"</span>,</span>
-<span id="cb14-482"><a href="#cb14-482" aria-hidden="true" tabindex="-1"></a>  <span class="at">poly_degree =</span> <span class="dv">2</span>,</span>
-<span id="cb14-483"><a href="#cb14-483" aria-hidden="true" tabindex="-1"></a>  <span class="at">include_interactions =</span> <span class="cn">TRUE</span></span>
-<span id="cb14-484"><a href="#cb14-484" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-471"><a href="#cb14-471" aria-hidden="true" tabindex="-1"></a>learner_available <span class="ot">&lt;-</span> <span class="cf">function</span>(learner) {</span>
+<span id="cb14-472"><a href="#cb14-472" aria-hidden="true" tabindex="-1"></a>  pkg <span class="ot">&lt;-</span> learner_package[[learner]]</span>
+<span id="cb14-473"><a href="#cb14-473" aria-hidden="true" tabindex="-1"></a>  <span class="fu">is.na</span>(pkg) <span class="sc">||</span> <span class="fu">requireNamespace</span>(pkg, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb14-474"><a href="#cb14-474" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-475"><a href="#cb14-475" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-476"><a href="#cb14-476" aria-hidden="true" tabindex="-1"></a>learner_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb14-477"><a href="#cb14-477" aria-hidden="true" tabindex="-1"></a>  <span class="at">learner =</span> <span class="fu">names</span>(learner_package),</span>
+<span id="cb14-478"><a href="#cb14-478" aria-hidden="true" tabindex="-1"></a>  <span class="at">package =</span> <span class="fu">unname</span>(learner_package),</span>
+<span id="cb14-479"><a href="#cb14-479" aria-hidden="true" tabindex="-1"></a>  <span class="at">available =</span> <span class="fu">vapply</span>(<span class="fu">names</span>(learner_package), learner_available, <span class="fu">logical</span>(<span class="dv">1</span>)),</span>
+<span id="cb14-480"><a href="#cb14-480" aria-hidden="true" tabindex="-1"></a>  <span class="at">stringsAsFactors =</span> <span class="cn">FALSE</span></span>
+<span id="cb14-481"><a href="#cb14-481" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-482"><a href="#cb14-482" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-483"><a href="#cb14-483" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(learner_table)</span>
+<span id="cb14-484"><a href="#cb14-484" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb14-485"><a href="#cb14-485" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-486"><a href="#cb14-486" aria-hidden="true" tabindex="-1"></a>hd_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb14-487"><a href="#cb14-487" aria-hidden="true" tabindex="-1"></a>  <span class="at">design =</span> <span class="fu">c</span>(<span class="st">"raw covariates"</span>, <span class="st">"polynomial plus interactions"</span>),</span>
-<span id="cb14-488"><a href="#cb14-488" aria-hidden="true" tabindex="-1"></a>  <span class="at">covariate_columns =</span> <span class="fu">c</span>(</span>
-<span id="cb14-489"><a href="#cb14-489" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(<span class="fu">grep</span>(<span class="st">"^x[0-9]+$"</span>, <span class="fu">names</span>(s_cont))),</span>
-<span id="cb14-490"><a href="#cb14-490" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(<span class="fu">grep</span>(<span class="st">"^x[0-9]+$"</span>, <span class="fu">names</span>(s_cont_hd)))</span>
-<span id="cb14-491"><a href="#cb14-491" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb14-492"><a href="#cb14-492" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-493"><a href="#cb14-493" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-494"><a href="#cb14-494" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(hd_table)</span>
-<span id="cb14-495"><a href="#cb14-495" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-496"><a href="#cb14-496" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-497"><a href="#cb14-497" aria-hidden="true" tabindex="-1"></a>For a full analysis, vary one dimension at a time: learner, expanded design,</span>
-<span id="cb14-498"><a href="#cb14-498" aria-hidden="true" tabindex="-1"></a><span class="in">`density_method`</span>, then <span class="in">`signal_map`</span>. The rendered tutorial keeps the grid</span>
-<span id="cb14-499"><a href="#cb14-499" aria-hidden="true" tabindex="-1"></a>small; set <span class="in">`FDID_TUTORIAL_HEAVY=true`</span> before rendering if you want larger</span>
-<span id="cb14-500"><a href="#cb14-500" aria-hidden="true" tabindex="-1"></a>replication counts or optional learner grids.</span>
-<span id="cb14-501"><a href="#cb14-501" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-502"><a href="#cb14-502" aria-hidden="true" tabindex="-1"></a><span class="fu">## DML Checklist</span></span>
-<span id="cb14-503"><a href="#cb14-503" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-504"><a href="#cb14-504" aria-hidden="true" tabindex="-1"></a>Before reporting a DML result, check:</span>
+<span id="cb14-486"><a href="#cb14-486" aria-hidden="true" tabindex="-1"></a>High-dimensional expansions are another sensitivity dimension. The example</span>
+<span id="cb14-487"><a href="#cb14-487" aria-hidden="true" tabindex="-1"></a>below creates a polynomial and interaction basis without running the full</span>
+<span id="cb14-488"><a href="#cb14-488" aria-hidden="true" tabindex="-1"></a>learner grid.</span>
+<span id="cb14-489"><a href="#cb14-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-490"><a href="#cb14-490" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dml-hd-design}</span></span>
+<span id="cb14-491"><a href="#cb14-491" aria-hidden="true" tabindex="-1"></a>s_cont_hd <span class="ot">&lt;-</span> <span class="fu">fdid_expand_covariates</span>(</span>
+<span id="cb14-492"><a href="#cb14-492" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
+<span id="cb14-493"><a href="#cb14-493" aria-hidden="true" tabindex="-1"></a>  <span class="at">basis_type =</span> <span class="st">"polynomial"</span>,</span>
+<span id="cb14-494"><a href="#cb14-494" aria-hidden="true" tabindex="-1"></a>  <span class="at">poly_degree =</span> <span class="dv">2</span>,</span>
+<span id="cb14-495"><a href="#cb14-495" aria-hidden="true" tabindex="-1"></a>  <span class="at">include_interactions =</span> <span class="cn">TRUE</span></span>
+<span id="cb14-496"><a href="#cb14-496" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-497"><a href="#cb14-497" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-498"><a href="#cb14-498" aria-hidden="true" tabindex="-1"></a>hd_table <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb14-499"><a href="#cb14-499" aria-hidden="true" tabindex="-1"></a>  <span class="at">design =</span> <span class="fu">c</span>(<span class="st">"raw covariates"</span>, <span class="st">"polynomial plus interactions"</span>),</span>
+<span id="cb14-500"><a href="#cb14-500" aria-hidden="true" tabindex="-1"></a>  <span class="at">covariate_columns =</span> <span class="fu">c</span>(</span>
+<span id="cb14-501"><a href="#cb14-501" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(<span class="fu">grep</span>(<span class="st">"^x[0-9]+$"</span>, <span class="fu">names</span>(s_cont))),</span>
+<span id="cb14-502"><a href="#cb14-502" aria-hidden="true" tabindex="-1"></a>    <span class="fu">length</span>(<span class="fu">grep</span>(<span class="st">"^x[0-9]+$"</span>, <span class="fu">names</span>(s_cont_hd)))</span>
+<span id="cb14-503"><a href="#cb14-503" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-504"><a href="#cb14-504" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb14-505"><a href="#cb14-505" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-506"><a href="#cb14-506" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>whether the target is scalar, curve, or incremental;</span>
-<span id="cb14-507"><a href="#cb14-507" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>whether <span class="in">`G`</span> is truly continuous or binary;</span>
-<span id="cb14-508"><a href="#cb14-508" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>which nuisance learner was used and whether optional packages were loaded;</span>
-<span id="cb14-509"><a href="#cb14-509" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>which conditional-density method was used for <span class="in">`dml_flex`</span> or</span>
-<span id="cb14-510"><a href="#cb14-510" aria-hidden="true" tabindex="-1"></a>  <span class="in">`dml_incremental`</span>;</span>
-<span id="cb14-511"><a href="#cb14-511" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>whether the interval is analytical score, scalar score multiplier,</span>
-<span id="cb14-512"><a href="#cb14-512" aria-hidden="true" tabindex="-1"></a>  practical signal-residual multiplier, or BLP-spline Gaussian max-$t$;</span>
-<span id="cb14-513"><a href="#cb14-513" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>whether curve conclusions rely on sparse support or a fragile derivative.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<span id="cb14-506"><a href="#cb14-506" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(hd_table)</span>
+<span id="cb14-507"><a href="#cb14-507" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-508"><a href="#cb14-508" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-509"><a href="#cb14-509" aria-hidden="true" tabindex="-1"></a>For a full analysis, vary one dimension at a time: learner, expanded design,</span>
+<span id="cb14-510"><a href="#cb14-510" aria-hidden="true" tabindex="-1"></a><span class="in">`density_method`</span>, then <span class="in">`signal_map`</span>. The rendered tutorial keeps the grid</span>
+<span id="cb14-511"><a href="#cb14-511" aria-hidden="true" tabindex="-1"></a>small; set <span class="in">`FDID_TUTORIAL_HEAVY=true`</span> before rendering if you want larger</span>
+<span id="cb14-512"><a href="#cb14-512" aria-hidden="true" tabindex="-1"></a>replication counts or optional learner grids.</span>
+<span id="cb14-513"><a href="#cb14-513" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-514"><a href="#cb14-514" aria-hidden="true" tabindex="-1"></a><span class="fu">## DML Checklist</span></span>
+<span id="cb14-515"><a href="#cb14-515" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-516"><a href="#cb14-516" aria-hidden="true" tabindex="-1"></a>Before reporting a DML result, check:</span>
+<span id="cb14-517"><a href="#cb14-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-518"><a href="#cb14-518" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>whether the target is scalar, curve, or incremental;</span>
+<span id="cb14-519"><a href="#cb14-519" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>whether <span class="in">`G`</span> is truly continuous or binary;</span>
+<span id="cb14-520"><a href="#cb14-520" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>which nuisance learner was used and whether optional packages were loaded;</span>
+<span id="cb14-521"><a href="#cb14-521" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>which conditional-density method was used for <span class="in">`dml_flex`</span> or</span>
+<span id="cb14-522"><a href="#cb14-522" aria-hidden="true" tabindex="-1"></a>  <span class="in">`dml_incremental`</span>;</span>
+<span id="cb14-523"><a href="#cb14-523" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>whether the interval is analytical score, scalar score multiplier,</span>
+<span id="cb14-524"><a href="#cb14-524" aria-hidden="true" tabindex="-1"></a>  practical signal-residual multiplier, or BLP-spline Gaussian max-$t$;</span>
+<span id="cb14-525"><a href="#cb14-525" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>whether curve conclusions rely on sparse support or a fragile derivative.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

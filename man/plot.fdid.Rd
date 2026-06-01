@@ -108,7 +108,8 @@ simultaneous bands in continuous-G curve plots.}
 \item{support.panel}{For continuous-G curve plots, \code{"embedded"} draws
 the support display in a lower strip of the main plot, while
 \code{"separate"} draws it in a small aligned panel below the curve. When
-\code{curve="both"}, support displays are embedded in each panel.}
+\code{curve="both"}, level and derivative panels are drawn side-by-side
+and support displays are embedded in each panel.}
 
 \item{show.eval_g}{Logical; if \code{TRUE}, draw ticks for the stored
 evaluation grid in continuous-G curve plots.}

@@ -1007,7 +1007,8 @@
 #' @param support.panel For continuous-G curve plots, \code{"embedded"} draws
 #'   the support display in a lower strip of the main plot, while
 #'   \code{"separate"} draws it in a small aligned panel below the curve. When
-#'   \code{curve="both"}, support displays are embedded in each panel.
+#'   \code{curve="both"}, level and derivative panels are drawn side-by-side
+#'   and support displays are embedded in each panel.
 #' @param show.eval_g Logical; if \code{TRUE}, draw ticks for the stored
 #'   evaluation grid in continuous-G curve plots.
 #' @param line.color,line.size,ci.color,ci.alpha,band.color,band.lty,hist.color,density.color,support.alpha
@@ -1334,8 +1335,12 @@ plot.fdid <- function(x,
 
     if (length(curves_to_plot) > 1L) {
       oldpar <- graphics::par(no.readonly = TRUE)
-      on.exit(graphics::par(oldpar), add = TRUE)
-      graphics::par(mfrow = c(length(curves_to_plot), 1L))
+      on.exit({
+        graphics::layout(1)
+        graphics::par(oldpar)
+      }, add = TRUE)
+      graphics::layout(matrix(seq_along(curves_to_plot), nrow = 1L))
+      graphics::par(mar = c(4.0, 4.0, 2.8, 0.8), oma = c(0, 0, 0, 0))
     }
 
     for (cc in curves_to_plot) {

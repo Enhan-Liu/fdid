@@ -1,7 +1,7 @@
 # Visualization Options {#sec-visualization}
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache = TRUE, message = FALSE, warning = FALSE)
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, message = FALSE, warning = FALSE)
 ```
 
 In this chapter, we explore various visualization options available in the `fdid` package.
@@ -303,8 +303,8 @@ If kernel and DML plots appear to have different lower panels, check
 specific: `"histogram"` draws many narrow bars, `"density"` draws a smoothed
 filled density, `"rug"` draws ticks, and `"none"` suppresses support entirely.
 When `curve = "both"`, support is embedded in each panel even if
-`support.panel = "separate"` is requested, so the two curve panels remain
-aligned.
+`support.panel = "separate"` is requested. The two panels are drawn
+side-by-side so the level and derivative curves remain readable.
 
 ```{r curve-data, include=FALSE}
 set.seed(101)
@@ -363,7 +363,7 @@ fdid_results_flex_curve <- fdid(
   tr_period = 3:4,
   ref_period = 2,
   method = "dml_flex",
-  learner = "linear",
+  learner = "grf",
   K = 3,
   S = 1,
   eval_g = eval_curve
@@ -374,11 +374,14 @@ fdid_results_incremental_scalar <- fdid(
   tr_period = 3:4,
   ref_period = 2,
   method = "dml_incremental",
-  learner = "linear",
+  learner = "grf",
   K = 3,
   S = 1
 )
 ```
+
+The DML objects in this visualization chapter use `learner = "grf"` so the
+plot examples match the main DML tutorial chapter.
 
 ```{r curve-kernel}
 plot(fdid_results_kernel_curve, type = "curve", curve = "derivative",
@@ -407,7 +410,7 @@ summary(fdid_results_incremental_scalar)
 This is useful when checking whether a visually smooth level curve implies a
 plausible derivative curve.
 
-```{r curve-both, fig.width=9, fig.height=4.6}
+```{r curve-both, fig.width=10, fig.height=4.8}
 plot(fdid_results_kernel_curve, type = "curve", curve = "both",
      Xdistr = "density", main = "Kernel Level and Derivative")
 ```

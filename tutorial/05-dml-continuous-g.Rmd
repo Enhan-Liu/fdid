@@ -109,6 +109,15 @@ DML then proceeds in three steps:
 Binary `method = "dml_binary"` is covered in Chapter @sec-binary because it
 targets a binary contrast, not a continuous-`G` scalar or curve.
 
+The package default is `learner = "linear"` because it is fast and has few
+backend requirements. The rendered examples in this chapter use
+`learner = "grf"` throughout to show the flexible DML workflow: generalized
+random forests fit the nuisance functions inside the cross-fitting loop, while
+the target is still estimated through the method-specific orthogonal score.
+Because these examples fit multiple forests across folds and targets, this
+chapter takes noticeably longer to render than the earlier linear-learner
+version. That is expected and reflects the heavier GRF workflow.
+
 ## Data Setup
 
 ```{r dml-library-data}
@@ -159,7 +168,7 @@ fit_plr_score <- fit_fdid(
   tr_period = tr_period,
   ref_period = ref_period,
   method = "dml_plr",
-  learner = "linear",
+  learner = "grf",
   K = 3,
   S = 1,
   dml_inference = "score"
@@ -170,7 +179,7 @@ fit_plr_multiplier <- fit_fdid(
   tr_period = tr_period,
   ref_period = ref_period,
   method = "dml_plr",
-  learner = "linear",
+  learner = "grf",
   K = 3,
   S = 1,
   dml_inference = "score_multiplier",
@@ -179,9 +188,9 @@ fit_plr_multiplier <- fit_fdid(
 
 plr_table <- rbind(
   event_row(fit_plr_score, "PLR score", "partially linear slope",
-            learner = "linear"),
+            learner = "grf"),
   event_row(fit_plr_multiplier, "PLR score multiplier",
-            "partially linear slope", learner = "linear")
+            "partially linear slope", learner = "grf")
 )
 
 knitr::kable(plr_table[, c("fit", "target", "learner", "Estimate",
@@ -248,7 +257,7 @@ fit_flex_spline <- fit_fdid(
   tr_period = tr_period,
   ref_period = ref_period,
   method = "dml_flex",
-  learner = "linear",
+  learner = "grf",
   K = 3,
   S = 1,
   eval_g = eval_g_dml,
@@ -262,7 +271,7 @@ fit_flex_blp <- fit_fdid(
   tr_period = tr_period,
   ref_period = ref_period,
   method = "dml_flex",
-  learner = "linear",
+  learner = "grf",
   K = 3,
   S = 1,
   eval_g = eval_g_dml,
@@ -273,10 +282,10 @@ fit_flex_blp <- fit_fdid(
 
 flex_table <- rbind(
   event_row(fit_flex_spline, "dml_flex spline", "average level summary",
-            learner = "linear", density_method = "residual_kde",
+            learner = "grf", density_method = "residual_kde",
             signal_map = "spline"),
   event_row(fit_flex_blp, "dml_flex BLP spline", "average level summary",
-            learner = "linear", density_method = "location_scale",
+            learner = "grf", density_method = "location_scale",
             signal_map = "blp_spline")
 )
 
@@ -290,11 +299,13 @@ knitr::kable(flex_table[, c("fit", "signal_map", "density_method",
 if (!is_fit_error(fit_flex_spline)) {
   old_par <- par(mfrow = c(1, 2))
   plot(fit_flex_spline, type = "curve", curve = "level",
-       interval = "both", Xdistr = "rug",
-       main = "DML flexible level curve")
+       interval = "both", Xdistr = "histogram",
+       support.panel = "embedded",
+       main = "Xdistr = histogram")
   plot(fit_flex_spline, type = "curve", curve = "derivative",
-       interval = "both", Xdistr = "rug",
-       main = "DML flexible derivative curve")
+       interval = "both", Xdistr = "histogram",
+       support.panel = "embedded",
+       main = "Xdistr = histogram")
   par(old_par)
 }
 ```
@@ -351,8 +362,9 @@ if (!is_fit_error(fit_flex_blp)) {
 ```{r dml-blp-band-plot, fig.width=7, fig.height=4.5}
 if (!is_fit_error(fit_flex_blp)) {
   plot(fit_flex_blp, type = "curve", curve = "level",
-       interval = "both", Xdistr = "density",
-       main = "BLP-spline Gaussian max-t band")
+       interval = "both", Xdistr = "histogram",
+       support.panel = "embedded",
+       main = "Xdistr = histogram")
 }
 ```
 
@@ -391,7 +403,7 @@ fit_inc_residual <- fit_fdid(
   tr_period = tr_period,
   ref_period = ref_period,
   method = "dml_incremental",
-  learner = "linear",
+  learner = "grf",
   K = 3,
   S = 1,
   density_method = "residual_kde"
@@ -402,7 +414,7 @@ fit_inc_location <- fit_fdid(
   tr_period = tr_period,
   ref_period = ref_period,
   method = "dml_incremental",
-  learner = "linear",
+  learner = "grf",
   K = 3,
   S = 1,
   density_method = "location_scale"
@@ -413,7 +425,7 @@ fit_inc_local <- fit_fdid(
   tr_period = tr_period,
   ref_period = ref_period,
   method = "dml_incremental",
-  learner = "linear",
+  learner = "grf",
   K = 3,
   S = 1,
   density_method = "local_kde"
@@ -421,13 +433,13 @@ fit_inc_local <- fit_fdid(
 
 incremental_table <- rbind(
   event_row(fit_inc_residual, "incremental residual KDE",
-            "observed average derivative", learner = "linear",
+            "observed average derivative", learner = "grf",
             density_method = "residual_kde"),
   event_row(fit_inc_location, "incremental location-scale",
-            "observed average derivative", learner = "linear",
+            "observed average derivative", learner = "grf",
             density_method = "location_scale"),
   event_row(fit_inc_local, "incremental local KDE",
-            "observed average derivative", learner = "linear",
+            "observed average derivative", learner = "grf",
             density_method = "local_kde")
 )
 
