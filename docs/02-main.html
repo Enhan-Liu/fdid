@@ -1557,39 +1557,9 @@ window.Quarto = {
 <code>type = "dynamic"</code>: Dynamic estimates relative to the reference period.</li>
 <li>
 <code>type = "overlap"</code>: Propensity-score overlap.</li>
-<li>
-<code>type = "curve"</code>: Continuous-<span class="math inline">\(G\)</span> curve for <code>method = "kernel"</code> or <code>method = "dml_flex"</code>.</li>
 </ul>
-<p>For <code>type = "curve"</code>, use <code>curve = "level"</code> or <code>curve = "derivative"</code> to make the estimand explicit. Kernel and <code>dml_flex</code> results support both. The <code>dml_incremental</code> method is scalar and should be inspected with <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>. For <code>kernel</code> and <code>dml_flex</code>, <code>eval_g</code> is the estimation grid: the fitted object stores curve estimates at those points, and <code>plot(type = "curve")</code> displays them without adding new estimation points.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 33%">
-<col style="width: 33%">
-<col style="width: 33%">
-</colgroup>
-<thead><tr class="header">
-<th>Method</th>
-<th><code>curve = "level"</code></th>
-<th><code>curve = "derivative"</code></th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>"kernel"</code></td>
-<td>kernel level curve <span class="math inline">\(\hat\mu(g)\)</span>
-</td>
-<td>kernel derivative curve <span class="math inline">\(\hat\delta(g)\)</span>
-</td>
-</tr>
-<tr class="even">
-<td><code>"dml_flex"</code></td>
-<td>DML level curve <span class="math inline">\(\hat\theta(g)\)</span>
-</td>
-<td>DML derivative curve <span class="math inline">\(\hat\theta'(g)\)</span>
-</td>
-</tr>
-</tbody>
-</table>
 <p><code><a href="https://rdrr.io/pkg/fdid/man/fdid_list.html">fdid_list()</a></code> lets the user visually compare multiple <code><a href="https://rdrr.io/pkg/fdid/man/fdid.html">fdid()</a></code> results in one plot.</p>
+<p>Continuous-<span class="math inline">\(G\)</span> curve and fixed-reference contrast plots use different fitted objects and are covered in Chapters <a href="04-kernel-continuous-g.html" class="quarto-xref"><span>Chapter 4</span></a>, <a href="05-dml-continuous-g.html" class="quarto-xref"><span>Chapter 5</span></a>, and <a href="06-visualization.html" class="quarto-xref"><span>Chapter 6</span></a>.</p>
 <section id="raw-means-by-group" class="level3" data-number="2.6.1"><h3 data-number="2.6.1" class="anchored" data-anchor-id="raw-means-by-group">
 <span class="header-section-number">2.6.1</span> Raw means by group</h3>
 <p>Use <code>type = "raw"</code> to plot the outcome means and the 95% confidence intervals in each period for the <span class="math inline">\(G=0\)</span> and <span class="math inline">\(G=1\)</span> group. This plot is purely descriptive – it does not depend on the estimation method.</p>
@@ -2686,56 +2656,47 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
 <span id="cb47-566"><a href="#cb47-566" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`type = "raw"`</span>: Raw outcome means by group over time.</span>
 <span id="cb47-567"><a href="#cb47-567" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`type = "dynamic"`</span>: Dynamic estimates relative to the reference period.</span>
 <span id="cb47-568"><a href="#cb47-568" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`type = "overlap"`</span>: Propensity-score overlap.</span>
-<span id="cb47-569"><a href="#cb47-569" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span><span class="in">`type = "curve"`</span>: Continuous-$G$ curve for <span class="in">`method = "kernel"`</span> or <span class="in">`method = "dml_flex"`</span>.</span>
-<span id="cb47-570"><a href="#cb47-570" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-571"><a href="#cb47-571" aria-hidden="true" tabindex="-1"></a>For <span class="in">`type = "curve"`</span>, use <span class="in">`curve = "level"`</span> or <span class="in">`curve = "derivative"`</span> to make</span>
-<span id="cb47-572"><a href="#cb47-572" aria-hidden="true" tabindex="-1"></a>the estimand explicit. Kernel and <span class="in">`dml_flex`</span> results support both. The</span>
-<span id="cb47-573"><a href="#cb47-573" aria-hidden="true" tabindex="-1"></a><span class="in">`dml_incremental`</span> method is scalar and should be inspected with <span class="in">`summary()`</span>.</span>
-<span id="cb47-574"><a href="#cb47-574" aria-hidden="true" tabindex="-1"></a>For <span class="in">`kernel`</span> and <span class="in">`dml_flex`</span>, <span class="in">`eval_g`</span> is the estimation grid: the fitted object</span>
-<span id="cb47-575"><a href="#cb47-575" aria-hidden="true" tabindex="-1"></a>stores curve estimates at those points, and <span class="in">`plot(type = "curve")`</span> displays</span>
-<span id="cb47-576"><a href="#cb47-576" aria-hidden="true" tabindex="-1"></a>them without adding new estimation points.</span>
+<span id="cb47-569"><a href="#cb47-569" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-570"><a href="#cb47-570" aria-hidden="true" tabindex="-1"></a><span class="in">`fdid_list()`</span> lets the user visually compare multiple <span class="in">`fdid()`</span> results in one plot.</span>
+<span id="cb47-571"><a href="#cb47-571" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-572"><a href="#cb47-572" aria-hidden="true" tabindex="-1"></a>Continuous-$G$ curve and fixed-reference contrast plots use different fitted</span>
+<span id="cb47-573"><a href="#cb47-573" aria-hidden="true" tabindex="-1"></a>objects and are covered in Chapters @sec-kernel-continuous,</span>
+<span id="cb47-574"><a href="#cb47-574" aria-hidden="true" tabindex="-1"></a>@sec-dml-continuous, and @sec-visualization.</span>
+<span id="cb47-575"><a href="#cb47-575" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-576"><a href="#cb47-576" aria-hidden="true" tabindex="-1"></a><span class="fu">### Raw means by group</span></span>
 <span id="cb47-577"><a href="#cb47-577" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-578"><a href="#cb47-578" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Method <span class="pp">|</span> <span class="in">`curve = "level"`</span> <span class="pp">|</span> <span class="in">`curve = "derivative"`</span> <span class="pp">|</span></span>
-<span id="cb47-579"><a href="#cb47-579" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb47-580"><a href="#cb47-580" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"kernel"`</span> <span class="pp">|</span> kernel level curve $\hat\mu(g)$ <span class="pp">|</span> kernel derivative curve $\hat\delta(g)$ <span class="pp">|</span></span>
-<span id="cb47-581"><a href="#cb47-581" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`"dml_flex"`</span> <span class="pp">|</span> DML level curve $\hat\theta(g)$ <span class="pp">|</span> DML derivative curve $\hat\theta'(g)$ <span class="pp">|</span></span>
-<span id="cb47-582"><a href="#cb47-582" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-583"><a href="#cb47-583" aria-hidden="true" tabindex="-1"></a><span class="in">`fdid_list()`</span> lets the user visually compare multiple <span class="in">`fdid()`</span> results in one plot.</span>
-<span id="cb47-584"><a href="#cb47-584" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-585"><a href="#cb47-585" aria-hidden="true" tabindex="-1"></a><span class="fu">### Raw means by group</span></span>
-<span id="cb47-586"><a href="#cb47-586" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-587"><a href="#cb47-587" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`type = "raw"`</span> to plot the outcome means and the 95% confidence intervals in each period for the $G=0$ and $G=1$ group. This plot is purely descriptive -- it does not depend on the estimation method.</span>
-<span id="cb47-588"><a href="#cb47-588" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-591"><a href="#cb47-591" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb47-592"><a href="#cb47-592" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fdid_results_ols1, <span class="at">type =</span> <span class="st">"raw"</span>)</span>
-<span id="cb47-593"><a href="#cb47-593" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb47-594"><a href="#cb47-594" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-595"><a href="#cb47-595" aria-hidden="true" tabindex="-1"></a><span class="fu">### Dynamic estimates</span></span>
-<span id="cb47-596"><a href="#cb47-596" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-597"><a href="#cb47-597" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`type = "dynamic"`</span> to plot period-by-period estimates relative to the reference period. These estimates come from separate cross-sectional estimations by year, not a single TWFE event-study regression.</span>
-<span id="cb47-598"><a href="#cb47-598" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-601"><a href="#cb47-601" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb47-602"><a href="#cb47-602" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fdid_results_ols1, <span class="at">type =</span> <span class="st">"dynamic"</span>)</span>
-<span id="cb47-603"><a href="#cb47-603" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb47-604"><a href="#cb47-604" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-605"><a href="#cb47-605" aria-hidden="true" tabindex="-1"></a><span class="fu">### Diagnostic test for overlap</span></span>
+<span id="cb47-578"><a href="#cb47-578" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`type = "raw"`</span> to plot the outcome means and the 95% confidence intervals in each period for the $G=0$ and $G=1$ group. This plot is purely descriptive -- it does not depend on the estimation method.</span>
+<span id="cb47-579"><a href="#cb47-579" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-582"><a href="#cb47-582" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb47-583"><a href="#cb47-583" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fdid_results_ols1, <span class="at">type =</span> <span class="st">"raw"</span>)</span>
+<span id="cb47-584"><a href="#cb47-584" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-585"><a href="#cb47-585" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-586"><a href="#cb47-586" aria-hidden="true" tabindex="-1"></a><span class="fu">### Dynamic estimates</span></span>
+<span id="cb47-587"><a href="#cb47-587" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-588"><a href="#cb47-588" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`type = "dynamic"`</span> to plot period-by-period estimates relative to the reference period. These estimates come from separate cross-sectional estimations by year, not a single TWFE event-study regression.</span>
+<span id="cb47-589"><a href="#cb47-589" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-592"><a href="#cb47-592" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb47-593"><a href="#cb47-593" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fdid_results_ols1, <span class="at">type =</span> <span class="st">"dynamic"</span>)</span>
+<span id="cb47-594"><a href="#cb47-594" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-595"><a href="#cb47-595" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-596"><a href="#cb47-596" aria-hidden="true" tabindex="-1"></a><span class="fu">### Diagnostic test for overlap</span></span>
+<span id="cb47-597"><a href="#cb47-597" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-598"><a href="#cb47-598" aria-hidden="true" tabindex="-1"></a>For <span class="in">`method = "ipw"`</span> and <span class="in">`method = "aipw"`</span>, the user can assess the overlap assumption using <span class="in">`type = "overlap"`</span>, which plots the propensity score distributions by group.</span>
+<span id="cb47-599"><a href="#cb47-599" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-602"><a href="#cb47-602" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb47-603"><a href="#cb47-603" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fdid_results_aipw, <span class="at">type =</span> <span class="st">"overlap"</span>)</span>
+<span id="cb47-604"><a href="#cb47-604" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-605"><a href="#cb47-605" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-606"><a href="#cb47-606" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-607"><a href="#cb47-607" aria-hidden="true" tabindex="-1"></a>For <span class="in">`method = "ipw"`</span> and <span class="in">`method = "aipw"`</span>, the user can assess the overlap assumption using <span class="in">`type = "overlap"`</span>, which plots the propensity score distributions by group.</span>
+<span id="cb47-607"><a href="#cb47-607" aria-hidden="true" tabindex="-1"></a><span class="fu">### Comparison of methods</span></span>
 <span id="cb47-608"><a href="#cb47-608" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-611"><a href="#cb47-611" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb47-612"><a href="#cb47-612" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fdid_results_aipw, <span class="at">type =</span> <span class="st">"overlap"</span>)</span>
-<span id="cb47-613"><a href="#cb47-613" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb47-614"><a href="#cb47-614" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-615"><a href="#cb47-615" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-616"><a href="#cb47-616" aria-hidden="true" tabindex="-1"></a><span class="fu">### Comparison of methods</span></span>
-<span id="cb47-617"><a href="#cb47-617" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-618"><a href="#cb47-618" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`fdid_list()`</span> to collect multiple <span class="in">`fdid()`</span> results and plot them together. The plot shows point estimates and 95% confidence intervals for each method.</span>
-<span id="cb47-619"><a href="#cb47-619" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-622"><a href="#cb47-622" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb47-623"><a href="#cb47-623" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">fdid_list</span>(fdid_results_did, fdid_results_ols1, fdid_results_ols2,</span>
-<span id="cb47-624"><a href="#cb47-624" aria-hidden="true" tabindex="-1"></a>               fdid_results_ebal, fdid_results_ipw, fdid_results_aipw),</span>
-<span id="cb47-625"><a href="#cb47-625" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">1</span>))</span>
-<span id="cb47-626"><a href="#cb47-626" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb47-609"><a href="#cb47-609" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`fdid_list()`</span> to collect multiple <span class="in">`fdid()`</span> results and plot them together. The plot shows point estimates and 95% confidence intervals for each method.</span>
+<span id="cb47-610"><a href="#cb47-610" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-613"><a href="#cb47-613" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb47-614"><a href="#cb47-614" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">fdid_list</span>(fdid_results_did, fdid_results_ols1, fdid_results_ols2,</span>
+<span id="cb47-615"><a href="#cb47-615" aria-hidden="true" tabindex="-1"></a>               fdid_results_ebal, fdid_results_ipw, fdid_results_aipw),</span>
+<span id="cb47-616"><a href="#cb47-616" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">1</span>))</span>
+<span id="cb47-617"><a href="#cb47-617" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

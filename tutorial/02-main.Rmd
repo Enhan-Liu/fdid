@@ -566,21 +566,12 @@ summary(fdid_results_ols1_missing_a)
 -   `type = "raw"`: Raw outcome means by group over time.
 -   `type = "dynamic"`: Dynamic estimates relative to the reference period.
 -   `type = "overlap"`: Propensity-score overlap.
--   `type = "curve"`: Continuous-$G$ curve for `method = "kernel"` or `method = "dml_flex"`.
-
-For `type = "curve"`, use `curve = "level"` or `curve = "derivative"` to make
-the estimand explicit. Kernel and `dml_flex` results support both. The
-`dml_incremental` method is scalar and should be inspected with `summary()`.
-For `kernel` and `dml_flex`, `eval_g` is the estimation grid: the fitted object
-stores curve estimates at those points, and `plot(type = "curve")` displays
-them without adding new estimation points.
-
-| Method | `curve = "level"` | `curve = "derivative"` |
-|---|---|---|
-| `"kernel"` | kernel level curve $\hat\mu(g)$ | kernel derivative curve $\hat\delta(g)$ |
-| `"dml_flex"` | DML level curve $\hat\theta(g)$ | DML derivative curve $\hat\theta'(g)$ |
 
 `fdid_list()` lets the user visually compare multiple `fdid()` results in one plot.
+
+Continuous-$G$ curve and fixed-reference contrast plots use different fitted
+objects and are covered in Chapters @sec-kernel-continuous,
+@sec-dml-continuous, and @sec-visualization.
 
 ### Raw means by group
 

@@ -247,6 +247,15 @@ fit_plr_multiplier <- fit_fdid(
 )
 ```
 
+For scalar DML targets, `summary()` is the first object to inspect. It reports
+the event-period slope and labels the DML inference path used by the fit.
+
+```{r dml-plr-summary}
+if (!is_fit_error(fit_plr_score)) {
+  summary(fit_plr_score)
+}
+```
+
 ```{r dml-plr-table, echo=FALSE}
 plr_table <- rbind(
   event_row(fit_plr_score, "PLR score", "partially linear slope",
@@ -343,6 +352,16 @@ fit_flex_blp <- fit_fdid(
 )
 ```
 
+For flexible DML, `summary()` is still useful, but the scalar event row is only
+a first-layer summary. The level and derivative curves remain the primary
+objects for this target.
+
+```{r dml-flex-standard-summary}
+if (!is_fit_error(fit_flex_blp)) {
+  summary(fit_flex_blp)
+}
+```
+
 ```{r dml-flex-summary, echo=FALSE}
 flex_table <- rbind(
   event_row(fit_flex_spline, "dml_flex spline", "average level summary",
@@ -358,11 +377,11 @@ knitr::kable(flex_table[, c("fit", "signal_map", "density_method",
                             "note")],
              digits = 3)
 
-if (!is_fit_error(fit_flex_spline)) {
+if (!is_fit_error(fit_flex_blp)) {
   data.frame(
-    stored_eval_g_points = length(fit_flex_spline$eval_g),
-    stored_grid_min = min(fit_flex_spline$eval_g),
-    stored_grid_max = max(fit_flex_spline$eval_g)
+    stored_eval_g_points = length(fit_flex_blp$eval_g),
+    stored_grid_min = min(fit_flex_blp$eval_g),
+    stored_grid_max = max(fit_flex_blp$eval_g)
   )
 }
 ```
@@ -372,15 +391,15 @@ fields are the primary output, so the table below prints a compact excerpt
 rather than all 50 grid rows.
 
 ```{r dml-flex-curve-table, echo=FALSE}
-if (!is_fit_error(fit_flex_spline)) {
+if (!is_fit_error(fit_flex_blp)) {
   flex_curve <- data.frame(
-    G = fit_flex_spline$eval_g,
-    theta_hat = fit_flex_spline$curve_event$theta_hat,
-    true_theta = dml_true_level(fit_flex_spline$eval_g),
-    se_theta = fit_flex_spline$curve_event$se_theta,
-    delta_hat = fit_flex_spline$curve_event$delta_hat,
-    true_delta = dml_true_deriv(fit_flex_spline$eval_g),
-    se_delta = fit_flex_spline$curve_event$se_delta
+    G = fit_flex_blp$eval_g,
+    theta_hat = fit_flex_blp$curve_event$theta_hat,
+    true_theta = dml_true_level(fit_flex_blp$eval_g),
+    se_theta = fit_flex_blp$curve_event$se_theta,
+    delta_hat = fit_flex_blp$curve_event$delta_hat,
+    true_delta = dml_true_deriv(fit_flex_blp$eval_g),
+    se_delta = fit_flex_blp$curve_event$se_delta
   )
   flex_curve_excerpt <- flex_curve[
     unique(round(seq(1, nrow(flex_curve), length.out = 8))),
@@ -388,6 +407,32 @@ if (!is_fit_error(fit_flex_spline)) {
     drop = FALSE
   ]
   knitr::kable(flex_curve_excerpt, digits = 3)
+}
+```
+
+The next figure shows the point estimates first, without uncertainty bands.
+This separates the shape of the fitted level and derivative curves from the
+inference layer introduced in the next section.
+
+```{r dml-flex-point-plots, fig.width=9, fig.height=5.2}
+if (!is_fit_error(fit_flex_blp)) {
+  dml_grid_blp <- fit_flex_blp$eval_g
+  true_level <- dml_true_level(dml_grid_blp)
+  true_deriv <- dml_true_deriv(dml_grid_blp)
+
+  old_par <- par(mfrow = c(1, 2))
+  plot(fit_flex_blp, type = "curve", curve = "level",
+       interval = "none", Xdistr = "histogram",
+       support.panel = "embedded", legend.position = "none",
+       main = "DML flexible level curve")
+  lines(dml_grid_blp, true_level, col = "firebrick", lty = 2, lwd = 2)
+
+  plot(fit_flex_blp, type = "curve", curve = "derivative",
+       interval = "none", Xdistr = "histogram",
+       support.panel = "embedded", legend.position = "none",
+       main = "DML flexible derivative curve")
+  lines(dml_grid_blp, true_deriv, col = "firebrick", lty = 2, lwd = 2)
+  par(old_par)
 }
 ```
 
@@ -520,6 +565,16 @@ fit_inc_local <- fit_fdid(
   S = 1,
   density_method = "local_kde"
 )
+```
+
+Because `dml_incremental` is a scalar observed-average derivative target,
+`summary()` is the main reporting interface. The comparison table below then
+shows how the same target moves across conditional-density choices.
+
+```{r dml-incremental-summary}
+if (!is_fit_error(fit_inc_residual)) {
+  summary(fit_inc_residual)
+}
 ```
 
 ```{r dml-incremental-table, echo=FALSE}

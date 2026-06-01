@@ -211,9 +211,17 @@ fit_kernel_fast <- fit_fdid(
 )
 ```
 
-```{r kernel-basic-summary, echo=FALSE}
-knitr::kable(event_table(fit_kernel_fast, "kernel robust"), digits = 3)
+The first reporting layer is the standard `summary()` method. It gives the
+scalar aggregate/event/dynamic rows and then identifies the stored
+continuous-$G$ curve object.
 
+```{r kernel-basic-summary}
+if (!is_fit_error(fit_kernel_fast)) {
+  summary(fit_kernel_fast)
+}
+```
+
+```{r kernel-basic-grid, echo=FALSE}
 if (!is_fit_error(fit_kernel_fast)) {
   data.frame(
     stored_eval_g_points = length(fit_kernel_fast$eval_g),
