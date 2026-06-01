@@ -193,14 +193,8 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container">
-  <a href="./07-reporting-inference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Reporting And Inference</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container">
-  <a href="./08-sensitivity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sensitivity Analysis</span></span></a>
+  <a href="./07-sensitivity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Sensitivity Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -343,7 +337,50 @@ div.csl-indent {
 <span>  <span class="va">g_positive</span>,</span>
 <span>  probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0.20</span>, <span class="fl">0.80</span>, length.out <span class="op">=</span> <span class="fl">9</span><span class="op">)</span>,</span>
 <span>  na.rm <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">support_summary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>  quantity <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"units"</span>, <span class="st">"share at zero"</span>, <span class="st">"grid minimum"</span>, <span class="st">"grid median"</span>,</span>
+<span>               <span class="st">"grid maximum"</span>, <span class="st">"grid length"</span><span class="op">)</span>,</span>
+<span>  value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">s_cont</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">s_cont</span><span class="op">$</span><span class="va">G</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">eval_g</span><span class="op">)</span>,</span>
+<span>            <span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">eval_g</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">eval_g</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">eval_g</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">support_summary</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">quantity</th>
+<th style="text-align: right;">value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">units</td>
+<td style="text-align: right;">921.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">share at zero</td>
+<td style="text-align: right;">0.4473</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">grid minimum</td>
+<td style="text-align: right;">0.0372</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grid median</td>
+<td style="text-align: right;">0.0951</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">grid maximum</td>
+<td style="text-align: right;">0.3063</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">grid length</td>
+<td style="text-align: right;">9.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 </section><section id="inspect-support-before-estimation" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="inspect-support-before-estimation">
 <span class="header-section-number">3.3</span> Inspect Support Before Estimation</h2>
@@ -353,6 +390,12 @@ div.csl-indent {
 <span>     xlab <span class="op">=</span> <span class="st">"Baseline factor G"</span>, main <span class="op">=</span> <span class="st">"Observed support"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/range.html">range</a></span><span class="op">(</span><span class="va">eval_g</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"steelblue"</span>, <span class="st">"firebrick"</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/rug.html">rug</a></span><span class="op">(</span><span class="va">s_cont</span><span class="op">$</span><span class="va">G</span>, col <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html">adjustcolor</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="03-continuous-overview_files/figure-html/continuous-support-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
 </div>
 </section><section id="method-choice-in-one-table" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="method-choice-in-one-table">
 <span class="header-section-number">3.4</span> Method Choice In One Table</h2>
@@ -422,6 +465,9 @@ Cao, Jiarui, Yiqing Xu, and Chuanchuan Zhang. 2022. <span>“Clans and Calamity:
 </div>
 <div id="ref-cinelli2020making" class="csl-entry" role="listitem">
 Cinelli, Carlos, and Chad Hazlett. 2020. <span>“Making Sense of Sensitivity: Extending Omitted Variable Bias.”</span> <em>Journal of the Royal Statistical Society: Series B</em> 82 (1): 39–67.
+</div>
+<div id="ref-liu2025practical" class="csl-entry" role="listitem">
+Liu, Jiehan, Ziyi Liu, and Yiqing Xu. 2025. <span>“A Practical Guide to Estimating Conditional Marginal Effects: Modern Approaches.”</span> <em>arXiv Preprint arXiv:2504.01355</em>.
 </div>
 <div id="ref-xu2026factorial" class="csl-entry" role="listitem">
 Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Differences.”</span> <em>Journal of the American Statistical Association</em>, no. just-accepted: 1–23.
@@ -931,7 +977,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
 <span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>Use a continuous baseline factor in <span class="in">`fdid_prepare()`</span>. The example below uses</span>
 <span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a><span class="in">`lnpczupu`</span>, a log social-capital measure from the mortality data.</span>
 <span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{r continuous-prepare, eval=FALSE}</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a><span class="in">```{r continuous-prepare}</span></span>
 <span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fdid)</span>
 <span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(fdid)</span>
 <span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a></span>
@@ -957,47 +1003,56 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
 <span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>stores curve quantities at those values; plotting displays the stored grid</span>
 <span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>rather than densifying the curve after the fact.</span>
 <span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r continuous-grid, eval=FALSE}</span></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r continuous-grid}</span></span>
 <span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>g_positive <span class="ot">&lt;-</span> s_cont<span class="sc">$</span>G[s_cont<span class="sc">$</span>G <span class="sc">&gt;</span> <span class="dv">0</span>]</span>
 <span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>eval_g <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(stats<span class="sc">::</span><span class="fu">quantile</span>(</span>
 <span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>  g_positive,</span>
 <span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">probs =</span> <span class="fu">seq</span>(<span class="fl">0.20</span>, <span class="fl">0.80</span>, <span class="at">length.out =</span> <span class="dv">9</span>),</span>
 <span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>  <span class="at">na.rm =</span> <span class="cn">TRUE</span></span>
 <span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inspect Support Before Estimation</span></span>
-<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>Continuous-<span class="in">`G`</span> curve estimates are weakest where observed support is sparse.</span>
-<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>Inspect the empirical distribution of <span class="in">`G`</span> before fitting a curve and avoid</span>
-<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>turning a tail extrapolation into a headline result.</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>support_summary <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>  <span class="at">quantity =</span> <span class="fu">c</span>(<span class="st">"units"</span>, <span class="st">"share at zero"</span>, <span class="st">"grid minimum"</span>, <span class="st">"grid median"</span>,</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>               <span class="st">"grid maximum"</span>, <span class="st">"grid length"</span>),</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">c</span>(<span class="fu">nrow</span>(s_cont), <span class="fu">mean</span>(s_cont<span class="sc">$</span>G <span class="sc">==</span> <span class="dv">0</span>), <span class="fu">min</span>(eval_g),</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>            stats<span class="sc">::</span><span class="fu">median</span>(eval_g), <span class="fu">max</span>(eval_g), <span class="fu">length</span>(eval_g))</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a><span class="in">```{r continuous-support, eval=FALSE}</span></span>
-<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(s_cont<span class="sc">$</span>G, <span class="at">breaks =</span> <span class="dv">35</span>, <span class="at">col =</span> <span class="st">"gray85"</span>, <span class="at">border =</span> <span class="st">"white"</span>,</span>
-<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Baseline factor G"</span>, <span class="at">main =</span> <span class="st">"Observed support"</span>)</span>
-<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">range</span>(eval_g), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span>
-<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a><span class="fu">rug</span>(s_cont<span class="sc">$</span>G, <span class="at">col =</span> grDevices<span class="sc">::</span><span class="fu">adjustcolor</span>(<span class="st">"black"</span>, <span class="fl">0.25</span>))</span>
-<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## Method Choice In One Table</span></span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(support_summary, <span class="at">digits =</span> <span class="dv">4</span>)</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a><span class="fu">## Inspect Support Before Estimation</span></span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>Continuous-<span class="in">`G`</span> curve estimates are weakest where observed support is sparse.</span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>Inspect the empirical distribution of <span class="in">`G`</span> before fitting a curve and avoid</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>turning a tail extrapolation into a headline result.</span>
 <span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Need <span class="pp">|</span> Use first <span class="pp">|</span> Then check <span class="pp">|</span> Avoid saying <span class="pp">|</span></span>
-<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
-<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Quick scalar benchmark <span class="pp">|</span> <span class="in">`dml_plr`</span> <span class="pp">|</span> OLS/discrete sensitivity <span class="pp">|</span> "This is the whole dose-response curve" <span class="pp">|</span></span>
-<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Smooth level curve <span class="pp">|</span> <span class="in">`kernel`</span> <span class="pp">|</span> bandwidth and support <span class="pp">|</span> "Kernel removes all confounding concerns" <span class="pp">|</span></span>
-<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Flexible adjusted level curve <span class="pp">|</span> <span class="in">`dml_flex`</span> <span class="pp">|</span> learners, density, signal map <span class="pp">|</span> "The scalar summary is the main result" <span class="pp">|</span></span>
-<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Observed average derivative <span class="pp">|</span> <span class="in">`dml_incremental`</span> <span class="pp">|</span> density diagnostics and fold sensitivity <span class="pp">|</span> "It is just the average plotted slope" <span class="pp">|</span></span>
-<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Fixed-reference comparison <span class="pp">|</span> <span class="in">`fdid_contrast()`</span> after <span class="in">`kernel`</span> or <span class="in">`dml_flex`</span> <span class="pp">|</span> exact grid vs interpolation and available covariance/replicates <span class="pp">|</span> "All contrast intervals use the same variance source" <span class="pp">|</span></span>
-<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Plot support <span class="pp">|</span> curve plot support options <span class="pp">|</span> mass points and sparse regions <span class="pp">|</span> "The support display is adjusted causal evidence" <span class="pp">|</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a><span class="in">```{r continuous-support, fig.width=7, fig.height=4.8}</span></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(s_cont<span class="sc">$</span>G, <span class="at">breaks =</span> <span class="dv">35</span>, <span class="at">col =</span> <span class="st">"gray85"</span>, <span class="at">border =</span> <span class="st">"white"</span>,</span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Baseline factor G"</span>, <span class="at">main =</span> <span class="st">"Observed support"</span>)</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">range</span>(eval_g), <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"firebrick"</span>), <span class="at">lwd =</span> <span class="dv">2</span>)</span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a><span class="fu">rug</span>(s_cont<span class="sc">$</span>G, <span class="at">col =</span> grDevices<span class="sc">::</span><span class="fu">adjustcolor</span>(<span class="st">"black"</span>, <span class="fl">0.25</span>))</span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a><span class="fu">## Method Choice In One Table</span></span>
 <span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a><span class="fu">## What Not To Compare Directly</span></span>
-<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>Do not line up <span class="in">`dml_plr`</span>, <span class="in">`kernel`</span>, <span class="in">`dml_flex`</span>, and <span class="in">`dml_incremental`</span> as if</span>
-<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>they estimate the same number. <span class="in">`dml_plr`</span> is a scalar partially linear slope.</span>
-<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a><span class="in">`kernel`</span> and <span class="in">`dml_flex`</span> can report level and derivative curves. <span class="in">`dml_incremental`</span></span>
-<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>is an observed-population average derivative, not the average of a plotted</span>
-<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a><span class="in">`dml_flex`</span> derivative curve. A fixed-reference contrast is a function of a</span>
-<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>stored level curve, not a new estimator.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Need <span class="pp">|</span> Use first <span class="pp">|</span> Then check <span class="pp">|</span> Avoid saying <span class="pp">|</span></span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Quick scalar benchmark <span class="pp">|</span> <span class="in">`dml_plr`</span> <span class="pp">|</span> OLS/discrete sensitivity <span class="pp">|</span> "This is the whole dose-response curve" <span class="pp">|</span></span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Smooth level curve <span class="pp">|</span> <span class="in">`kernel`</span> <span class="pp">|</span> bandwidth and support <span class="pp">|</span> "Kernel removes all confounding concerns" <span class="pp">|</span></span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Flexible adjusted level curve <span class="pp">|</span> <span class="in">`dml_flex`</span> <span class="pp">|</span> learners, density, signal map <span class="pp">|</span> "The scalar summary is the main result" <span class="pp">|</span></span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Observed average derivative <span class="pp">|</span> <span class="in">`dml_incremental`</span> <span class="pp">|</span> density diagnostics and fold sensitivity <span class="pp">|</span> "It is just the average plotted slope" <span class="pp">|</span></span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Fixed-reference comparison <span class="pp">|</span> <span class="in">`fdid_contrast()`</span> after <span class="in">`kernel`</span> or <span class="in">`dml_flex`</span> <span class="pp">|</span> exact grid vs interpolation and available covariance/replicates <span class="pp">|</span> "All contrast intervals use the same variance source" <span class="pp">|</span></span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Plot support <span class="pp">|</span> curve plot support options <span class="pp">|</span> mass points and sparse regions <span class="pp">|</span> "The support display is adjusted causal evidence" <span class="pp">|</span></span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a><span class="fu">## What Not To Compare Directly</span></span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>Do not line up <span class="in">`dml_plr`</span>, <span class="in">`kernel`</span>, <span class="in">`dml_flex`</span>, and <span class="in">`dml_incremental`</span> as if</span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>they estimate the same number. <span class="in">`dml_plr`</span> is a scalar partially linear slope.</span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a><span class="in">`kernel`</span> and <span class="in">`dml_flex`</span> can report level and derivative curves. <span class="in">`dml_incremental`</span></span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>is an observed-population average derivative, not the average of a plotted</span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a><span class="in">`dml_flex`</span> derivative curve. A fixed-reference contrast is a function of a</span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>stored level curve, not a new estimator.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

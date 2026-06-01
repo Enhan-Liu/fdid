@@ -42,7 +42,7 @@ Keep four concepts separate:
 Use a continuous baseline factor in `fdid_prepare()`. The example below uses
 `lnpczupu`, a log social-capital measure from the mortality data.
 
-```{r continuous-prepare, eval=FALSE}
+```{r continuous-prepare}
 library(fdid)
 data(fdid)
 
@@ -68,13 +68,22 @@ For curve methods, `eval_g` is an estimation grid. The package estimates and
 stores curve quantities at those values; plotting displays the stored grid
 rather than densifying the curve after the fact.
 
-```{r continuous-grid, eval=FALSE}
+```{r continuous-grid}
 g_positive <- s_cont$G[s_cont$G > 0]
 eval_g <- as.numeric(stats::quantile(
   g_positive,
   probs = seq(0.20, 0.80, length.out = 9),
   na.rm = TRUE
 ))
+
+support_summary <- data.frame(
+  quantity = c("units", "share at zero", "grid minimum", "grid median",
+               "grid maximum", "grid length"),
+  value = c(nrow(s_cont), mean(s_cont$G == 0), min(eval_g),
+            stats::median(eval_g), max(eval_g), length(eval_g))
+)
+
+knitr::kable(support_summary, digits = 4)
 ```
 
 ## Inspect Support Before Estimation
@@ -83,7 +92,7 @@ Continuous-`G` curve estimates are weakest where observed support is sparse.
 Inspect the empirical distribution of `G` before fitting a curve and avoid
 turning a tail extrapolation into a headline result.
 
-```{r continuous-support, eval=FALSE}
+```{r continuous-support, fig.width=7, fig.height=4.8}
 hist(s_cont$G, breaks = 35, col = "gray85", border = "white",
      xlab = "Baseline factor G", main = "Observed support")
 abline(v = range(eval_g), col = c("steelblue", "firebrick"), lwd = 2)

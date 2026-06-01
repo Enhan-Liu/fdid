@@ -33,8 +33,6 @@ Main user-facing functions:
 - [Chapter @sec-dml-continuous] covers DML scalar, flexible-curve, and
   incremental targets.
 - [Chapter @sec-visualization] documents current base-graphics plotting.
-- [Chapter @sec-reporting-inference] centralizes summaries, contrasts,
-  derivatives, and interval labels.
 - [Chapter @sec-sensitivity] gives applied sensitivity checks.
 
 ## Contributors

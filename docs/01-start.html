@@ -119,7 +119,32 @@ div.csl-indent {
     "search-label": "Search"
   }
 }</script><link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 </head>
 <body class="nav-sidebar docked quarto-light">
 
@@ -193,14 +218,8 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container">
-  <a href="./07-reporting-inference.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Reporting And Inference</span></span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container">
-  <a href="./08-sensitivity.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Sensitivity Analysis</span></span></a>
+  <a href="./07-sensitivity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Sensitivity Analysis</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -237,53 +256,94 @@ div.csl-indent {
 
 
 
-</header><p>This chapter covers only the setup needed to run the tutorial: install or load <code>fdid</code>, load the example data, and prepare the wide panel shape used by <code><a href="https://rdrr.io/pkg/fdid/man/fdid.html">fdid()</a></code>.</p>
+</header><p>This chapter provides installation instructions and introduces the <code>mortality</code> dataset used in the tutorial.</p>
 <section id="installation" class="level2" data-number="1.1"><h2 data-number="1.1" class="anchored" data-anchor-id="installation">
 <span class="header-section-number">1.1</span> Installation</h2>
-<p>Install the package from GitHub for ordinary use:</p>
+<p>To install <code>fdid</code> from CRAN, run the code chunk below:</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"xuyiqing/fdid"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"fdid"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>When reviewing a local source checkout, install the local source into the R library that will be used for rendering:</p>
+<p>The <code>main</code> branch on GitHub tracks the latest stable release. The <code>dev</code> branch contains the most up-to-date features but may be more prone to errors.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD build fdid</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD INSTALL fdid_<span class="op">&lt;</span>version<span class="op">&gt;</span>.tar.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Install stable version from GitHub (same as CRAN)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"xuyiqing/fdid"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Install the latest development version (may be unstable)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"xuyiqing/fdid@dev"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>After installation, restart R and confirm the package path:</p>
+<p>If you downloaded the source folder and want to install locally, first build a <code>.tar.gz</code> file and then install it:</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yiqingxu.org/packages/fdid/">fdid</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/packageDescription.html">packageVersion</a></span><span class="op">(</span><span class="st">"fdid"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/find.package.html">find.package</a></span><span class="op">(</span><span class="st">"fdid"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># It can be implemented by "Terminal" of R Studio:</span></span>
+<span><span class="co"># (Typing the command after ':' in each step at the 'Terminal' page </span></span>
+<span><span class="co"># and replace "path/to/" with the actual path)</span></span>
+<span><span class="co"># 1. Set directory: cd path/to</span></span>
+<span><span class="co"># 2. Build package: R CMD build fdid</span></span>
+<span><span class="co"># 3. Install package: R CMD INSTALL fdid_0.1.0.tar.gz</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>fdid</code> depends on the following packages, which should be installed automatically when <code>fdid</code> is being installed. You can also install them manually.</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">install_all</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">packages</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">installed_pkgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/installed.packages.html">installed.packages</a></span><span class="op">(</span><span class="op">)</span><span class="op">[</span>, <span class="st">"Package"</span><span class="op">]</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">pkg</span> <span class="kw">in</span> <span class="va">packages</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">pkg</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">installed_pkgs</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="va">pkg</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
+<span><span class="va">packages</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"estimatr"</span>, <span class="st">"dplyr"</span>, <span class="st">"tidyr"</span>, <span class="st">"rlang"</span>, <span class="st">"tidyselect"</span>, <span class="st">"RColorBrewer"</span>,</span>
+<span>              <span class="st">"foreach"</span>, <span class="st">"doFuture"</span>, <span class="st">"future"</span>, <span class="st">"ebal"</span>, <span class="st">"grf"</span>, <span class="st">"car"</span>,</span>
+<span>              <span class="st">"sandwich"</span><span class="op">)</span></span>
+<span><span class="fu">install_all</span><span class="op">(</span><span class="va">packages</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="dataset" class="level2" data-number="1.2"><h2 data-number="1.2" class="anchored" data-anchor-id="dataset">
 <span class="header-section-number">1.2</span> Dataset</h2>
-<p>The tutorial uses the package’s famine mortality data. The raw data are long panel data: each unit has multiple year rows, an outcome, a baseline factor <code>G</code>, and covariates. <code><a href="https://rdrr.io/pkg/fdid/man/fdid_prepare.html">fdid_prepare()</a></code> converts this layout to one row per unit with one outcome column per time period.</p>
+<p>As in the empirical application of <span class="citation" data-cites="xu2026factorial">Xu, Zhao, and Ding (<a href="references.html#ref-xu2026factorial" role="doc-biblioref">2026</a>)</span>, we use the county-year panel from <span class="citation" data-cites="cao2022clans">Cao, Xu, and Zhang (<a href="references.html#ref-cao2022clans" role="doc-biblioref">2022</a>)</span>[<a href="https://doi.org/10.1016/j.jdeveco.2022.102865" target="_blank">Paper</a>] to illustrate the workflow.</p>
+<p><span class="citation" data-cites="cao2022clans">Cao, Xu, and Zhang (<a href="references.html#ref-cao2022clans" role="doc-biblioref">2022</a>)</span> examines the role of social capital in disaster relief during China’s Great Famine and finds that the rise in the mortality rate during the famine years is significantly less in counties with a higher clan density. In their research design, the event is China’s Great Famine (1958–1961), and the baseline factor <span class="math inline">\(G\)</span> is social capital, measured by the density of genealogy books.</p>
+<p><code>fdid</code> ships this long-format panel dataset <code>mortality</code>, which works directly with <code><a href="https://rdrr.io/pkg/fdid/man/fdid_prepare.html">fdid_prepare()</a></code> we’ll explain in <a href="02-main.html" class="quarto-xref">Chapter&nbsp;<span>2</span></a>. To load it, run the code chunk below:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yiqingxu.org/packages/fdid/">fdid</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yiqingxu.org/packages/fdid/">fdid</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">fdid</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">mortality</span><span class="op">$</span><span class="va">uniqueid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span></span>
-<span>  <span class="va">mortality</span><span class="op">$</span><span class="va">provid</span>,</span>
-<span>  <span class="va">mortality</span><span class="op">$</span><span class="va">countyid</span>,</span>
-<span>  sep <span class="op">=</span> <span class="st">"-"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">covar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"avggrain"</span>, <span class="st">"nograin"</span>, <span class="st">"urban"</span>, <span class="st">"dis_bj"</span>, <span class="st">"dis_pc"</span>,</span>
-<span>           <span class="st">"rice"</span>, <span class="st">"minority"</span>, <span class="st">"edu"</span>, <span class="st">"lnpop"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fdid/man/fdid_prepare.html">fdid_prepare</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">mortality</span>,</span>
-<span>  Y_label <span class="op">=</span> <span class="st">"mortality"</span>,</span>
-<span>  X_labels <span class="op">=</span> <span class="va">covar</span>,</span>
-<span>  G_label <span class="op">=</span> <span class="st">"pczupu"</span>,</span>
-<span>  unit_label <span class="op">=</span> <span class="st">"uniqueid"</span>,</span>
-<span>  time_label <span class="op">=</span> <span class="st">"year"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html">str</a></span><span class="op">(</span><span class="va">s</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "mortality"       "pandoc_dir"      "quarto_bin_path"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The prepared object is the input to <code><a href="https://rdrr.io/pkg/fdid/man/fdid.html">fdid()</a></code>. It contains <code>G</code>, covariates, and wide outcome columns such as <code>Y_1957</code>, <code>Y_1958</code>, and later years. The following chapters reuse this pattern for binary, discrete, and continuous baseline factors.</p>
+<p>The <code>mortality</code> dataset includes 16 variables. The variables are described below.</p>
+<ul>
+<li>Unit and period identifiers: <code>provid</code> identifies the province and <code>countyid</code> is the id of the county in this province; <code>year</code> indicates the period of the variables.</li>
+<li>Baseline factor in different measurement methods: <code>pczupu</code> is the number of genealogy books in a county (per capita); <code>lnpczupu</code> is its log-transformed version (<code>log(pczupu + 1)</code>), used as a continuous treatment; <code>anyzupu</code> is a binary variable which equals 1 if there’s any genealogy book in a county; <code>zupu</code> is a discrete variable to differentiate counties with some genealogies (<code>zupu = 1</code>) and counties with many genealogies (<code>zupu = 2</code>).</li>
+<li>Outcome: <code>mortality</code> is a county’s mortality in a year.</li>
+<li>Pre-event covariates:
+<ul>
+<li>
+<code>avggrain</code>: per capita grain production</li>
+<li>
+<code>nograin</code>: ratio of non-farming land</li>
+<li>
+<code>urban</code>: share of urban population</li>
+<li>
+<code>dis_bj</code>: distance from Beijing (km)</li>
+<li>
+<code>dis_pc</code>: distance from provincial capital (km)</li>
+<li>
+<code>rice</code>: suitable for rice cultivation (indicator)</li>
+<li>
+<code>minority</code>: share of ethnic minorities</li>
+<li>
+<code>edu</code>: average years of education</li>
+<li>
+<code>lnpop</code>: log county population</li>
+</ul>
+</li>
+</ul>
+<div class="cell">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">mortality</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["provid"],"name":[1],"type":["int"],"align":["right"]},{"label":["countyid"],"name":[2],"type":["int"],"align":["right"]},{"label":["zupu"],"name":[3],"type":["int"],"align":["right"]},{"label":["pczupu"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["anyzupu"],"name":[5],"type":["int"],"align":["right"]},{"label":["avggrain"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["nograin"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["urban"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["dis_bj"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["dis_pc"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["rice"],"name":[11],"type":["int"],"align":["right"]},{"label":["minority"],"name":[12],"type":["int"],"align":["right"]},{"label":["edu"],"name":[13],"type":["dbl"],"align":["right"]},{"label":["lnpop"],"name":[14],"type":["dbl"],"align":["right"]},{"label":["year"],"name":[15],"type":["int"],"align":["right"]},{"label":["mortality"],"name":[16],"type":["dbl"],"align":["right"]},{"label":["lnpczupu"],"name":[17],"type":["dbl"],"align":["right"]}],"data":[{"1":"13","2":"5","3":"1","4":"0.04299633","5":"1","6":"176.5823","7":"31.81305","8":"5","9":"80.0262","10":"75.00105","11":"0","12":"0","13":"2.547561","14":"12.54255","15":"1954","16":"17.09","17":"0.04209766","_rn_":"1"},{"1":"13","2":"5","3":"1","4":"0.04299633","5":"1","6":"176.5823","7":"31.81305","8":"5","9":"80.0262","10":"75.00105","11":"0","12":"0","13":"2.547561","14":"12.54255","15":"1955","16":"17.13","17":"0.04209766","_rn_":"2"},{"1":"13","2":"5","3":"1","4":"0.04299633","5":"1","6":"176.5823","7":"31.81305","8":"5","9":"80.0262","10":"75.00105","11":"0","12":"0","13":"2.547561","14":"12.54255","15":"1956","16":"17.09","17":"0.04209766","_rn_":"3"},{"1":"13","2":"5","3":"1","4":"0.04299633","5":"1","6":"176.5823","7":"31.81305","8":"5","9":"80.0262","10":"75.00105","11":"0","12":"0","13":"2.547561","14":"12.54255","15":"1957","16":"17.02","17":"0.04209766","_rn_":"4"},{"1":"13","2":"5","3":"1","4":"0.04299633","5":"1","6":"176.5823","7":"31.81305","8":"5","9":"80.0262","10":"75.00105","11":"0","12":"0","13":"2.547561","14":"12.54255","15":"1958","16":"16.94","17":"0.04209766","_rn_":"5"},{"1":"13","2":"5","3":"1","4":"0.04299633","5":"1","6":"176.5823","7":"31.81305","8":"5","9":"80.0262","10":"75.00105","11":"0","12":"0","13":"2.547561","14":"12.54255","15":"1959","16":"17.08","17":"0.04209766","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
 
 
 <!-- -->
@@ -294,6 +354,9 @@ Cao, Jiarui, Yiqing Xu, and Chuanchuan Zhang. 2022. <span>“Clans and Calamity:
 </div>
 <div id="ref-cinelli2020making" class="csl-entry" role="listitem">
 Cinelli, Carlos, and Chad Hazlett. 2020. <span>“Making Sense of Sensitivity: Extending Omitted Variable Bias.”</span> <em>Journal of the Royal Statistical Society: Series B</em> 82 (1): 39–67.
+</div>
+<div id="ref-liu2025practical" class="csl-entry" role="listitem">
+Liu, Jiehan, Ziyi Liu, and Yiqing Xu. 2025. <span>“A Practical Guide to Estimating Conditional Marginal Effects: Modern Approaches.”</span> <em>arXiv Preprint arXiv:2504.01355</em>.
 </div>
 <div id="ref-xu2026factorial" class="csl-entry" role="listitem">
 Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Differences.”</span> <em>Journal of the American Statistical Association</em>, no. just-accepted: 1–23.
@@ -759,82 +822,94 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="sourceCode" id="cb5" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Get Started {#sec-start}</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup-start, include=FALSE}</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">echo =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">cache =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">message =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">warning =</span> <span class="cn">FALSE</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>This chapter covers only the setup needed to run the tutorial: install or load</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="in">`fdid`</span>, load the example data, and prepare the wide panel shape used by</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="in">`fdid()`</span>.</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a><span class="fu">## Installation</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>Install the package from GitHub for ordinary use:</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{r install-github, eval=FALSE}</span></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"devtools"</span>)</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"xuyiqing/fdid"</span>)</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>When reviewing a local source checkout, install the local source into the R</span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>library that will be used for rendering:</span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="in">```{bash install-local, eval=FALSE}</span></span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD build fdid</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="ex">R</span> CMD INSTALL fdid_<span class="op">&lt;</span>version<span class="op">&gt;</span>.tar.gz</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>After installation, restart R and confirm the package path:</span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="in">```{r load-and-check, eval=FALSE}</span></span>
-<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fdid)</span>
-<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="fu">packageVersion</span>(<span class="st">"fdid"</span>)</span>
-<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="fu">normalizePath</span>(<span class="fu">find.package</span>(<span class="st">"fdid"</span>))</span>
-<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dataset</span></span>
-<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>The tutorial uses the package's famine mortality data. The raw data are long</span>
-<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>panel data: each unit has multiple year rows, an outcome, a baseline factor</span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="in">`G`</span>, and covariates. <span class="in">`fdid_prepare()`</span> converts this layout to one row per unit</span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>with one outcome column per time period.</span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="in">```{r data-shape, eval=FALSE}</span></span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fdid)</span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(fdid)</span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>mortality<span class="sc">$</span>uniqueid <span class="ot">&lt;-</span> <span class="fu">paste</span>(</span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>  mortality<span class="sc">$</span>provid,</span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>  mortality<span class="sc">$</span>countyid,</span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep =</span> <span class="st">"-"</span></span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>covar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"avggrain"</span>, <span class="st">"nograin"</span>, <span class="st">"urban"</span>, <span class="st">"dis_bj"</span>, <span class="st">"dis_pc"</span>,</span>
-<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>           <span class="st">"rice"</span>, <span class="st">"minority"</span>, <span class="st">"edu"</span>, <span class="st">"lnpop"</span>)</span>
-<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">fdid_prepare</span>(</span>
-<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> mortality,</span>
-<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>  <span class="at">Y_label =</span> <span class="st">"mortality"</span>,</span>
-<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>  <span class="at">X_labels =</span> covar,</span>
-<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>  <span class="at">G_label =</span> <span class="st">"pczupu"</span>,</span>
-<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>  <span class="at">unit_label =</span> <span class="st">"uniqueid"</span>,</span>
-<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_label =</span> <span class="st">"year"</span></span>
-<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(s)</span>
-<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a>The prepared object is the input to <span class="in">`fdid()`</span>. It contains <span class="in">`G`</span>, covariates, and</span>
-<span id="cb5-74"><a href="#cb5-74" aria-hidden="true" tabindex="-1"></a>wide outcome columns such as <span class="in">`Y_1957`</span>, <span class="in">`Y_1958`</span>, and later years. The following</span>
-<span id="cb5-75"><a href="#cb5-75" aria-hidden="true" tabindex="-1"></a>chapters reuse this pattern for binary, discrete, and continuous baseline</span>
-<span id="cb5-76"><a href="#cb5-76" aria-hidden="true" tabindex="-1"></a>factors.</span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Get Started {#sec-start}</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup, include=FALSE}</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span>opts_chunk<span class="sc">$</span><span class="fu">set</span>(<span class="at">echo =</span> <span class="cn">TRUE</span>, <span class="at">cache =</span> <span class="cn">TRUE</span>, <span class="at">message =</span> <span class="cn">FALSE</span>, <span class="at">warning =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>This chapter provides installation instructions and introduces the <span class="in">`mortality`</span> dataset used in the tutorial.</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## Installation</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>To install <span class="in">`fdid`</span> from CRAN, run the code chunk below:</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="in">```{r install_CRAN, eval = FALSE}</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"fdid"</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>The <span class="in">`main`</span> branch on GitHub tracks the latest stable release. The <span class="in">`dev`</span> branch contains the most up-to-date features but may be more prone to errors.</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="in">```{r installation, eval = FALSE}</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Install stable version from GitHub (same as CRAN)</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"xuyiqing/fdid"</span>)</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the latest development version (may be unstable)</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">"xuyiqing/fdid@dev"</span>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>If you downloaded the source folder and want to install locally, first build a <span class="in">`.tar.gz`</span> file and then install it:</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="in">```{r installation_local, eval = FALSE}</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="co"># It can be implemented by "Terminal" of R Studio:</span></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="co"># (Typing the command after ':' in each step at the 'Terminal' page </span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="co"># and replace "path/to/" with the actual path)</span></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Set directory: cd path/to</span></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Build package: R CMD build fdid</span></span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Install package: R CMD INSTALL fdid_0.1.0.tar.gz</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a><span class="in">`fdid`</span> depends on the following packages, which should be installed automatically when <span class="in">`fdid`</span> is being installed. You can also install them manually.</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a><span class="in">```{r dependencies, eval=FALSE}</span></span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>install_all <span class="ot">&lt;-</span> <span class="cf">function</span>(packages) {</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>  installed_pkgs <span class="ot">&lt;-</span> <span class="fu">installed.packages</span>()[, <span class="st">"Package"</span>]</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (pkg <span class="cf">in</span> packages) {</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>pkg <span class="sc">%in%</span> installed_pkgs) {</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>      <span class="fu">install.packages</span>(pkg)</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"estimatr"</span>, <span class="st">"dplyr"</span>, <span class="st">"tidyr"</span>, <span class="st">"rlang"</span>, <span class="st">"tidyselect"</span>, <span class="st">"RColorBrewer"</span>,</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>              <span class="st">"foreach"</span>, <span class="st">"doFuture"</span>, <span class="st">"future"</span>, <span class="st">"ebal"</span>, <span class="st">"grf"</span>, <span class="st">"car"</span>,</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>              <span class="st">"sandwich"</span>)</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a><span class="fu">install_all</span>(packages)</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Dataset</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>As in the empirical application of @xu2026factorial, we use the county-year panel from @cao2022clans<span class="sc">\[</span><span class="dt">&lt;</span><span class="kw">a</span><span class="ot"> href</span><span class="op">=</span><span class="st">"https://doi.org/10.1016/j.jdeveco.2022.102865"</span><span class="ot"> target</span><span class="op">=</span><span class="st">"_blank"</span><span class="dt">&gt;</span>Paper<span class="dt">&lt;/</span><span class="kw">a</span><span class="dt">&gt;</span><span class="sc">\]</span> to illustrate the workflow.</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>@cao2022clans examines the role of social capital in disaster relief during China’s Great Famine and finds that the rise in the mortality rate during the famine years is significantly less in counties with a higher clan density. In their research design, the event is China’s Great Famine (1958–1961), and the baseline factor $G$ is social capital, measured by the density of genealogy books.</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="in">`fdid`</span> ships this long-format panel dataset <span class="in">`mortality`</span>, which works directly with <span class="in">`fdid_prepare()`</span> we'll explain in <span class="co">[</span><span class="ot">Chapter @sec-binary</span><span class="co">]</span>. To load it, run the code chunk below:</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a><span class="in">```{r read_data}</span></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fdid)</span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(fdid)</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span>()</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>The <span class="in">`mortality`</span> dataset includes 16 variables. The variables are described below.</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Unit and period identifiers: <span class="in">`provid`</span> identifies the province and <span class="in">`countyid`</span> is the id of the county in this province; <span class="in">`year`</span> indicates the period of the variables.</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Baseline factor in different measurement methods: <span class="in">`pczupu`</span> is the number of genealogy books in a county (per capita); <span class="in">`lnpczupu`</span> is its log-transformed version (<span class="in">`log(pczupu + 1)`</span>), used as a continuous treatment; <span class="in">`anyzupu`</span> is a binary variable which equals 1 if there's any genealogy book in a county; <span class="in">`zupu`</span> is a discrete variable to differentiate counties with some genealogies (<span class="in">`zupu = 1`</span>) and counties with many genealogies (<span class="in">`zupu = 2`</span>).</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Outcome: <span class="in">`mortality`</span> is a county's mortality in a year.</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Pre-event covariates:</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span><span class="in">`avggrain`</span>: per capita grain production</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span><span class="in">`nograin`</span>: ratio of non-farming land</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span><span class="in">`urban`</span>: share of urban population</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span><span class="in">`dis_bj`</span>: distance from Beijing (km)</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span><span class="in">`dis_pc`</span>: distance from provincial capital (km)</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span><span class="in">`rice`</span>: suitable for rice cultivation (indicator)</span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span><span class="in">`minority`</span>: share of ethnic minorities</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span><span class="in">`edu`</span>: average years of education</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="ss">    - </span><span class="in">`lnpop`</span>: log county population</span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="in">```{r show_long_df}</span></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mortality)</span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

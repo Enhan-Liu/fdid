@@ -15,8 +15,7 @@ book:
     - 04-kernel-continuous-g.Rmd
     - 05-dml-continuous-g.Rmd
     - 06-visualization.Rmd
-    - 07-reporting-inference.Rmd
-    - 08-sensitivity.Rmd
+    - 07-sensitivity.Rmd
     - references.qmd
 
 delete_merged_file: true
