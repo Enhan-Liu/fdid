@@ -295,19 +295,20 @@ knitr::kable(flex_table[, c("fit", "signal_map", "density_method",
              digits = 3)
 ```
 
-In the mortality application, the GRF-based derivative curve is much noisier
-than the level curve. The derivative panel below therefore suppresses intervals
-and should be read as a point-estimate diagnostic for comparison with the
-kernel derivative and scalar DML targets. A synthetic example later in this
-chapter shows the DML curve interval display more cleanly.
+In the mortality application, the GRF-based curve intervals are wide enough to
+obscure the fitted shape, especially for the derivative. The panels below
+therefore suppress intervals and should be read as point-estimate diagnostics
+for comparison with the kernel curves and scalar DML targets. A synthetic
+example later in this chapter shows the DML curve interval display more
+cleanly.
 
 ```{r dml-flex-plots, fig.width=9, fig.height=4.4}
 if (!is_fit_error(fit_flex_spline)) {
   old_par <- par(mfrow = c(1, 2))
   plot(fit_flex_spline, type = "curve", curve = "level",
-       interval = "both", Xdistr = "histogram",
+       interval = "none", ci = FALSE, Xdistr = "histogram",
        support.panel = "embedded",
-       main = "DML level curve (mortality)")
+       main = "DML level points (mortality)")
   plot(fit_flex_spline, type = "curve", curve = "derivative",
        interval = "none", ci = FALSE, Xdistr = "histogram",
        support.panel = "embedded",
@@ -369,7 +370,7 @@ if (!is_fit_error(fit_flex_blp)) {
 if (!is_fit_error(fit_flex_blp)) {
   plot(fit_flex_blp, type = "curve", curve = "level",
        interval = "both", Xdistr = "histogram",
-       support.panel = "embedded",
+       support.panel = "separate",
        main = "DML BLP-spline level band (mortality)")
 }
 ```
@@ -544,26 +545,7 @@ knitr::kable(incremental_table[, c("fit", "density_method", "Estimate",
              digits = 3)
 ```
 
-For the mortality data, it is often easier to first compare the incremental
-point estimates across density-score approximations without drawing confidence
-intervals.
-
-```{r dml-incremental-point-plot, fig.width=7, fig.height=4.2}
-inc_plot <- incremental_table[is.finite(incremental_table$Estimate), ]
-if (nrow(inc_plot) > 0L) {
-  old_par <- par(mar = c(7.5, 4.5, 3, 1))
-  xpos <- seq_len(nrow(inc_plot))
-  plot(xpos, inc_plot$Estimate,
-       type = "b", pch = 16, xaxt = "n",
-       xlab = "", ylab = "Observed average derivative",
-       main = "DML incremental points (mortality)")
-  axis(1, at = xpos, labels = inc_plot$density_method, las = 2)
-  abline(h = 0, lty = 2, col = "gray50")
-  par(old_par)
-}
-```
-
-## Learner And Design Sensitivity
+### Learner Choice
 
 The DML estimators support several nuisance learners. Optional learner packages
 are loaded only when requested, so a tutorial should check availability before
@@ -596,6 +578,8 @@ learner_table <- data.frame(
 
 knitr::kable(learner_table)
 ```
+
+### High-Dimensional Expansions
 
 High-dimensional expansions are another sensitivity dimension. The example
 below creates a polynomial and interaction basis without running the full

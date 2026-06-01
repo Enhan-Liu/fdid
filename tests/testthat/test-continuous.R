@@ -581,7 +581,7 @@ test_that("[CRAN] dml_flex curve plots expose DML-specific interval labels", {
   expect_equal(unique(stats::na.omit(pd$band_method)),
                "practical_signal_residual_multiplier")
   expect_equal(unique(stats::na.omit(pd$band_label)),
-               "Practical band (signal residual multiplier)")
+               "Practical DML band")
   expect_true(any(grepl("not a final theorem-level",
                         stats::na.omit(pd$band_caveat),
                         fixed = TRUE)))
@@ -605,7 +605,7 @@ test_that("[CRAN] dml_flex curve plots expose DML-specific interval labels", {
   expect_equal(unique(stats::na.omit(pd_blp$band_method)),
                "gaussian_max_t_blp_spline_covariance")
   expect_equal(unique(stats::na.omit(pd_blp$band_label)),
-               "Gaussian max-t band (BLP spline covariance)")
+               "BLP max-t band")
   expect_true(any(pd_blp$curve_vcov_available))
   expect_true(any(grepl("not a DML refit bootstrap",
                         stats::na.omit(pd_blp$band_caveat),
@@ -623,6 +623,8 @@ test_that("[CRAN] plot.fdid contrast works for kernel and dml_flex objects", {
   expect_invisible(plot(res_k, type = "contrast"))
   expect_invisible(plot(res_k, type = "contrast", ci = FALSE))
   expect_invisible(plot(res_f, type = "contrast"))
+  expect_invisible(plot(res_f, type = "curve", curve = "level",
+                        legend.position = "none"))
 })
 
 test_that("[CRAN] plot.fdid contrast helper selects and validates targets", {

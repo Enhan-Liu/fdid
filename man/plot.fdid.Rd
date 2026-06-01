@@ -45,6 +45,7 @@
   inference = c("auto", "replicate", "vcov", "band", "pointwise"),
   interpolate = c("linear", "none"),
   show.grid = FALSE,
+  legend.position = c("auto", "topright", "topleft", "bottomright", "bottomleft", "none"),
   theme.bw = FALSE,
   ...
 )
@@ -160,6 +161,10 @@ for \code{type="contrast"}.}
 
 \item{show.grid}{Logical; if \code{TRUE}, draw a light background grid for
 continuous-G curve and contrast plots.}
+
+\item{legend.position}{Legend placement for plots that draw a legend. Use
+\code{"auto"} for continuous-G curve plots, one of the standard base
+graphics corners, or \code{"none"} to suppress the legend.}
 
 \item{theme.bw}{Reserved for compatibility with ggplot-style plotting
 controls; currently ignored by the base graphics method.}

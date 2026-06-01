@@ -278,6 +278,7 @@ The main continuous-G plot controls are:
 | `Xdistr` | `"histogram"`, `"density"`, `"rug"`, `"none"` | observed support display for continuous `G` |
 | `support.panel` | `"embedded"`, `"separate"` | whether support is drawn inside the curve panel or below it |
 | `show.eval_g` | `TRUE`, `FALSE` | ticks for the stored evaluation grid |
+| `legend.position` | `"auto"`, `"topright"`, `"topleft"`, `"bottomright"`, `"bottomleft"`, `"none"` | place or suppress plot legends |
 | `diff.values`, `contrast.values` | numeric vector | vertical reference lines at selected `G` values |
 | `line.color`, `line.size`, `ci.color`, `ci.alpha`, `band.color`, `band.lty`, `hist.color`, `density.color`, `support.alpha` | graphics values | base-graphics style controls |
 | `xlim`, `ylim`, `xlab`, `ylab`, `main` | graphics values | axis limits and labels |
@@ -304,7 +305,9 @@ specific: `"histogram"` draws many narrow bars, `"density"` draws a smoothed
 filled density, `"rug"` draws ticks, and `"none"` suppresses support entirely.
 When `curve = "both"`, support is embedded in each panel even if
 `support.panel = "separate"` is requested. The two panels are drawn
-side-by-side so the level and derivative curves remain readable.
+side-by-side so the level and derivative curves remain readable. If the legend
+competes with the curve, use `legend.position` to move it or
+`legend.position = "none"` to suppress it.
 
 ```{r curve-data, include=FALSE}
 set.seed(101)

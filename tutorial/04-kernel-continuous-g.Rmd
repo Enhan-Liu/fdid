@@ -98,31 +98,33 @@ s_cont <- fdid_prepare(
 )
 ```
 
-The famine mortality example has a mass point at zero in `lnpczupu`. For a
-smooth continuous-$G$ curve, it is usually better to report an interior region
-with enough positive support rather than force the kernel smoother to explain
-the mass point and far tail in one plot.
+The famine mortality example has a mass point at zero in `lnpczupu`. The grid
+below keeps that lowest observed value as a reporting anchor, then adds
+positive-support landmarks where the smooth curve is more interpretable.
 
 ```{r kernel-support-grid}
 g_positive <- s_cont$G[s_cont$G > 0]
 
-eval_g_kernel <- as.numeric(stats::quantile(
+eval_g_kernel <- c(0, as.numeric(stats::quantile(
   g_positive,
   probs = c(0.20, 0.35, 0.50, 0.65, 0.80),
   na.rm = TRUE
-))
+)))
 
-kernel_landmarks <- as.numeric(stats::quantile(
+kernel_landmarks <- c(0, as.numeric(stats::quantile(
   g_positive,
   probs = c(0.20, 0.50, 0.80),
   na.rm = TRUE
-))
+)))
 
 support_summary <- data.frame(
   quantity = c("n units", "share G = 0", "20% positive support",
-               "80% positive support", "grid size"),
-  value = c(nrow(s_cont), mean(s_cont$G == 0), min(eval_g_kernel),
-            max(eval_g_kernel), length(eval_g_kernel))
+               "80% positive support", "grid minimum", "grid maximum",
+               "grid size"),
+  value = c(nrow(s_cont), mean(s_cont$G == 0),
+            min(eval_g_kernel[eval_g_kernel > 0]),
+            max(eval_g_kernel), min(eval_g_kernel), max(eval_g_kernel),
+            length(eval_g_kernel))
 )
 
 knitr::kable(support_summary, digits = 4)
@@ -210,7 +212,7 @@ curves, pointwise bootstrap percentile intervals, curve covariance matrices,
 and finite-grid bootstrap quantile-envelope bands.
 
 The rendered example below keeps the same mortality dataset and the same
-interior positive-support grid. In an applied analysis, use many more bootstrap
+zero-anchored reporting grid. In an applied analysis, use many more bootstrap
 replications. The band shown by `interval = "both"` is a bootstrap
 quantile-envelope band; it is not a studentized sup-$t$ band.
 
@@ -297,10 +299,9 @@ algebraic zero anchor.
 ```{r kernel-contrast-plot, fig.width=7, fig.height=4.5}
 if (!is_fit_error(fit_kernel_boot)) {
   plot(fit_kernel_boot, type = "contrast",
-       ref.g = "median",
-       target.type = "quantile",
-       target.g = 5,
-       main = "Kernel contrasts vs median G")
+       ref.g = 0,
+       target.g = eval_g_kernel,
+       main = "Kernel contrasts vs G = 0")
 }
 ```
 

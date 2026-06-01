@@ -32,18 +32,18 @@
   }
   if (identical(method, "kernel") &&
       identical(band_method, "bootstrap_quantile_envelope")) {
-    return("Uniform band (bootstrap quantile-envelope)")
+    return("Bootstrap uniform band")
   }
   if (identical(method, "dml_flex")) {
     if (identical(band_method, "gaussian_max_t_blp_spline_covariance")) {
-      return("Gaussian max-t band (BLP spline covariance)")
+      return("BLP max-t band")
     }
     if (identical(band_method, "practical_signal_residual_multiplier") ||
         grepl("practical residual multiplier", practical_band_method,
               fixed = TRUE)) {
-      return("Practical band (signal residual multiplier)")
+      return("Practical DML band")
     }
-    return(paste0("DML curve band (", band_method, ")"))
+    return("DML curve band")
   }
   "Uniform band"
 }
@@ -176,9 +176,9 @@
     pointwise_upper <- as.numeric(ci_hi_stored)
     pointwise_method <- ci_method_stored
     pointwise_label <- if (identical(pointwise_method, "bootstrap_percentile")) {
-      "Pointwise CI (bootstrap)"
+      "Bootstrap CI"
     } else if (identical(method, "dml_flex")) {
-      "Pointwise CI (DML mapping)"
+      "Mapping CI"
     } else {
       "Pointwise CI"
     }
@@ -712,6 +712,16 @@
     pad <- if (is.finite(diff(rng)) && diff(rng) > 0) 0.08 * diff(rng) else 0.5
     ylim <- c(rng[1] - pad, rng[2] + pad)
   }
+  label_lines <- max(lengths(strsplit(as.character(contrast_df$label), "\n",
+                                      fixed = TRUE)), 1L)
+  old_mar <- graphics::par("mar")
+  needed_bottom <- max(4.8, 3.8 + 0.65 * label_lines)
+  if (old_mar[1L] < needed_bottom) {
+    new_mar <- old_mar
+    new_mar[1L] <- needed_bottom
+    graphics::par(mar = new_mar)
+    on.exit(graphics::par(mar = old_mar), add = TRUE)
+  }
   graphics::plot(
     xpos, contrast_df$estimate, type = "n", xaxt = "n",
     xlim = c(0.5, length(xpos) + 0.5), ylim = ylim,
@@ -748,7 +758,10 @@
     graphics::points(xpos, contrast_df$estimate, pch = 16,
                      col = line.color, cex = 1.05)
   }
-  graphics::axis(1, at = xpos, labels = contrast_df$label)
+  graphics::axis(1, at = xpos, labels = FALSE, tcl = -0.25)
+  label_cex <- if (nrow(contrast_df) > 7L || label_lines > 1L) 0.82 else 0.9
+  graphics::axis(1, at = xpos, labels = contrast_df$label,
+                 tick = FALSE, line = 0.35, cex.axis = label_cex)
   graphics::box()
   inf_rows <- if ("is_reference" %in% names(contrast_df)) {
     !contrast_df$is_reference
@@ -767,6 +780,32 @@
   invisible(NULL)
 }
 
+.fdid_auto_curve_legend_position <- function(curve_df, plot_xlim, plot_ylim,
+                                             embedded_support = FALSE) {
+  candidates <- c("topright", "topleft", "bottomright", "bottomleft")
+  xmid <- mean(plot_xlim)
+  ymid <- mean(plot_ylim)
+  score <- setNames(rep(0, length(candidates)), candidates)
+  y_cols <- c("estimate", "pointwise_lower", "pointwise_upper",
+              "band_lower", "band_upper")
+  y_cols <- y_cols[y_cols %in% names(curve_df)]
+  pts <- data.frame(
+    x = rep(curve_df$g, length(y_cols)),
+    y = unlist(curve_df[y_cols], use.names = FALSE)
+  )
+  pts <- pts[is.finite(pts$x) & is.finite(pts$y), , drop = FALSE]
+  if (nrow(pts) == 0L) return("topright")
+  for (pos in candidates) {
+    right <- grepl("right", pos)
+    top <- grepl("top", pos)
+    in_x <- if (right) pts$x >= xmid else pts$x <= xmid
+    in_y <- if (top) pts$y >= ymid else pts$y <= ymid
+    score[pos] <- sum(in_x & in_y)
+    if (embedded_support && !top) score[pos] <- score[pos] + 100
+  }
+  candidates[which.min(score[candidates])]
+}
+
 .fdid_plot_curve_base <- function(x, curve_df, interval, ci, show.uniform.CI,
                                   Xdistr, support.panel, show.eval_g,
                                   diff.values, contrast.values,
@@ -774,7 +813,8 @@
                                   line.color, line.size, ci.color, ci.alpha,
                                   band.color, band.lty, hist.color,
                                   density.color, support.alpha,
-                                  show.grid = FALSE, ...) {
+                                  show.grid = FALSE,
+                                  legend.position = "auto", ...) {
   flags <- .fdid_curve_interval_flags(curve_df, interval, ci, show.uniform.CI)
   finite_g <- curve_df$g[is.finite(curve_df$g)]
   finite_y <- curve_df$estimate[is.finite(curve_df$estimate)]
@@ -940,9 +980,24 @@
     legend_pch <- c(legend_pch, NA)
     legend_pt_cex <- c(legend_pt_cex, 1)
   }
-  graphics::legend("topright", legend = legend_labels, col = legend_col,
-                   lty = legend_lty, lwd = legend_lwd, pch = legend_pch,
-                   pt.cex = legend_pt_cex, bty = "n", cex = 0.85)
+  draw_legend <- !identical(legend.position, "none") &&
+    (length(legend_labels) > 1L || !identical(legend.position, "auto"))
+  if (draw_legend) {
+    legend_pos <- if (identical(legend.position, "auto")) {
+      .fdid_auto_curve_legend_position(
+        curve_df, plot_xlim, plot_ylim,
+        embedded_support = embedded_support ||
+          (identical(support.panel, "embedded") && support_available)
+      )
+    } else {
+      legend.position
+    }
+    legend_cex <- if (max(nchar(legend_labels), na.rm = TRUE) > 18L ||
+                      length(legend_labels) > 2L) 0.78 else 0.85
+    graphics::legend(legend_pos, legend = legend_labels, col = legend_col,
+                     lty = legend_lty, lwd = legend_lwd, pch = legend_pch,
+                     pt.cex = legend_pt_cex, bty = "n", cex = legend_cex)
+  }
 
   if (separate_support) {
     graphics::par(mar = c(2.8, 3.8, 0.2, 0.8))
@@ -1048,6 +1103,9 @@
 #'   for \code{type="contrast"}.
 #' @param show.grid Logical; if \code{TRUE}, draw a light background grid for
 #'   continuous-G curve and contrast plots.
+#' @param legend.position Legend placement for plots that draw a legend. Use
+#'   \code{"auto"} for continuous-G curve plots, one of the standard base
+#'   graphics corners, or \code{"none"} to suppress the legend.
 #' @param theme.bw Reserved for compatibility with ggplot-style plotting
 #'   controls; currently ignored by the base graphics method.
 #' @param ...  Additional graphics parameters.
@@ -1111,6 +1169,8 @@ plot.fdid <- function(x,
                                     "pointwise"),
                       interpolate = c("linear", "none"),
                       show.grid = FALSE,
+                      legend.position = c("auto", "topright", "topleft",
+                                          "bottomright", "bottomleft", "none"),
                       theme.bw = FALSE,
                       ...) {
 
@@ -1121,6 +1181,7 @@ plot.fdid <- function(x,
   support.panel <- match.arg(support.panel)
   inference <- match.arg(inference)
   interpolate <- match.arg(interpolate)
+  legend.position <- match.arg(legend.position)
 
   if (!requireNamespace("RColorBrewer", quietly = TRUE)) {
     stop("Please install the 'RColorBrewer' package.")
@@ -1148,18 +1209,18 @@ plot.fdid <- function(x,
   }
 
  shade_treatment <- function(tr_period, yrange, col = "gray") {
-    
+
     # remove shading: user passes NULL/empty
     if (is.null(tr_period) || length(tr_period) == 0 ||
         !is.finite(alpha_shade) || alpha_shade <= 0) {
       return(invisible(NULL))
     }
-    
+
     draw_one <- function(tp) {
       tp <- as.numeric(tp)
       tp <- tp[!is.na(tp)]
       if (length(tp) == 0) return(invisible(NULL))
-      
+
       rect(min(tp) - 0.5,
            yrange[1] - 10,
            max(tp) + 0.5,
@@ -1168,13 +1229,13 @@ plot.fdid <- function(x,
            border = NA)
       invisible(NULL)
     }
-    
+
     if (is.list(tr_period)) {
       for (tp in tr_period) draw_one(tp)
     } else {
       draw_one(tr_period)
     }
-    
+
     invisible(NULL)
   }
 
@@ -1189,10 +1250,10 @@ plot.fdid <- function(x,
     }
 
     times <- sort(unique(rawdf$time))
-    
+
     # If CI columns exist (or seY exists), prepare 95% CI for plotting
     has_ci <- ci && all(c("CI_Lower", "CI_Upper") %in% names(rawdf))
-    
+
     if (is.null(ylim)) {
       if (has_ci) {
         tmp <- range(rawdf$CI_Lower, rawdf$CI_Upper, na.rm = TRUE)
@@ -1215,7 +1276,7 @@ plot.fdid <- function(x,
       lines(g1$time, g1$meanY, col = group_colors[2], lwd = 2)
       lines(g0$time, g0$meanY, col = group_colors[1], lwd = 2)
     }
-    
+
     # 95% CI error bars (default on when available)
     if (exists("has_ci") && isTRUE(has_ci)) {
       ok1 <- !is.na(g1$CI_Lower) & !is.na(g1$CI_Upper)
@@ -1229,12 +1290,19 @@ plot.fdid <- function(x,
                angle = 90, code = 3, length = 0.05, col = group_colors[1])
       }
     }
-    
+
     points(g1$time, g1$meanY, pch = 16, col = group_colors[2])
     points(g0$time, g0$meanY, pch = 16, col = group_colors[1])
 
-    legend("topleft", legend = group_labels,
-           col = group_colors, pch = 16, bty = "n")
+    if (!identical(legend.position, "none")) {
+      raw_legend_pos <- if (identical(legend.position, "auto")) {
+        "topleft"
+      } else {
+        legend.position
+      }
+      legend(raw_legend_pos, legend = group_labels,
+             col = group_colors, pch = 16, bty = "n")
+    }
     return(invisible(NULL))
   }
 
@@ -1379,6 +1447,7 @@ plot.fdid <- function(x,
         density.color = density.color,
         support.alpha = support.alpha,
         show.grid = show.grid,
+        legend.position = legend.position,
         ...
       )
     }
@@ -1407,8 +1476,15 @@ plot.fdid <- function(x,
   plot(h1, freq = FALSE, add = TRUE,
        col = adjustcolor(group_colors[2], .6))
   abline(h = 0, lty = 2)
-  legend("topright", legend = group_labels,
-         fill = adjustcolor(group_colors, .6), bty = "n")
+  if (!identical(legend.position, "none")) {
+    overlap_legend_pos <- if (identical(legend.position, "auto")) {
+      "topright"
+    } else {
+      legend.position
+    }
+    legend(overlap_legend_pos, legend = group_labels,
+           fill = adjustcolor(group_colors, .6), bty = "n")
+  }
 
   invisible(NULL)
 }

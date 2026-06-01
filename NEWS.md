@@ -19,6 +19,9 @@
   now use the mortality application throughout, DML mortality derivative and
   incremental displays emphasize point estimates, and a synthetic DML example
   illustrates curve uncertainty.
+* Polished continuous-G plotting defaults with compact curve legend labels,
+  automatic legend placement, suppressible legends via `legend.position`, and
+  cleaner contrast-plot axis labels.
 * Replaced `options(warn = -1)` with `suppressWarnings()` in internal helper
   `silent_ebalance()` for CRAN compliance (avoids global state modification).
 
