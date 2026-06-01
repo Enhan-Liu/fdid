@@ -845,30 +845,30 @@ window.Quarto = {
 <span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
 <span><span class="co">#&gt;                       Estimate    Std.Error     95% CI </span></span>
 <span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
-<span><span class="co">#&gt;   Pre-Event             0.2781       0.1949  [-0.1039, 0.6601] </span></span>
-<span><span class="co">#&gt;   Event                -2.4586       0.6042  [-3.6429, -1.2744] </span></span>
-<span><span class="co">#&gt;   Post-Event           -0.4523       0.1851  [-0.8150, -0.0895] </span></span>
+<span><span class="co">#&gt;   Pre-Event             0.2777       0.1951  [-0.1047, 0.6600] </span></span>
+<span><span class="co">#&gt;   Event                -2.4216       0.6089  [-3.6151, -1.2280] </span></span>
+<span><span class="co">#&gt;   Post-Event           -0.4650       0.1840  [-0.8257, -0.1043] </span></span>
 <span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Dynamic Estimates</span></span>
 <span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
 <span><span class="co">#&gt;                       Estimate    Std.Error     95% CI </span></span>
 <span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
-<span><span class="co">#&gt;   1954                  0.8722       0.2722  [0.3387, 1.4056] </span></span>
-<span><span class="co">#&gt;   1955                  0.1473       0.2515  [-0.3457, 0.6403] </span></span>
-<span><span class="co">#&gt;   1956                 -0.1518       0.2397  [-0.6215, 0.3180] </span></span>
+<span><span class="co">#&gt;   1954                  0.8578       0.2706  [0.3274, 1.3881] </span></span>
+<span><span class="co">#&gt;   1955                  0.1753       0.2502  [-0.3150, 0.6657] </span></span>
+<span><span class="co">#&gt;   1956                 -0.1453       0.2381  [-0.6120, 0.3215] </span></span>
 <span><span class="co">#&gt;   1957                  0.0000       0.0000  [0.0000, 0.0000] </span></span>
 <span><span class="co">#&gt;    .................................................................... </span></span>
-<span><span class="co">#&gt;   1958                 -0.6106       0.3009  [-1.2004, -0.0208] </span></span>
-<span><span class="co">#&gt;   1959                 -3.0583       0.8350  [-4.6949, -1.4216] </span></span>
-<span><span class="co">#&gt;   1960                 -4.6842       1.4340  [-7.4949, -1.8736] </span></span>
-<span><span class="co">#&gt;   1961                 -1.2127       0.6243  [-2.4362, 0.0109] </span></span>
+<span><span class="co">#&gt;   1958                 -0.6356       0.3035  [-1.2304, -0.0407] </span></span>
+<span><span class="co">#&gt;   1959                 -2.8707       0.8335  [-4.5043, -1.2371] </span></span>
+<span><span class="co">#&gt;   1960                 -4.6878       1.4438  [-7.5177, -1.8578] </span></span>
+<span><span class="co">#&gt;   1961                 -1.1506       0.6248  [-2.3752, 0.0740] </span></span>
 <span><span class="co">#&gt;    .................................................................... </span></span>
-<span><span class="co">#&gt;   1962                 -0.0111       0.2790  [-0.5580, 0.5358] </span></span>
-<span><span class="co">#&gt;   1963                 -0.4533       0.2301  [-0.9043, -0.0023] </span></span>
-<span><span class="co">#&gt;   1964                 -0.7170       0.2255  [-1.1590, -0.2749] </span></span>
-<span><span class="co">#&gt;   1965                 -0.4697       0.1994  [-0.8606, -0.0789] </span></span>
-<span><span class="co">#&gt;   1966                 -0.4368       0.1997  [-0.8282, -0.0455] </span></span>
+<span><span class="co">#&gt;   1962                 -0.0401       0.2793  [-0.5875, 0.5074] </span></span>
+<span><span class="co">#&gt;   1963                 -0.4937       0.2291  [-0.9428, -0.0446] </span></span>
+<span><span class="co">#&gt;   1964                 -0.6858       0.2249  [-1.1267, -0.2449] </span></span>
+<span><span class="co">#&gt;   1965                 -0.4761       0.2004  [-0.8689, -0.0833] </span></span>
+<span><span class="co">#&gt;   1966                 -0.4436       0.2004  [-0.8363, -0.0508] </span></span>
 <span><span class="co">#&gt;   ------------------------------------------------------------------------</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="dml-binary" class="level3" data-number="2.3.7"><h3 data-number="2.3.7" class="anchored" data-anchor-id="dml-binary">
@@ -1630,7 +1630,7 @@ window.Quarto = {
 <span class="header-section-number">2.6.4</span> Comparison of methods</h3>
 <p>Use <code><a href="https://rdrr.io/pkg/fdid/man/fdid_list.html">fdid_list()</a></code> to collect multiple <code><a href="https://rdrr.io/pkg/fdid/man/fdid.html">fdid()</a></code> results and plot them together. The plot shows point estimates and 95% confidence intervals for each method.</p>
 <div class="cell">
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/fdid/man/fdid_list.html">fdid_list</a></span><span class="op">(</span><span class="va">fdid_results_did</span>, <span class="va">fdid_results_ols1</span>, <span class="va">fdid_results_ols2</span>, </span>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/fdid/man/fdid_list.html">fdid_list</a></span><span class="op">(</span><span class="va">fdid_results_did</span>, <span class="va">fdid_results_ols1</span>, <span class="va">fdid_results_ols2</span>,</span>
 <span>               <span class="va">fdid_results_ebal</span>, <span class="va">fdid_results_ipw</span>, <span class="va">fdid_results_aipw</span><span class="op">)</span>,</span>
 <span>     ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -2281,10 +2281,10 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
 <span id="cb47-161"><a href="#cb47-161" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-162"><a href="#cb47-162" aria-hidden="true" tabindex="-1"></a><span class="fu">### Difference-in-Differences</span></span>
 <span id="cb47-163"><a href="#cb47-163" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-164"><a href="#cb47-164" aria-hidden="true" tabindex="-1"></a>By setting <span class="in">`method = 'did'`</span>, the estimated model is the no-covariate specification: </span>
+<span id="cb47-164"><a href="#cb47-164" aria-hidden="true" tabindex="-1"></a>By setting <span class="in">`method = 'did'`</span>, the estimated model is the no-covariate specification:</span>
 <span id="cb47-165"><a href="#cb47-165" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb47-166"><a href="#cb47-166" aria-hidden="true" tabindex="-1"></a>\Delta Y_i=\beta_0+\beta_G G_i+\varepsilon_i</span>
-<span id="cb47-167"><a href="#cb47-167" aria-hidden="true" tabindex="-1"></a>$$ </span>
+<span id="cb47-167"><a href="#cb47-167" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb47-168"><a href="#cb47-168" aria-hidden="true" tabindex="-1"></a>Here, $\beta_G$ is a cross-sectional analogue of the canonical $2\times2$ DID estimand.</span>
 <span id="cb47-169"><a href="#cb47-169" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-170"><a href="#cb47-170" aria-hidden="true" tabindex="-1"></a><span class="in">```{r did}</span></span>
@@ -2305,7 +2305,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
 <span id="cb47-185"><a href="#cb47-185" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-186"><a href="#cb47-186" aria-hidden="true" tabindex="-1"></a><span class="fu">### OLS without interactions</span></span>
 <span id="cb47-187"><a href="#cb47-187" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-188"><a href="#cb47-188" aria-hidden="true" tabindex="-1"></a>By setting <span class="in">`method = "ols1"`</span>, the estimated model corresponds to the $OLS_+$ specification in @xu2026factorial: </span>
+<span id="cb47-188"><a href="#cb47-188" aria-hidden="true" tabindex="-1"></a>By setting <span class="in">`method = "ols1"`</span>, the estimated model corresponds to the $OLS_+$ specification in @xu2026factorial:</span>
 <span id="cb47-189"><a href="#cb47-189" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb47-190"><a href="#cb47-190" aria-hidden="true" tabindex="-1"></a>\Delta Y_i=\beta_0+\beta_GG_i+\beta_X'\mathbf{X}_i+\varepsilon_i</span>
 <span id="cb47-191"><a href="#cb47-191" aria-hidden="true" tabindex="-1"></a>$$</span>
@@ -2325,7 +2325,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
 <span id="cb47-205"><a href="#cb47-205" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-206"><a href="#cb47-206" aria-hidden="true" tabindex="-1"></a><span class="fu">### OLS with interactions</span></span>
 <span id="cb47-207"><a href="#cb47-207" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-208"><a href="#cb47-208" aria-hidden="true" tabindex="-1"></a>By setting <span class="in">`method = "ols2"`</span>, the estimated model corresponds to the $OLS_*$ specification: </span>
+<span id="cb47-208"><a href="#cb47-208" aria-hidden="true" tabindex="-1"></a>By setting <span class="in">`method = "ols2"`</span>, the estimated model corresponds to the $OLS_*$ specification:</span>
 <span id="cb47-209"><a href="#cb47-209" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb47-210"><a href="#cb47-210" aria-hidden="true" tabindex="-1"></a>\Delta Y_i=\beta_0+\beta_GG_i+\beta_X'\mathbf{X}_i+\beta'_{GX}G_i\mathbf{X}_i+\varepsilon_i</span>
 <span id="cb47-211"><a href="#cb47-211" aria-hidden="true" tabindex="-1"></a>$$</span>
@@ -2729,7 +2729,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
 <span id="cb47-615"><a href="#cb47-615" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`fdid_list()`</span> to collect multiple <span class="in">`fdid()`</span> results and plot them together. The plot shows point estimates and 95% confidence intervals for each method.</span>
 <span id="cb47-616"><a href="#cb47-616" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb47-619"><a href="#cb47-619" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb47-620"><a href="#cb47-620" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">fdid_list</span>(fdid_results_did, fdid_results_ols1, fdid_results_ols2, </span>
+<span id="cb47-620"><a href="#cb47-620" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">fdid_list</span>(fdid_results_did, fdid_results_ols1, fdid_results_ols2,</span>
 <span id="cb47-621"><a href="#cb47-621" aria-hidden="true" tabindex="-1"></a>               fdid_results_ebal, fdid_results_ipw, fdid_results_aipw),</span>
 <span id="cb47-622"><a href="#cb47-622" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>, <span class="dv">1</span>))</span>
 <span id="cb47-623"><a href="#cb47-623" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
