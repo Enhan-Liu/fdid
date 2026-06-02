@@ -111,6 +111,18 @@ DML then proceeds in three steps:
 Binary `method = "dml_binary"` is covered in Chapter @sec-binary because it
 targets a binary contrast, not a continuous-`G` scalar or curve.
 
+DML inference is target-specific. The scalar methods use score-based standard
+errors; flexible curves add a second-stage mapping layer. That mapping layer is
+why `dml_flex` intervals should be read more carefully than scalar PLR
+intervals.
+
+| DML output | Where to look | Inference reading |
+|---|---|---|
+| `dml_plr` scalar slope | `summary()` | analytical score CI, or score-multiplier critical value if requested |
+| `dml_flex` level/derivative curve | `curve_event`, `plot(type = "curve")` | pointwise and band labels depend on `signal_map` |
+| `dml_flex` fixed contrast | `fdid_contrast()` | uses stored covariance for `blp_spline`, otherwise replicate/band/fallback when available |
+| `dml_incremental` observed average derivative | `summary()` | scalar orthogonal-score SE; compare `density_method` choices as sensitivity |
+
 ## Synthetic Data Setup
 
 The DGP has four periods. Period 2 is the reference period and periods 3 and 4
@@ -322,6 +334,35 @@ density_table <- data.frame(
 knitr::kable(density_table)
 ```
 
+The `signal_map` options control only the second-stage map from the cross-fitted
+signal to the stored `eval_g` grid:
+
+```{r dml-signal-map-table, echo=FALSE}
+signal_map_table <- data.frame(
+  signal_map = c("local_poly", "kernel", "spline", "gam", "blp_spline"),
+  mapping = c(
+    "Local polynomial smoother; default map.",
+    "Local-linear smoother alias.",
+    "B-spline regression map.",
+    "mgcv GAM smooth map.",
+    "B-spline best linear projection map."
+  ),
+  inference_note = c(
+    "Pointwise local-polynomial SE; practical signal-residual multiplier band.",
+    "Same practical route with degree fixed to local linear.",
+    "Pointwise delta-method SE; practical signal-residual multiplier band.",
+    "Pointwise smooth-design SE; practical signal-residual multiplier band.",
+    "Stores theta_vcov and delta_vcov; Gaussian max-t band from covariance."
+  )
+)
+
+knitr::kable(signal_map_table)
+```
+
+`map_degree` controls local-polynomial and spline degree. `map_df` controls the
+spline/GAM basis size when relevant. These are curve-mapping choices; they do
+not change the nuisance learner or the conditional-density algorithm.
+
 ```{r dml-flex-fit}
 dml_curve_draws <- 99L
 
@@ -352,9 +393,9 @@ fit_flex_blp <- fit_fdid(
 )
 ```
 
-For flexible DML, `summary()` is still useful, but the scalar event row is only
-a first-layer summary. The level and derivative curves remain the primary
-objects for this target.
+For flexible DML, `summary()` is still useful, but the scalar event row is an
+interval-average level-slope summary over the fitted `eval_g` range. The level
+and derivative curves remain the primary objects for this target.
 
 ```{r dml-flex-standard-summary}
 if (!is_fit_error(fit_flex_blp)) {
@@ -364,10 +405,10 @@ if (!is_fit_error(fit_flex_blp)) {
 
 ```{r dml-flex-summary, echo=FALSE}
 flex_table <- rbind(
-  event_row(fit_flex_spline, "dml_flex spline", "average level summary",
+  event_row(fit_flex_spline, "dml_flex spline", "interval-average level slope",
             learner = "grf", density_method = "residual_kde",
             signal_map = "spline"),
-  event_row(fit_flex_blp, "dml_flex BLP spline", "average level summary",
+  event_row(fit_flex_blp, "dml_flex BLP spline", "interval-average level slope",
             learner = "grf", density_method = "location_scale",
             signal_map = "blp_spline")
 )
@@ -386,9 +427,9 @@ if (!is_fit_error(fit_flex_blp)) {
 }
 ```
 
-The scalar event row for `dml_flex` is a compatibility summary. The curve
-fields are the primary output, so the table below prints a compact excerpt
-rather than all 50 grid rows.
+The scalar event row for `dml_flex` is a compatibility summary of the level
+curve's endpoint slope. The curve fields are the primary output, so the table
+below prints a compact excerpt rather than all 50 grid rows.
 
 ```{r dml-flex-curve-table, echo=FALSE}
 if (!is_fit_error(fit_flex_blp)) {
@@ -438,7 +479,8 @@ if (!is_fit_error(fit_flex_blp)) {
 
 ## DML Curve Inference
 
-The DML curve inference labels are method-specific.
+The DML curve inference labels are method-specific. Read the legend and metadata
+as part of the result:
 
 - Pointwise intervals for `dml_flex` are second-stage mapping intervals.
 - With `signal_map = "spline"`, the simultaneous band is a practical residual
@@ -448,6 +490,11 @@ The DML curve inference labels are method-specific.
   when the covariance is usable.
 - Neither path is a full nonparametric DML refit bootstrap over all nuisance
   stages.
+
+In short, `blp_spline` is the current route with stored finite-grid covariance
+for level and derivative curves. The other maps are useful sensitivity checks,
+but their bands are practical mapping bands rather than theorem-level uniform
+DML bands.
 
 ```{r dml-flex-inference-metadata, echo=FALSE}
 if (!is_fit_error(fit_flex_blp)) {

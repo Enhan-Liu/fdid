@@ -231,8 +231,13 @@ if (!is_fit_error(fit_kernel_fast)) {
 }
 ```
 
-The scalar event row is a compact summary. For the kernel estimator, the main
-objects are the stored curve arrays.
+The scalar event row is a compact interval-average level-slope summary over the
+fitted `eval_g` range. For the kernel estimator, the main objects are still the
+stored level and derivative curve arrays. Under `vartype = "robust"`, the
+current implementation also stores analytical cross-grid covariance matrices
+for those arrays; this is what lets the scalar summary and exact-grid contrasts
+use covariance-aware standard errors rather than independent-endpoint
+approximations.
 
 ```{r kernel-curve-table, echo=FALSE}
 if (!is_fit_error(fit_kernel_fast)) {
@@ -269,10 +274,18 @@ marker, and contrast plot options.
 
 ## Bootstrap Pointwise And Uniform Bands
 
-For kernel inference, `vartype = "robust"` gives analytical pointwise normal
-intervals. With `vartype = "bootstrap"`, the package stores bootstrap replicate
-curves, pointwise bootstrap percentile intervals, curve covariance matrices,
-and finite-grid bootstrap quantile-envelope bands.
+For kernel inference, keep two routes separate:
+
+| `vartype` | What is stored | Main use |
+|---|---|---|
+| `"robust"` | analytical pointwise normal intervals plus stacked-sandwich `mu_vcov` and `delta_vcov` over the stored grid | stable pointwise intervals, covariance-aware summaries, contrasts, and derivative values |
+| `"bootstrap"` | bootstrap replicate curves, pointwise percentile intervals, bootstrap curve covariance, and finite-grid quantile-envelope bands | pointwise bootstrap intervals and uniform curve displays |
+
+The robust covariance is a cross-grid covariance for the local-linear curve
+estimates. Exact-grid level contrasts use the identity
+`V22 + V11 - 2 * V12`; off-grid values use the same matrix after linear
+interpolation weights. Bootstrap covariance matrices are computed from the
+stored replicate curves.
 
 The rendered example below keeps the same mortality dataset and the same
 full-support 50-point grid. It uses 200 bootstrap replications so the
@@ -353,13 +366,14 @@ of quantities. `fdid_contrast()` reports level differences such as
 `G`.
 
 For these compact reporting examples, we use the analytical `vartype = "robust"`
-fit from the basic kernel section. This keeps the table and coefficient plot
-tied to robust pointwise normal inference rather than the bootstrap covariance
-object used for the full uniform-band display above. For a fixed derivative
-value, the standard error is the analytical pointwise derivative SE. For a level
-contrast, the robust fit does not currently store a cross-grid covariance
-matrix, so `inference = "pointwise"` reports an endpoint pointwise approximation
-rather than the full covariance formula.
+fit from the basic kernel section rather than the bootstrap object used for the
+uniform-band display above. The reporting helper's default `inference = "auto"`
+first looks for stored curve covariance; for exact-grid contrasts this is the
+`V22 + V11 - 2 * V12` calculation. In this mortality example, however, the
+substantively useful reference is the lowest grid value `G = 0`, and the
+full-support boundary covariance can be numerically unavailable. We therefore
+request `inference = "pointwise"` in the compact table and coefficient plot, so
+the output is explicitly labeled as an analytical endpoint approximation.
 
 ```{r kernel-reporting, echo=FALSE}
 if (!is_fit_error(fit_kernel_fast)) {
@@ -396,11 +410,13 @@ if (!is_fit_error(fit_kernel_fast)) {
 
 When the helper is applied to a bootstrap kernel object, exact-grid contrasts
 can use the stored bootstrap curve covariance matrix and the covariance identity
-`V22 + V11 - 2 * V12`. The analytical robust object shown here does not store
-that cross-grid covariance, so the contrast row and coefficient plot are labeled
-`pointwise_approx`. Use the bootstrap object when the covariance contrast is the
-target; use the robust object when the goal is a stable analytical reporting
-summary.
+`V22 + V11 - 2 * V12`. The robust object shown here now stores the analytical
+stacked-sandwich version of the same cross-grid covariance idea when the
+relevant grid covariance entries are finite. Use the bootstrap object when the
+target is a bootstrap curve display or replicate-based sensitivity check; use
+the robust object when the goal is a stable analytical reporting summary, and
+read the `inference` column to see whether the helper used covariance or a
+labeled pointwise approximation.
 
 ## Option Checklist
 
@@ -432,7 +448,8 @@ For a substantive kernel analysis, the practical checklist is:
 
 - inspect the support of `G` before choosing the grid;
 - avoid interpreting sparse tails or large mass points as smooth regions;
-- report whether intervals are analytical pointwise or bootstrap pointwise;
+- report whether intervals are analytical pointwise, bootstrap pointwise, or
+  covariance-based contrasts from stored curve covariance;
 - call the simultaneous band a bootstrap quantile-envelope band, not a
   studentized sup-$t$ band;
 - report key values with `fdid_contrast()` or `fdid_derivative()` in addition

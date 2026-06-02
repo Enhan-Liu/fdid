@@ -185,8 +185,75 @@ run_kernel_method <- function(
     h0_grid[which.min(CV)]
   }
 
+  # ── Cross-grid sandwich covariance for level and derivative curves ──
+  kernel_curve_sandwich_vcov <- function(DeltaY, G, X, evg, h_ev, theta_mat, Xbar,
+                                         cluster_labels = NULL) {
+    m_c <- length(evg)
+    p_c <- ncol(X)
+    np_c <- 2L + 2L * p_c
+    av <- a_vec(Xbar)
+    bv <- b_vec(Xbar)
+    A_inv_list <- vector("list", m_c)
+    score_list <- vector("list", m_c)
+
+    use_cluster <- !is.null(cluster_labels) &&
+      length(cluster_labels) == length(DeltaY) &&
+      length(unique(cluster_labels[!is.na(cluster_labels)])) >= 2L
+    cluster_factor <- if (use_cluster) as.factor(cluster_labels) else NULL
+
+    for (j in seq_len(m_c)) {
+      th <- theta_mat[j, ]
+      if (length(th) != np_c || any(!is.finite(th))) next
+      dG <- G - evg[j]
+      W_diag <- dnorm((G - evg[j]) / h_ev[j]) / h_ev[j]
+      R <- if (p_c > 0) cbind(1, X, dG, dG * X) else cbind(1, dG)
+      e_hat <- as.numeric(DeltaY - R %*% th)
+      WR <- R * W_diag
+      A <- crossprod(WR, R)
+      A_inv <- tryCatch(solve(A), error = function(e) NULL)
+      if (is.null(A_inv) || any(!is.finite(A_inv))) next
+      score_i <- R * (W_diag * e_hat)
+      if (use_cluster) {
+        score_i <- rowsum(score_i, cluster_factor, reorder = FALSE)
+      }
+      A_inv_list[[j]] <- A_inv
+      score_list[[j]] <- score_i
+    }
+
+    mu_vcov <- matrix(NA_real_, m_c, m_c)
+    delta_vcov <- matrix(NA_real_, m_c, m_c)
+    finite_adj <- if (use_cluster) {
+      g_cl <- length(levels(cluster_factor))
+      if (g_cl > 1L) g_cl / (g_cl - 1L) else 1
+    } else {
+      1
+    }
+    for (j in seq_len(m_c)) {
+      if (is.null(A_inv_list[[j]]) || is.null(score_list[[j]])) next
+      for (k in j:m_c) {
+        if (is.null(A_inv_list[[k]]) || is.null(score_list[[k]])) next
+        meat_jk <- finite_adj * crossprod(score_list[[j]], score_list[[k]])
+        V_jk <- A_inv_list[[j]] %*% meat_jk %*% A_inv_list[[k]]
+        mu_vcov[j, k] <- as.numeric(t(av) %*% V_jk %*% av)
+        delta_vcov[j, k] <- as.numeric(t(bv) %*% V_jk %*% bv)
+        if (k != j) {
+          mu_vcov[k, j] <- mu_vcov[j, k]
+          delta_vcov[k, j] <- delta_vcov[j, k]
+        }
+      }
+    }
+    list(
+      mu_vcov = (mu_vcov + t(mu_vcov)) / 2,
+      delta_vcov = (delta_vcov + t(delta_vcov)) / 2,
+      method = if (use_cluster) "analytical_cluster_stacked_sandwich" else
+        "analytical_stacked_sandwich"
+    )
+  }
+
   # ── Estimate curve over evaluation grid ──
-  estimate_curve_kernel <- function(DeltaY, G, X, evg, h0_star, rho_ev, rho_gm, Xbar) {
+  estimate_curve_kernel <- function(DeltaY, G, X, evg, h0_star, rho_ev, rho_gm,
+                                    Xbar, cluster_labels = NULL,
+                                    compute_vcov = TRUE) {
     m_c  <- length(evg)
     np_c <- 2L + 2L * ncol(X)
     theta_mat <- matrix(NA_real_, m_c, np_c)
@@ -212,8 +279,28 @@ run_kernel_method <- function(
         }
       }
     }
+    curve_vcov <- list(
+      mu_vcov = NULL,
+      delta_vcov = NULL,
+      method = NA_character_
+    )
+    if (isTRUE(compute_vcov)) {
+      curve_vcov <- kernel_curve_sandwich_vcov(
+        DeltaY = DeltaY, G = G, X = X, evg = evg, h_ev = h_ev,
+        theta_mat = theta_mat, Xbar = Xbar, cluster_labels = cluster_labels
+      )
+      if (is.matrix(curve_vcov$mu_vcov)) {
+        se_mu <- sqrt(pmax(0, diag(curve_vcov$mu_vcov)))
+      }
+      if (is.matrix(curve_vcov$delta_vcov)) {
+        se_delta <- sqrt(pmax(0, diag(curve_vcov$delta_vcov)))
+      }
+    }
     list(theta_mat = theta_mat, mu_hat = mu_hat, delta_hat = delta_hat,
-         se_mu = se_mu, se_delta = se_delta, h_adaptive = h_ev)
+         se_mu = se_mu, se_delta = se_delta, h_adaptive = h_ev,
+         mu_vcov = curve_vcov$mu_vcov,
+         delta_vcov = curve_vcov$delta_vcov,
+         curve_vcov_method = curve_vcov$method)
   }
 
   kernel_pointwise_ci <- function(boot_mat, alpha_val) {
@@ -328,6 +415,15 @@ run_kernel_method <- function(
                           SE_Method = "bootstrap_replicate",
                           CI_Method = "bootstrap_percentile"))
       }
+      if (!is.null(cv$delta_vcov) && is.matrix(cv$delta_vcov) &&
+          nrow(cv$delta_vcov) >= 1L && ncol(cv$delta_vcov) >= 1L) {
+        sb <- sqrt(pmax(0, cv$delta_vcov[1L, 1L]))
+        return(data.frame(Estimate = db, Std.Error = sb,
+                          CI_Lower = db - z_c * sb, CI_Upper = db + z_c * sb,
+                          SE_Method = cv$curve_vcov_method %||%
+                            "analytical_curve_vcov",
+                          CI_Method = "normal_curve_vcov"))
+      }
       sb <- cv$se_delta[1L]
       return(data.frame(Estimate = db, Std.Error = sb,
                         CI_Lower = db - z_c * sb, CI_Upper = db + z_c * sb,
@@ -361,6 +457,17 @@ run_kernel_method <- function(
                         SE_Method = "bootstrap_curve_vcov",
                         CI_Method = "normal_curve_vcov"))
     }
+    if (!is.null(cv$mu_vcov) && is.matrix(cv$mu_vcov) &&
+        all(dim(cv$mu_vcov) >= length(evg)) && span > 0) {
+      V <- cv$mu_vcov
+      v_t <- V[length(evg), length(evg)] + V[1L, 1L] - 2 * V[length(evg), 1L]
+      sb <- sqrt(pmax(0, v_t)) / span
+      return(data.frame(Estimate = db, Std.Error = sb,
+                        CI_Lower = db - z_c * sb, CI_Upper = db + z_c * sb,
+                        SE_Method = cv$curve_vcov_method %||%
+                          "analytical_curve_vcov",
+                        CI_Method = "normal_curve_vcov"))
+    }
     se_t <- sqrt(pmax(0, cv$se_mu[length(evg)]^2 + cv$se_mu[1]^2, na.rm = TRUE))
     sb   <- if (!is.na(se_t) && span > 0) se_t / span else NA_real_
     data.frame(Estimate = db, Std.Error = sb,
@@ -388,7 +495,8 @@ run_kernel_method <- function(
         select_h0_LSCV(DY_b, G_b, X_b, min(K_folds, max(2L, length(DY_b) %/% 5L))),
         error = function(e) h0_star
       )
-      cv_b <- estimate_curve_kernel(DY_b, G_b, X_b, evg, h0_b, rho_b_ev, rho_gm_b, Xbar)
+      cv_b <- estimate_curve_kernel(DY_b, G_b, X_b, evg, h0_b, rho_b_ev,
+                                    rho_gm_b, Xbar, compute_vcov = FALSE)
       mu_boot[b, ] <- cv_b$mu_hat
       delta_boot[b, ] <- cv_b$delta_hat
     }
@@ -446,7 +554,8 @@ run_kernel_method <- function(
 
   # ── Event-period curve ──
   cv_event <- estimate_curve_kernel(tempY_event, G_vec, X_mat,
-                                    eval_g, h0_star, rho_eval, rho_bar_GM, X_bar)
+                                    eval_g, h0_star, rho_eval, rho_bar_GM,
+                                    X_bar, cluster_vec)
 
   # ── Confidence band ──
   z_crit <- qnorm(1 - alpha / 2)
@@ -519,8 +628,9 @@ run_kernel_method <- function(
 	    if (sum(ok) < 10) next
 	    Xbar_t <- if (p > 0) colMeans(X_mat[ok, , drop = FALSE]) else numeric(0)
 	    cv_t   <- estimate_curve_kernel(tempY_t[ok], G_vec[ok],
-	                                    if (p > 0) X_mat[ok, , drop = FALSE] else X_mat,
-	                                    eval_g, h0_star, rho_eval, rho_bar_GM, Xbar_t)
+		                                    if (p > 0) X_mat[ok, , drop = FALSE] else X_mat,
+		                                    eval_g, h0_star, rho_eval, rho_bar_GM, Xbar_t,
+		                                    if (is.null(cluster_vec)) NULL else cluster_vec[ok])
 	    df_t   <- curve_scalar(cv_t, eval_g, z_crit)
 	    dynamic_df[i, ]  <- unlist(df_t[names(dynamic_df)])
 	    curve_dynamic[[i]] <- cv_t
@@ -543,9 +653,10 @@ run_kernel_method <- function(
     if (sum(ok) < 10)
       return(data.frame(Estimate = NA, Std.Error = NA, CI_Lower = NA, CI_Upper = NA))
     Xbar_a <- if (p > 0) colMeans(X_mat[ok, , drop = FALSE]) else numeric(0)
-    cv_a   <- estimate_curve_kernel(DY_a[ok], G_vec[ok],
-                                    if (p > 0) X_mat[ok, , drop = FALSE] else X_mat,
-                                    eval_g, h0_star, rho_eval, rho_bar_GM, Xbar_a)
+	    cv_a   <- estimate_curve_kernel(DY_a[ok], G_vec[ok],
+	                                    if (p > 0) X_mat[ok, , drop = FALSE] else X_mat,
+	                                    eval_g, h0_star, rho_eval, rho_bar_GM, Xbar_a,
+	                                    if (is.null(cluster_vec)) NULL else cluster_vec[ok])
     curve_scalar(cv_a, eval_g, z_crit)
   }
 

@@ -37,6 +37,16 @@ Keep four concepts separate:
 3. the inference calculation, such as analytical, bootstrap, or multiplier;
 4. the plot or reporting view, such as a curve plot or contrast table.
 
+The same fitted object can therefore support several reporting layers. A useful
+default order is `summary()` first, then `plot()`, then targeted helpers.
+
+| Reporting layer | What it summarizes | Inference source to check |
+|---|---|---|
+| `summary()` scalar rows | One aggregate event/dynamic number. For `kernel` and `dml_flex`, the continuous-G event row is an interval-average level slope over the fitted grid. | Printed SE/CI method when stored; curve covariance is used when available. |
+| `plot(type = "curve")` | Stored level and/or derivative curves at `eval_g`. | The legend labels whether intervals are pointwise, bootstrap envelope, practical mapping band, or BLP covariance band. |
+| `fdid_contrast()` | Fixed level differences such as `mu(g1) - mu(g0)` or `theta(g1) - theta(g0)`. | `inference = "auto"` tries stored covariance, then replicate curves, then bands, then a labeled pointwise approximation. |
+| `fdid_derivative()` | A derivative value at one `G`, or a derivative contrast if requested through `fdid_contrast(type = "derivative")`. | Uses derivative covariance/replicates when available; otherwise falls back in the same order. |
+
 ## Prepare the Continuous-G Design
 
 Use a continuous baseline factor in `fdid_prepare()`. The example below uses

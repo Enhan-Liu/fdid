@@ -111,6 +111,10 @@ test_that("[CRAN] fdid kernel: curve fields populated", {
   expect_equal(length(res$curve_event$delta_hat), length(res$eval_g))
   expect_equal(length(res$curve_event$se_delta),  length(res$eval_g))
   expect_equal(length(res$curve_event$mu_hat),    length(res$eval_g))
+  expect_true(is.matrix(res$curve_event$mu_vcov))
+  expect_true(is.matrix(res$curve_event$delta_vcov))
+  expect_equal(dim(res$curve_event$mu_vcov), c(length(res$eval_g), length(res$eval_g)))
+  expect_equal(dim(res$curve_event$delta_vcov), c(length(res$eval_g), length(res$eval_g)))
 })
 
 test_that("[CRAN] fdid kernel: h0 is finite positive", {
@@ -166,6 +170,21 @@ test_that("[CRAN] fdid kernel: bootstrap curve vcov supports covariance-aware co
   con <- fdid_contrast(res, g0 = evg[1], g1 = evg[4], inference = "vcov")
   expect_equal(con$inference, "vcov")
   expect_equal(con$std.error, expected, tolerance = 1e-8)
+})
+
+test_that("[CRAN] fdid kernel: robust curve vcov supports covariance-aware contrasts", {
+  evg <- seq(0.2, 0.8, length.out = 4)
+  res <- fdid(s_cont, tr_period = 2L, ref_period = 1L, method = "kernel",
+              vartype = "robust", eval_g = evg)
+  V <- res$curve_event$mu_vcov
+  span <- evg[4] - evg[1]
+  expected_contrast <- sqrt(pmax(0, V[4, 4] + V[1, 1] - 2 * V[4, 1]))
+  expected_scalar <- expected_contrast / span
+  con <- fdid_contrast(res, g0 = evg[1], g1 = evg[4], inference = "vcov")
+  expect_equal(con$inference, "vcov")
+  expect_equal(con$std.error, expected_contrast, tolerance = 1e-8)
+  expect_equal(res$est$event$Std.Error, expected_scalar, tolerance = 1e-8)
+  expect_equal(res$est$event$SE_Method, "analytical_stacked_sandwich")
 })
 
 test_that("[CRAN] fdid kernel: cluster bootstrap records cluster resampling", {
@@ -330,6 +349,13 @@ test_that("[CRAN] fdid dml_flex blp_spline stores covariance-aware inference", {
   expected_se <- sqrt(pmax(0, V[4, 4] + V[1, 1] - 2 * V[4, 1]))
   expect_equal(con$std.error, expected_se, tolerance = 1e-8)
   expect_equal(con$inference, "vcov")
+  expected_interval_se <- expected_se / (evg[4] - evg[1])
+  expect_equal(unname(res$curve_event$interval_average["Std.Error"]),
+               expected_interval_se, tolerance = 1e-8)
+  expect_equal(unname(res$est$event$Estimate),
+               unname(res$curve_event$interval_average["Estimate"]),
+               tolerance = 1e-8)
+  expect_equal(res$est$event$SE_Method, "curve_vcov")
 
   der <- fdid_derivative(res, g0 = evg[2], inference = "vcov")
   expect_equal(der$std.error, sqrt(pmax(0, res$curve_event$delta_vcov[2, 2])),
@@ -441,6 +467,9 @@ test_that("[CRAN] summary.fdid works for kernel and dml objects", {
                 method = "dml_plr", K = 3L, S = 1L)
   expect_output(summary(res_k))
   expect_output(summary(res_p))
+  out_k <- capture.output(summary(res_k))
+  expect_true(any(grepl("Scalar event SE", out_k)))
+  expect_true(any(grepl("interval average", out_k)))
 })
 
 test_that("[CRAN] summary.fdid output is ASCII-safe", {

@@ -269,6 +269,18 @@ average derivative through `summary()` rather than `type = "curve"`.
 
 For numeric reporting from these stored curves, use `fdid_contrast()` for
 level comparisons and `fdid_derivative()` for fixed-$g$ derivative values.
+The plot is a display layer; it does not refit the estimator or choose a new
+inference method after estimation.
+
+| Display | What it draws | Where inference comes from |
+|---|---|---|
+| `type = "curve"` | stored level/derivative rows in `curve_event` | pointwise intervals, stored bands, and labels already attached to the fitted curve |
+| `type = "contrast"` | selected fixed-reference contrasts | repeated calls to `fdid_contrast()` with its `inference` rule |
+| support panel | observed empirical distribution of `G` | descriptive only; no causal or inferential adjustment |
+
+For contrast plots, `inference = "auto"` follows the reporting helper order:
+stored curve covariance first, then replicate curves, then bands, then a labeled
+pointwise approximation.
 
 The main continuous-G plot controls are:
 
@@ -422,11 +434,12 @@ plot(fdid_results_kernel_curve, type = "curve", curve = "both",
      Xdistr = "density", main = "Kernel Level and Derivative")
 ```
 
-The `interval` argument chooses which uncertainty layer is drawn. For kernel
-curves, robust fits provide analytical pointwise normal intervals. Kernel
-bootstrap fits additionally store bootstrap percentile intervals and finite-grid
-quantile-envelope bands. For `dml_flex`, the label printed in the legend tells
-whether the band is a practical signal-residual multiplier band or, for
+The `interval` argument chooses which stored uncertainty layer is drawn. For
+kernel curves, robust fits provide analytical pointwise normal intervals and
+cross-grid covariance for reporting helpers. Kernel bootstrap fits additionally
+store bootstrap percentile intervals and finite-grid quantile-envelope bands.
+For `dml_flex`, the label printed in the legend tells whether the band is a
+practical signal-residual multiplier band or, for
 `signal_map = "blp_spline"`, a Gaussian max-$t$ BLP-spline covariance band.
 
 ```{r curve-intervals, fig.width=9, fig.height=5.6}

@@ -151,13 +151,26 @@ summary.fdid <- function(object, ...) {
       cat(sprintf("  |  Density: %s", object$density_method))
     if (!is.null(object$signal_map) || !is.null(object$density_method))
       cat("\n")
-	    if (!is.null(object$curve_event$simultaneous_band_method)) {
-	      cat(sprintf("  Simultaneous bands: %s\n",
-	                  object$curve_event$simultaneous_band_method))
-	    }
-	    if (identical(object$method, "kernel") &&
-	        identical(object$vartype, "bootstrap") &&
-	        !is.null(object$curve_event$delta_uniform_zeta)) {
+		    if (!is.null(object$curve_event$simultaneous_band_method)) {
+		      cat(sprintf("  Simultaneous bands: %s\n",
+		                  object$curve_event$simultaneous_band_method))
+		    }
+		    if (!is.null(object$est$event$SE_Method) &&
+		        length(object$est$event$SE_Method) > 0L &&
+		        !is.na(object$est$event$SE_Method[1L])) {
+		      cat(sprintf("  Scalar event SE: %s",
+		                  as.character(object$est$event$SE_Method[1L])))
+		      if (!is.null(object$est$event$CI_Method) &&
+		          length(object$est$event$CI_Method) > 0L &&
+		          !is.na(object$est$event$CI_Method[1L])) {
+		        cat(sprintf("  |  CI: %s",
+		                    as.character(object$est$event$CI_Method[1L])))
+		      }
+		      cat("\n")
+		    }
+		    if (identical(object$method, "kernel") &&
+		        identical(object$vartype, "bootstrap") &&
+		        !is.null(object$curve_event$delta_uniform_zeta)) {
 	      cat(sprintf("  Kernel delta band zeta: %.4f",
 	                  object$curve_event$delta_uniform_zeta))
 	      if (!is.null(object$curve_event$delta_uniform_coverage) &&
@@ -167,11 +180,11 @@ summary.fdid <- function(object, ...) {
 	      }
 	      cat("\n")
 	    }
-    if (identical(object$method, "dml_flex")) {
-      cat("  (Full theta(g) and theta'(g) curves in $curve_event; scalar $est$event is grid-average theta)\n")
-    } else {
-      cat("  (Full mu(g) and delta(g) curves in $curve_event; scalar $est$event is interval average)\n")
-    }
+	    if (identical(object$method, "dml_flex")) {
+	      cat("  (Full theta(g) and theta'(g) curves in $curve_event; scalar $est$event is interval-average theta slope)\n")
+	    } else {
+	      cat("  (Full mu(g) and delta(g) curves in $curve_event; scalar $est$event is interval average)\n")
+	    }
     cat(" ", sep, "\n")
   }
 

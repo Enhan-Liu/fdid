@@ -1438,7 +1438,14 @@
   } else {
     delta_final[1L]
   }
-  interval_se <- if (is.finite(g_range) && g_range > 0) {
+  interval_se_method <- "endpoint_independent_fallback"
+  interval_se <- if (is.finite(g_range) && g_range > 0 &&
+                     !is.null(theta_vcov) && is.matrix(theta_vcov) &&
+                     all(dim(theta_vcov) >= m)) {
+    v_t <- theta_vcov[m, m] + theta_vcov[1L, 1L] - 2 * theta_vcov[m, 1L]
+    interval_se_method <- "curve_vcov"
+    sqrt(pmax(0, v_t)) / g_range
+  } else if (is.finite(g_range) && g_range > 0) {
     sqrt(se_theta[1L]^2 + se_theta[m]^2) / g_range
   } else {
     se_delta[1L]
@@ -1556,6 +1563,12 @@
       CI_Lower  = interval_avg - stats::qnorm(1 - alpha/2) * interval_se,
       CI_Upper  = interval_avg + stats::qnorm(1 - alpha/2) * interval_se
     ),
+    interval_average_se_method = interval_se_method,
+    interval_average_ci_method = if (identical(interval_se_method, "curve_vcov")) {
+      "normal_curve_vcov"
+    } else {
+      "normal_pointwise_fallback"
+    },
     mean_delta = c(
       Estimate  = mean_delta,
       Std.Error = mean_delta_se,
@@ -1722,13 +1735,10 @@ run_dml_method <- function(
         density_method = density_method,
         boot = boot
       )
-      scalar_est <- mean(cv$theta_hat, na.rm = TRUE)
-      scalar_se  <- mean(cv$se_theta, na.rm = TRUE)
-      r <- c(Estimate  = scalar_est,
-             Std.Error = scalar_se,
-             CI_Lower  = scalar_est - stats::qnorm(1 - alpha/2) * scalar_se,
-             CI_Upper  = scalar_est + stats::qnorm(1 - alpha/2) * scalar_se)
-      list(result = r, ps = NULL, curve = cv)
+      r <- cv$interval_average
+      list(result = r, ps = NULL, curve = cv,
+           se_method = cv$interval_average_se_method,
+           ci_method = cv$interval_average_ci_method)
     } else if (dml_type == "incremental") {
       inc <- .est_dml_incremental_scalar(
         DeltaY, G, X, K, S, alpha, learner,
@@ -1748,14 +1758,16 @@ run_dml_method <- function(
   Y_tr_cols  <- setdiff(ycol(tr_period), Y_ref_col)
   tempY_event <- rowMeans(s[, Y_tr_cols, drop = FALSE], na.rm = TRUE) - s[[Y_ref_col]]
 
-  event_res <- run_one(tempY_event, G_vec, X_mat, cluster = cluster_vec)
+	  event_res <- run_one(tempY_event, G_vec, X_mat, cluster = cluster_vec)
   result_event <- event_res$result
   stored_ps    <- event_res$ps
   curve_event  <- event_res$curve
   scalar_event <- if (!is.null(event_res$scalar)) event_res$scalar else NULL
   incremental_event <- if (!is.null(event_res$incremental)) event_res$incremental else NULL
 
-  est_event_df <- as.data.frame(t(result_event))
+	  est_event_df <- as.data.frame(t(result_event))
+	  if (!is.null(event_res$se_method)) est_event_df$SE_Method <- event_res$se_method
+	  if (!is.null(event_res$ci_method)) est_event_df$CI_Method <- event_res$ci_method
 
   # ── Dynamic loop ──
   dynamic_df <- data.frame(

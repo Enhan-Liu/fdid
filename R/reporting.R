@@ -173,13 +173,14 @@ fdid_derivative <- function(x, g0,
   ce <- x$curve_event
   g <- as.numeric(x$eval_g)
   if (type == "level") {
-    if (identical(x$method, "kernel")) {
-      estimate <- ce$mu_hat
-      se <- ce$se_mu
-	      lower <- ce$mu_band_lower
-	      upper <- ce$mu_band_upper
-	      reps <- ce$mu_bootstrap
-	      vcov <- ce$mu_boot_vcov
+	    if (identical(x$method, "kernel")) {
+	      estimate <- ce$mu_hat
+	      se <- ce$se_mu
+		      lower <- ce$mu_band_lower
+		      upper <- ce$mu_band_upper
+		      reps <- ce$mu_bootstrap
+		      vcov <- if (identical(x$vartype, "bootstrap") &&
+		                  !is.null(ce$mu_boot_vcov)) ce$mu_boot_vcov else ce$mu_vcov
     } else {
       estimate <- ce$theta_hat
       se <- ce$se_theta
@@ -191,11 +192,12 @@ fdid_derivative <- function(x, g0,
   } else {
     estimate <- ce$delta_hat
     se <- ce$se_delta
-    if (identical(x$method, "kernel")) {
-	      lower <- ce$delta_band_lower
-	      upper <- ce$delta_band_upper
-	      reps <- ce$delta_bootstrap
-	      vcov <- ce$delta_boot_vcov
+	    if (identical(x$method, "kernel")) {
+		      lower <- ce$delta_band_lower
+		      upper <- ce$delta_band_upper
+		      reps <- ce$delta_bootstrap
+		      vcov <- if (identical(x$vartype, "bootstrap") &&
+		                  !is.null(ce$delta_boot_vcov)) ce$delta_boot_vcov else ce$delta_vcov
     } else {
 	      lower <- ce$delta_band_lower
 	      upper <- ce$delta_band_upper
