@@ -31,7 +31,7 @@ format:
     df-print: paged
     code-fold: false
     code-tools: false
-    code-link: true
+    code-link: false
     toc-depth: 3
 
 knitr:

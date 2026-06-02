@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.7.32">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
 <title>4&nbsp; Kernel Estimator for Continuous G – fdid -- User Manual</title>
 <style>
 code{white-space: pre-wrap;}
@@ -74,6 +77,7 @@ div.csl-indent {
   margin-left: 2em;
 }</style>
 
+
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -92,7 +96,8 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a25c6ca0899ecb75239135bf1b5c1690.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a25c6ca0899ecb75239135bf1b5c1690.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -118,8 +123,14 @@ div.csl-indent {
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+}</script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -145,11 +156,15 @@ window.Quarto = {
   typesetMath
 };
 </script>
+
 </head>
+
 <body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -160,9 +175,13 @@ window.Quarto = {
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">fdid – User Manual</a> 
     </div>
@@ -174,7 +193,7 @@ window.Quarto = {
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
@@ -229,23 +248,29 @@ window.Quarto = {
   </div>
 </li>
     </ul>
-</div>
-</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#data-setup-and-support" id="toc-data-setup-and-support" class="nav-link active" data-scroll-target="#data-setup-and-support"><span class="header-section-number">4.1</span> Data Setup And Support</a></li>
+  <li><a href="#data-setup-and-support" id="toc-data-setup-and-support" class="nav-link active" data-scroll-target="#data-setup-and-support"><span class="header-section-number">4.1</span> Data Setup And Support</a></li>
   <li><a href="#basic-kernel-fit" id="toc-basic-kernel-fit" class="nav-link" data-scroll-target="#basic-kernel-fit"><span class="header-section-number">4.2</span> Basic Kernel Fit</a></li>
   <li><a href="#level-and-derivative-curves" id="toc-level-and-derivative-curves" class="nav-link" data-scroll-target="#level-and-derivative-curves"><span class="header-section-number">4.3</span> Level And Derivative Curves</a></li>
   <li><a href="#bootstrap-pointwise-and-uniform-bands" id="toc-bootstrap-pointwise-and-uniform-bands" class="nav-link" data-scroll-target="#bootstrap-pointwise-and-uniform-bands"><span class="header-section-number">4.4</span> Bootstrap Pointwise And Uniform Bands</a></li>
   <li><a href="#reporting-contrasts-and-derivatives" id="toc-reporting-contrasts-and-derivatives" class="nav-link" data-scroll-target="#reporting-contrasts-and-derivatives"><span class="header-section-number">4.5</span> Reporting Contrasts And Derivatives</a></li>
   <li><a href="#option-checklist" id="toc-option-checklist" class="nav-link" data-scroll-target="#option-checklist"><span class="header-section-number">4.6</span> Option Checklist</a></li>
-  </ul></nav>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
 <h1 class="title"><span id="sec-kernel-continuous" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Kernel Estimator for Continuous G</span></span></h1>
 </div>
 
@@ -260,50 +285,55 @@ window.Quarto = {
   
 
 
-</header><p>This chapter gives a focused workflow for <code>method = "kernel"</code> with continuous baseline factor <code>G</code>. The structure follows the practical style used in the <code>interflex</code> tutorial and in <span class="citation" data-cites="liu2025practical">Liu, Liu, and Xu (<a href="references.html#ref-liu2025practical" role="doc-biblioref">2025</a>)</span>: diagnose support first, estimate the curve, inspect uncertainty, then report specific contrasts or derivatives.</p>
+</header>
+
+
+<p>This chapter gives a focused workflow for <code>method = "kernel"</code> with continuous baseline factor <code>G</code>. The structure follows the practical style used in the <code>interflex</code> tutorial and in <span class="citation" data-cites="liu2025practical">Liu, Liu, and Xu (<a href="references.html#ref-liu2025practical" role="doc-biblioref">2025</a>)</span>: diagnose support first, estimate the curve, inspect uncertainty, then report specific contrasts or derivatives.</p>
 <p>The kernel estimator is useful when the main empirical object is a smooth continuous-<span class="math inline">\(G\)</span> curve rather than a single slope. It estimates two event-period objects:</p>
 <ul>
 <li>the level curve, <span class="math inline">\(\mu(g)\)</span>, the local FDID response at a value of <code>G</code>;</li>
 <li>the derivative curve, <span class="math inline">\(\delta(g)\)</span>, the local slope of that response.</li>
 </ul>
 <p>Unlike the DML estimators in Chapter <a href="05-dml-continuous-g.html" class="quarto-xref"><span>Chapter 5</span></a>, the kernel estimator is a fused local smoother: the local linear fit, support weighting, and curve aggregation are part of one estimator.</p>
-<section id="data-setup-and-support" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="data-setup-and-support">
-<span class="header-section-number">4.1</span> Data Setup And Support</h2>
+<section id="data-setup-and-support" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="data-setup-and-support"><span class="header-section-number">4.1</span> Data Setup And Support</h2>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yiqingxu.org/packages/fdid/">fdid</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">fdid</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">mortality</span><span class="op">$</span><span class="va">uniqueid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">mortality</span><span class="op">$</span><span class="va">provid</span><span class="op">)</span>,</span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">mortality</span><span class="op">$</span><span class="va">countyid</span><span class="op">)</span>,</span>
-<span>  sep <span class="op">=</span> <span class="st">"-"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">covar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"avggrain"</span>, <span class="st">"nograin"</span>, <span class="st">"urban"</span>, <span class="st">"dis_bj"</span>, <span class="st">"dis_pc"</span>,</span>
-<span>           <span class="st">"rice"</span>, <span class="st">"minority"</span>, <span class="st">"edu"</span>, <span class="st">"lnpop"</span><span class="op">)</span></span>
-<span><span class="va">tr_period</span> <span class="op">&lt;-</span> <span class="fl">1958</span><span class="op">:</span><span class="fl">1961</span></span>
-<span><span class="va">ref_period</span> <span class="op">&lt;-</span> <span class="fl">1957</span></span>
-<span></span>
-<span><span class="va">s_cont</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fdid/man/fdid_prepare.html">fdid_prepare</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html">transform</a></span><span class="op">(</span><span class="va">mortality</span>, G_cont <span class="op">=</span> <span class="va">lnpczupu</span><span class="op">)</span>,</span>
-<span>  Y_label <span class="op">=</span> <span class="st">"mortality"</span>,</span>
-<span>  X_labels <span class="op">=</span> <span class="va">covar</span>,</span>
-<span>  G_label <span class="op">=</span> <span class="st">"G_cont"</span>,</span>
-<span>  unit_label <span class="op">=</span> <span class="st">"uniqueid"</span>,</span>
-<span>  time_label <span class="op">=</span> <span class="st">"year"</span></span>
-<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fdid)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(fdid)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>mortality<span class="sc">$</span>uniqueid <span class="ot">&lt;-</span> <span class="fu">paste</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>(mortality<span class="sc">$</span>provid),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as.character</span>(mortality<span class="sc">$</span>countyid),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep =</span> <span class="st">"-"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>covar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"avggrain"</span>, <span class="st">"nograin"</span>, <span class="st">"urban"</span>, <span class="st">"dis_bj"</span>, <span class="st">"dis_pc"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>           <span class="st">"rice"</span>, <span class="st">"minority"</span>, <span class="st">"edu"</span>, <span class="st">"lnpop"</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>tr_period <span class="ot">&lt;-</span> <span class="dv">1958</span><span class="sc">:</span><span class="dv">1961</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>ref_period <span class="ot">&lt;-</span> <span class="dv">1957</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>s_cont <span class="ot">&lt;-</span> <span class="fu">fdid_prepare</span>(</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> <span class="fu">transform</span>(mortality, <span class="at">G_cont =</span> lnpczupu),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">Y_label =</span> <span class="st">"mortality"</span>,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">X_labels =</span> covar,</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">G_label =</span> <span class="st">"G_cont"</span>,</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">unit_label =</span> <span class="st">"uniqueid"</span>,</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_label =</span> <span class="st">"year"</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The famine mortality example has a mass point at zero in <code>lnpczupu</code>. This is important because <code>eval_g</code> is an estimation grid, not a plotting-only option. When <code>eval_g = NULL</code>, <code><a href="https://rdrr.io/pkg/fdid/man/fdid.html">fdid()</a></code> constructs the grid internally:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">G</span>, <span class="va">trim</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">G</span>, <span class="fl">1</span> <span class="op">-</span> <span class="va">trim</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The famine mortality example has a mass point at zero in <code>lnpczupu</code>. This is important because <code>eval_g</code> is an estimation grid, not a plotting-only option. When <code>eval_g = NULL</code>, <code>fdid()</code> constructs the grid internally:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">seq</span>(<span class="fu">quantile</span>(G, trim), <span class="fu">quantile</span>(G, <span class="dv">1</span> <span class="sc">-</span> trim), <span class="at">length.out =</span> <span class="dv">50</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The package default is <code>trim = 0.05</code>, so <code>eval_g = NULL</code> usually means 50 points from the 5th to the 95th percentile of the observed <code>G</code> values after the estimation sample is formed. <code>trim</code> does not delete observations or winsorize <code>G</code>; it only chooses the endpoints of the evaluation grid. If more than 5 percent of units have <code>G = 0</code>, then the lower endpoint is still zero.</p>
 <p>In this chapter we deliberately set <code>trim = 0</code> while leaving <code>eval_g = NULL</code>. That keeps the convenient 50-point automatic grid but expands it to the full observed support of <code>G</code>. This is useful in the mortality example because the 95%-100% upper tail contains substantively large observed baseline-factor values rather than a single isolated outlier. Supplying <code>eval_g</code> manually would override this rule and estimate exactly the points supplied.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<thead><tr class="header">
+<thead>
+<tr class="header">
 <th style="text-align: left;">quantity</th>
 <th style="text-align: right;">value</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">n units</td>
@@ -359,103 +389,105 @@ window.Quarto = {
 </div>
 <p>The support plot below does not draw all 50 evaluation points. The table records the grid size, while the figure marks only the full-support upper endpoint, the package-default 95% endpoint, and a few positive-support landmarks.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">old_par_support</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>no.readonly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html">layout</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">1.05</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4.7</span>, <span class="fl">4.2</span>, <span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">s_cont</span><span class="op">$</span><span class="va">G</span>, breaks <span class="op">=</span> <span class="fl">35</span>, col <span class="op">=</span> <span class="st">"gray85"</span>, border <span class="op">=</span> <span class="st">"white"</span>,</span>
-<span>     xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">kernel_chapter_grid</span><span class="op">)</span> <span class="op">*</span> <span class="fl">1.02</span><span class="op">)</span>,</span>
-<span>     xlab <span class="op">=</span> <span class="st">"Baseline factor G: lnpczupu"</span>,</span>
-<span>     main <span class="op">=</span> <span class="st">"Observed support for continuous G"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">kernel_package_grid</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"gray40"</span>, lty <span class="op">=</span> <span class="fl">2</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/abline.html">abline</a></span><span class="op">(</span>v <span class="op">=</span> <span class="va">kernel_landmarks</span>, col <span class="op">=</span> <span class="st">"firebrick"</span>, lty <span class="op">=</span> <span class="fl">3</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/points.html">points</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">kernel_chapter_grid</span><span class="op">)</span>, <span class="fl">0</span>, pch <span class="op">=</span> <span class="fl">17</span>, col <span class="op">=</span> <span class="st">"steelblue"</span>, cex <span class="op">=</span> <span class="fl">1.4</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/rug.html">rug</a></span><span class="op">(</span><span class="va">s_cont</span><span class="op">$</span><span class="va">G</span>, col <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/adjustcolor.html">adjustcolor</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4.2</span>, <span class="fl">0.2</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">+</span> <span class="fl">0.1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/frame.html">plot.new</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html">legend</a></span><span class="op">(</span><span class="st">"center"</span>,</span>
-<span>       legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"full-support upper endpoint"</span>, <span class="st">"package trim = 0.05 upper end"</span>,</span>
-<span>                  <span class="st">"positive-support landmarks"</span><span class="op">)</span>,</span>
-<span>       col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"steelblue"</span>, <span class="st">"gray40"</span>, <span class="st">"firebrick"</span><span class="op">)</span>, lty <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
-<span>       pch <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="cn">NA</span>, <span class="cn">NA</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">1.5</span>,</span>
-<span>       bty <span class="op">=</span> <span class="st">"o"</span>, bg <span class="op">=</span> <span class="st">"white"</span>, box.col <span class="op">=</span> <span class="st">"gray75"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>old_par_support <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">no.readonly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">layout</span>(<span class="fu">matrix</span>(<span class="fu">c</span>(<span class="dv">1</span>L, <span class="dv">2</span>L), <span class="at">ncol =</span> <span class="dv">1</span>), <span class="at">heights =</span> <span class="fu">c</span>(<span class="dv">4</span>, <span class="fl">1.05</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">4.7</span>, <span class="fl">4.2</span>, <span class="dv">4</span>, <span class="dv">2</span>) <span class="sc">+</span> <span class="fl">0.1</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(s_cont<span class="sc">$</span>G, <span class="at">breaks =</span> <span class="dv">35</span>, <span class="at">col =</span> <span class="st">"gray85"</span>, <span class="at">border =</span> <span class="st">"white"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fu">max</span>(kernel_chapter_grid) <span class="sc">*</span> <span class="fl">1.02</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"Baseline factor G: lnpczupu"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Observed support for continuous G"</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> <span class="fu">max</span>(kernel_package_grid), <span class="at">col =</span> <span class="st">"gray40"</span>, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> kernel_landmarks, <span class="at">col =</span> <span class="st">"firebrick"</span>, <span class="at">lty =</span> <span class="dv">3</span>, <span class="at">lwd =</span> <span class="fl">1.5</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="fu">max</span>(kernel_chapter_grid), <span class="dv">0</span>, <span class="at">pch =</span> <span class="dv">17</span>, <span class="at">col =</span> <span class="st">"steelblue"</span>, <span class="at">cex =</span> <span class="fl">1.4</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">rug</span>(s_cont<span class="sc">$</span>G, <span class="at">col =</span> grDevices<span class="sc">::</span><span class="fu">adjustcolor</span>(<span class="st">"black"</span>, <span class="fl">0.25</span>))</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mar =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">4.2</span>, <span class="fl">0.2</span>, <span class="dv">2</span>) <span class="sc">+</span> <span class="fl">0.1</span>)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot.new</span>()</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">legend</span>(<span class="st">"center"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">legend =</span> <span class="fu">c</span>(<span class="st">"full-support upper endpoint"</span>, <span class="st">"package trim = 0.05 upper end"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"positive-support landmarks"</span>),</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">col =</span> <span class="fu">c</span>(<span class="st">"steelblue"</span>, <span class="st">"gray40"</span>, <span class="st">"firebrick"</span>), <span class="at">lty =</span> <span class="fu">c</span>(<span class="cn">NA</span>, <span class="dv">2</span>, <span class="dv">3</span>),</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">pch =</span> <span class="fu">c</span>(<span class="dv">17</span>, <span class="cn">NA</span>, <span class="cn">NA</span>), <span class="at">lwd =</span> <span class="fl">1.5</span>,</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">bty =</span> <span class="st">"o"</span>, <span class="at">bg =</span> <span class="st">"white"</span>, <span class="at">box.col =</span> <span class="st">"gray75"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="04-kernel-continuous-g_files/figure-html/kernel-support-plot-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure">
+<p><img src="04-kernel-continuous-g_files/figure-html/kernel-support-plot-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/layout.html">layout</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span><span class="va">old_par_support</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">layout</span>(<span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(old_par_support)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="basic-kernel-fit" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="basic-kernel-fit">
-<span class="header-section-number">4.2</span> Basic Kernel Fit</h2>
+</section>
+<section id="basic-kernel-fit" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="basic-kernel-fit"><span class="header-section-number">4.2</span> Basic Kernel Fit</h2>
 <p>The next fit uses a fixed bandwidth <code>h0</code> so that the tutorial renders quickly and reproducibly. Leaving <code>h0 = NULL</code> asks the package to select the baseline bandwidth by cross-validation. We leave <code>eval_g = NULL</code> but set <code>trim = 0</code>, so the fitted object stores a 50-point grid over the full observed support of <code>G</code>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_kernel_fast</span> <span class="op">&lt;-</span> <span class="fu">fit_fdid</span><span class="op">(</span></span>
-<span>  <span class="va">s_cont</span>,</span>
-<span>  tr_period <span class="op">=</span> <span class="va">tr_period</span>,</span>
-<span>  ref_period <span class="op">=</span> <span class="va">ref_period</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"kernel"</span>,</span>
-<span>  h0 <span class="op">=</span> <span class="fl">0.18</span>,</span>
-<span>  K_folds <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  trim <span class="op">=</span> <span class="va">kernel_chapter_trim</span>,</span>
-<span>  vartype <span class="op">=</span> <span class="st">"robust"</span></span>
-<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>fit_kernel_fast <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"kernel"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">h0 =</span> <span class="fl">0.18</span>,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">K_folds =</span> <span class="dv">3</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">trim =</span> kernel_chapter_trim,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">vartype =</span> <span class="st">"robust"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The first reporting layer is the standard <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> method. It gives the scalar aggregate/event/dynamic rows and then identifies the stored continuous-<span class="math inline">\(G\)</span> curve object.</p>
+<p>The first reporting layer is the standard <code>summary()</code> method. It gives the scalar aggregate/event/dynamic rows and then identifies the stored continuous-<span class="math inline">\(G\)</span> curve object.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">is_fit_error</span><span class="op">(</span><span class="va">fit_kernel_fast</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_kernel_fast</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Factorial Difference-in-Differences (FDID) Summary</span></span>
-<span><span class="co">#&gt;   ======================================================================== </span></span>
-<span><span class="co">#&gt;   Method:             kernel </span></span>
-<span><span class="co">#&gt;   Variance Type:      robust </span></span>
-<span><span class="co">#&gt;   Reference Period:   1957 </span></span>
-<span><span class="co">#&gt;   Pre-Event Period:   1954, 1955, 1956, 1957 </span></span>
-<span><span class="co">#&gt;   Event Period:       1958, 1959, 1960, 1961 </span></span>
-<span><span class="co">#&gt;   Post-Event Period:  1962, 1963, 1964, 1965, 1966 </span></span>
-<span><span class="co">#&gt;   ======================================================================== </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Aggregate Estimates</span></span>
-<span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
-<span><span class="co">#&gt;                       Estimate    Std.Error     95% CI </span></span>
-<span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
-<span><span class="co">#&gt;   Pre-Event            -0.4729       0.5878  [-1.6250, 0.6791] </span></span>
-<span><span class="co">#&gt;   Event                -5.1790       1.5975  [-8.3101, -2.0480] </span></span>
-<span><span class="co">#&gt;   Post-Event           -1.3640       0.4395  [-2.2255, -0.5026] </span></span>
-<span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Dynamic Estimates</span></span>
-<span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
-<span><span class="co">#&gt;                       Estimate    Std.Error     95% CI </span></span>
-<span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
-<span><span class="co">#&gt;   1954                  0.1453       0.7287  [-1.2831, 1.5736] </span></span>
-<span><span class="co">#&gt;   1955                 -0.6617       0.7291  [-2.0907, 0.7672] </span></span>
-<span><span class="co">#&gt;   1956                 -0.9023       0.6613  [-2.1985, 0.3939] </span></span>
-<span><span class="co">#&gt;   1957                  0.0000       0.0000  [0.0000, 0.0000] </span></span>
-<span><span class="co">#&gt;    .................................................................... </span></span>
-<span><span class="co">#&gt;   1958                 -3.1860       0.8728  [-4.8967, -1.4753] </span></span>
-<span><span class="co">#&gt;   1959                 -5.5275       2.2435  [-9.9247, -1.1303] </span></span>
-<span><span class="co">#&gt;   1960                -11.1019       2.9329  [-16.8503, -5.3534] </span></span>
-<span><span class="co">#&gt;   1961                 -0.9008       1.9348  [-4.6929, 2.8913] </span></span>
-<span><span class="co">#&gt;    .................................................................... </span></span>
-<span><span class="co">#&gt;   1962                  1.1817       0.7661  [-0.3197, 2.6831] </span></span>
-<span><span class="co">#&gt;   1963                 -2.2929       0.5959  [-3.4608, -1.1250] </span></span>
-<span><span class="co">#&gt;   1964                 -2.1235       0.5804  [-3.2611, -0.9859] </span></span>
-<span><span class="co">#&gt;   1965                 -1.7378       0.5276  [-2.7718, -0.7038] </span></span>
-<span><span class="co">#&gt;   1966                 -1.8477       0.6160  [-3.0550, -0.6404] </span></span>
-<span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   Moderation Curve Summary (G-domain)</span></span>
-<span><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
-<span><span class="co">#&gt;   Method: kernel  |  Eval points: 50  |  G range: [0.000, 2.148]</span></span>
-<span><span class="co">#&gt;   Target: level curve mu(g) and derivative curve delta(g)</span></span>
-<span><span class="co">#&gt;   Bandwidth h0: 0.1800</span></span>
-<span><span class="co">#&gt;   Simultaneous bands: normal_pointwise</span></span>
-<span><span class="co">#&gt;   (Full mu(g) and delta(g) curves in $curve_event; scalar $est$event is interval average)</span></span>
-<span><span class="co">#&gt;   ------------------------------------------------------------------------</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_kernel_fast)) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(fit_kernel_fast)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Factorial Difference-in-Differences (FDID) Summary</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ======================================================================== </span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Method:             kernel </span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Variance Type:      robust </span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Reference Period:   1957 </span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Pre-Event Period:   1954, 1955, 1956, 1957 </span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Event Period:       1958, 1959, 1960, 1961 </span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Post-Event Period:  1962, 1963, 1964, 1965, 1966 </span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ======================================================================== </span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Aggregate Estimates</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                       Estimate    Std.Error     95% CI </span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Pre-Event            -0.4729       0.5878  [-1.6250, 0.6791] </span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Event                -5.1790       1.5975  [-8.3101, -2.0480] </span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Post-Event           -1.3640       0.4395  [-2.2255, -0.5026] </span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Dynamic Estimates</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;                       Estimate    Std.Error     95% CI </span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1954                  0.1453       0.7287  [-1.2831, 1.5736] </span></span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1955                 -0.6617       0.7291  [-2.0907, 0.7672] </span></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1956                 -0.9023       0.6613  [-2.1985, 0.3939] </span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1957                  0.0000       0.0000  [0.0000, 0.0000] </span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    .................................................................... </span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1958                 -3.1860       0.8728  [-4.8967, -1.4753] </span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1959                 -5.5275       2.2435  [-9.9247, -1.1303] </span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1960                -11.1019       2.9329  [-16.8503, -5.3534] </span></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1961                 -0.9008       1.9348  [-4.6929, 2.8913] </span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    .................................................................... </span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1962                  1.1817       0.7661  [-0.3197, 2.6831] </span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1963                 -2.2929       0.5959  [-3.4608, -1.1250] </span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1964                 -2.1235       0.5804  [-3.2611, -0.9859] </span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1965                 -1.7378       0.5276  [-2.7718, -0.7038] </span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   1966                 -1.8477       0.6160  [-3.0550, -0.6404] </span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Moderation Curve Summary (G-domain)</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ------------------------------------------------------------------------ </span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Method: kernel  |  Eval points: 50  |  G range: [0.000, 2.148]</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Target: level curve mu(g) and derivative curve delta(g)</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Bandwidth h0: 0.1800</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Simultaneous bands: normal_pointwise</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   (Full mu(g) and delta(g) curves in $curve_event; scalar $est$event is interval average)</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   ------------------------------------------------------------------------</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -470,13 +502,15 @@ window.Quarto = {
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
-<thead><tr class="header">
+<thead>
+<tr class="header">
 <th style="text-align: right;">G</th>
 <th style="text-align: right;">mu_hat</th>
 <th style="text-align: right;">se_mu</th>
 <th style="text-align: right;">delta_hat</th>
 <th style="text-align: right;">se_delta</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: right;">0.000</td>
@@ -538,32 +572,35 @@ window.Quarto = {
 </table>
 </div>
 </div>
-</section><section id="level-and-derivative-curves" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="level-and-derivative-curves">
-<span class="header-section-number">4.3</span> Level And Derivative Curves</h2>
+</section>
+<section id="level-and-derivative-curves" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="level-and-derivative-curves"><span class="header-section-number">4.3</span> Level And Derivative Curves</h2>
 <p><code>plot(type = "curve")</code> draws the stored curve values. Use <code>curve = "level"</code> for the FDID response curve and <code>curve = "derivative"</code> for the local slope.</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">is_fit_error</span><span class="op">(</span><span class="va">fit_kernel_fast</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">old_par</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_kernel_fast</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"level"</span>,</span>
-<span>       interval <span class="op">=</span> <span class="st">"pointwise"</span>, Xdistr <span class="op">=</span> <span class="st">"histogram"</span>,</span>
-<span>       support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
-<span>       main <span class="op">=</span> <span class="st">"Kernel level curve (mortality)"</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_kernel_fast</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"derivative"</span>,</span>
-<span>       interval <span class="op">=</span> <span class="st">"pointwise"</span>, Xdistr <span class="op">=</span> <span class="st">"histogram"</span>,</span>
-<span>       support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
-<span>       main <span class="op">=</span> <span class="st">"Kernel derivative curve (mortality)"</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span><span class="va">old_par</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_kernel_fast)) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  old_par <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_kernel_fast, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"level"</span>,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">interval =</span> <span class="st">"pointwise"</span>, <span class="at">Xdistr =</span> <span class="st">"histogram"</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Kernel level curve (mortality)"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_kernel_fast, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"derivative"</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">interval =</span> <span class="st">"pointwise"</span>, <span class="at">Xdistr =</span> <span class="st">"histogram"</span>,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Kernel derivative curve (mortality)"</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(old_par)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="04-kernel-continuous-g_files/figure-html/kernel-basic-plots-1.png" class="img-fluid figure-img" width="864"></p>
+<figure class="figure">
+<p><img src="04-kernel-continuous-g_files/figure-html/kernel-basic-plots-1.png" class="img-fluid figure-img" width="864"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Support displays are descriptive. They show where observed values of <code>G</code> lie inside the plotted window; they do not change the stored estimates. This estimator chapter uses one consistent histogram display, but its titles name the estimand rather than the display option. Chapter <a href="06-visualization.html" class="quarto-xref"><span>Chapter 6</span></a> shows the alternative density, rug, none, separate-panel, marker, and contrast plot options.</p>
-</section><section id="bootstrap-pointwise-and-uniform-bands" class="level2" data-number="4.4"><h2 data-number="4.4" class="anchored" data-anchor-id="bootstrap-pointwise-and-uniform-bands">
-<span class="header-section-number">4.4</span> Bootstrap Pointwise And Uniform Bands</h2>
+</section>
+<section id="bootstrap-pointwise-and-uniform-bands" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="bootstrap-pointwise-and-uniform-bands"><span class="header-section-number">4.4</span> Bootstrap Pointwise And Uniform Bands</h2>
 <p>For kernel inference, keep two routes separate:</p>
 <table class="caption-top table">
 <colgroup>
@@ -571,11 +608,13 @@ window.Quarto = {
 <col style="width: 33%">
 <col style="width: 33%">
 </colgroup>
-<thead><tr class="header">
+<thead>
+<tr class="header">
 <th><code>vartype</code></th>
 <th>What is stored</th>
 <th>Main use</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
 <td><code>"robust"</code></td>
@@ -593,19 +632,19 @@ window.Quarto = {
 <p>The rendered example below keeps the same mortality dataset and the same full-support 50-point grid. It uses 200 bootstrap replications so the pointwise percentile intervals and finite-grid quantile-envelope band are much less dominated by a handful of extreme resamples than in a quick draft render. The band shown by <code>interval = "both"</code> is a bootstrap quantile-envelope band; it is not a studentized sup-<span class="math inline">\(t\)</span> band. Even with 200 replications, the full-support right tail and derivative curve can remain wide because support is thinner and local slopes are more sensitive than levels.</p>
 <p>The metadata row reports the number of bootstrap curves that are usable for the finite-grid uniform envelope. This count can be smaller than <code>boot</code> because the uniform envelope needs a whole bootstrap curve to be finite at every stored <code>eval_g</code> point. Pointwise percentile intervals are computed column by column with finite bootstrap draws, but a joint finite-grid envelope drops resampled curves that fail local-linear estimation at one or more grid points. This is not an additional trimming or winsorization step; it is a finite-value filter for the uniform-band calculation.</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">kernel_boot_draws</span> <span class="op">&lt;-</span> <span class="fl">200L</span></span>
-<span></span>
-<span><span class="va">fit_kernel_boot</span> <span class="op">&lt;-</span> <span class="fu">fit_fdid</span><span class="op">(</span></span>
-<span>  <span class="va">s_cont</span>,</span>
-<span>  tr_period <span class="op">=</span> <span class="va">tr_period</span>,</span>
-<span>  ref_period <span class="op">=</span> <span class="va">ref_period</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"kernel"</span>,</span>
-<span>  h0 <span class="op">=</span> <span class="fl">0.18</span>,</span>
-<span>  K_folds <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  trim <span class="op">=</span> <span class="va">kernel_chapter_trim</span>,</span>
-<span>  vartype <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
-<span>  boot <span class="op">=</span> <span class="va">kernel_boot_draws</span></span>
-<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>kernel_boot_draws <span class="ot">&lt;-</span> <span class="dv">200</span>L</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>fit_kernel_boot <span class="ot">&lt;-</span> <span class="fu">fit_fdid</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  s_cont,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">tr_period =</span> tr_period,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">ref_period =</span> ref_period,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">method =</span> <span class="st">"kernel"</span>,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">h0 =</span> <span class="fl">0.18</span>,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">K_folds =</span> <span class="dv">3</span>,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">trim =</span> kernel_chapter_trim,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">vartype =</span> <span class="st">"bootstrap"</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">boot =</span> kernel_boot_draws</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="cell-output-display">
@@ -617,44 +656,47 @@ window.Quarto = {
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">is_fit_error</span><span class="op">(</span><span class="va">fit_kernel_boot</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">old_par</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_kernel_boot</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"level"</span>,</span>
-<span>       interval <span class="op">=</span> <span class="st">"both"</span>, show.uniform.CI <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>       Xdistr <span class="op">=</span> <span class="st">"histogram"</span>, support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
-<span>       main <span class="op">=</span> <span class="st">"Kernel level bands (mortality)"</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_kernel_boot</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"derivative"</span>,</span>
-<span>       interval <span class="op">=</span> <span class="st">"both"</span>, show.uniform.CI <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>       Xdistr <span class="op">=</span> <span class="st">"histogram"</span>, support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
-<span>       main <span class="op">=</span> <span class="st">"Kernel derivative bands (mortality)"</span><span class="op">)</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/par.html">par</a></span><span class="op">(</span><span class="va">old_par</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_kernel_boot)) {</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  old_par <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_kernel_boot, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"level"</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">interval =</span> <span class="st">"both"</span>, <span class="at">show.uniform.CI =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">Xdistr =</span> <span class="st">"histogram"</span>, <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Kernel level bands (mortality)"</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_kernel_boot, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"derivative"</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">interval =</span> <span class="st">"both"</span>, <span class="at">show.uniform.CI =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">Xdistr =</span> <span class="st">"histogram"</span>, <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Kernel derivative bands (mortality)"</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">par</span>(old_par)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="04-kernel-continuous-g_files/figure-html/kernel-bootstrap-plots-1.png" class="img-fluid figure-img" width="864"></p>
+<figure class="figure">
+<p><img src="04-kernel-continuous-g_files/figure-html/kernel-bootstrap-plots-1.png" class="img-fluid figure-img" width="864"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>To hide the uniform band while keeping pointwise intervals, use <code>show.uniform.CI = FALSE</code>, mirroring the interflex plotting workflow.</p>
 <div class="cell">
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">is_fit_error</span><span class="op">(</span><span class="va">fit_kernel_boot</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_kernel_boot</span>, type <span class="op">=</span> <span class="st">"curve"</span>, curve <span class="op">=</span> <span class="st">"level"</span>,</span>
-<span>       show.uniform.CI <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>       Xdistr <span class="op">=</span> <span class="st">"histogram"</span>, support.panel <span class="op">=</span> <span class="st">"embedded"</span>,</span>
-<span>       main <span class="op">=</span> <span class="st">"Kernel pointwise intervals (mortality)"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_kernel_boot)) {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_kernel_boot, <span class="at">type =</span> <span class="st">"curve"</span>, <span class="at">curve =</span> <span class="st">"level"</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">show.uniform.CI =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">Xdistr =</span> <span class="st">"histogram"</span>, <span class="at">support.panel =</span> <span class="st">"embedded"</span>,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Kernel pointwise intervals (mortality)"</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="04-kernel-continuous-g_files/figure-html/kernel-hide-uniform-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure">
+<p><img src="04-kernel-continuous-g_files/figure-html/kernel-hide-uniform-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
-</section><section id="reporting-contrasts-and-derivatives" class="level2" data-number="4.5"><h2 data-number="4.5" class="anchored" data-anchor-id="reporting-contrasts-and-derivatives">
-<span class="header-section-number">4.5</span> Reporting Contrasts And Derivatives</h2>
-<p>The curve is useful for diagnosis, but a write-up often needs a smaller number of quantities. <code><a href="https://rdrr.io/pkg/fdid/man/fdid_contrast.html">fdid_contrast()</a></code> reports level differences such as <code>mu(g1) - mu(g0)</code>. <code><a href="https://rdrr.io/pkg/fdid/man/fdid_derivative.html">fdid_derivative()</a></code> reports a derivative at a fixed value of <code>G</code>.</p>
+</section>
+<section id="reporting-contrasts-and-derivatives" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="reporting-contrasts-and-derivatives"><span class="header-section-number">4.5</span> Reporting Contrasts And Derivatives</h2>
+<p>The curve is useful for diagnosis, but a write-up often needs a smaller number of quantities. <code>fdid_contrast()</code> reports level differences such as <code>mu(g1) - mu(g0)</code>. <code>fdid_derivative()</code> reports a derivative at a fixed value of <code>G</code>.</p>
 <p>For these compact reporting examples, we use the analytical <code>vartype = "robust"</code> fit from the basic kernel section rather than the bootstrap object used for the uniform-band display above. The reporting helper’s default <code>inference = "auto"</code> first looks for stored curve covariance; for exact-grid contrasts this is the <code>V22 + V11 - 2 * V12</code> calculation. In this mortality example, however, the substantively useful reference is the lowest grid value <code>G = 0</code>, and the full-support boundary covariance can be numerically unavailable. We therefore request <code>inference = "pointwise"</code> in the compact table and coefficient plot, so the output is explicitly labeled as an analytical endpoint approximation.</p>
 <div class="cell">
 <div class="cell-output-display">
@@ -670,7 +712,8 @@ window.Quarto = {
 <col style="width: 10%">
 <col style="width: 18%">
 </colgroup>
-<thead><tr class="header">
+<thead>
+<tr class="header">
 <th style="text-align: left;">target</th>
 <th style="text-align: left;">method</th>
 <th style="text-align: right;">g0</th>
@@ -680,7 +723,8 @@ window.Quarto = {
 <th style="text-align: right;">conf.low</th>
 <th style="text-align: right;">conf.high</th>
 <th style="text-align: left;">inference</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">level contrast</td>
@@ -710,23 +754,25 @@ window.Quarto = {
 </div>
 <p>The fixed-reference coefficient plot gives the same reporting target in a visual form: choose a reference value of <code>G</code>, then display several <code>mu(g) - mu(g_ref)</code> contrasts and their 95% intervals. The reference row is the algebraic zero anchor.</p>
 <div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu">is_fit_error</span><span class="op">(</span><span class="va">fit_kernel_fast</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_kernel_fast</span>, type <span class="op">=</span> <span class="st">"contrast"</span>,</span>
-<span>       ref.g <span class="op">=</span> <span class="st">"min"</span>,</span>
-<span>       target.g <span class="op">=</span> <span class="st">"5"</span>,</span>
-<span>       inference <span class="op">=</span> <span class="st">"pointwise"</span>,</span>
-<span>       main <span class="op">=</span> <span class="st">"Kernel analytical contrasts vs lowest grid point"</span><span class="op">)</span></span>
-<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">is_fit_error</span>(fit_kernel_fast)) {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(fit_kernel_fast, <span class="at">type =</span> <span class="st">"contrast"</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">ref.g =</span> <span class="st">"min"</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">target.g =</span> <span class="st">"5"</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">inference =</span> <span class="st">"pointwise"</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">main =</span> <span class="st">"Kernel analytical contrasts vs lowest grid point"</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="04-kernel-continuous-g_files/figure-html/kernel-contrast-plot-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure">
+<p><img src="04-kernel-continuous-g_files/figure-html/kernel-contrast-plot-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>When the helper is applied to a bootstrap kernel object, exact-grid contrasts can use the stored bootstrap curve covariance matrix and the covariance identity <code>V22 + V11 - 2 * V12</code>. The robust object shown here now stores the analytical stacked-sandwich version of the same cross-grid covariance idea when the relevant grid covariance entries are finite. Use the bootstrap object when the target is a bootstrap curve display or replicate-based sensitivity check; use the robust object when the goal is a stable analytical reporting summary, and read the <code>inference</code> column to see whether the helper used covariance or a labeled pointwise approximation.</p>
-</section><section id="option-checklist" class="level2" data-number="4.6"><h2 data-number="4.6" class="anchored" data-anchor-id="option-checklist">
-<span class="header-section-number">4.6</span> Option Checklist</h2>
+</section>
+<section id="option-checklist" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="option-checklist"><span class="header-section-number">4.6</span> Option Checklist</h2>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -734,10 +780,12 @@ window.Quarto = {
 <col style="width: 20%">
 <col style="width: 80%">
 </colgroup>
-<thead><tr class="header">
+<thead>
+<tr class="header">
 <th style="text-align: left;">option</th>
 <th style="text-align: left;">role</th>
-</tr></thead>
+</tr>
+</thead>
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">eval_g</td>
@@ -797,7 +845,7 @@ window.Quarto = {
 <li>avoid interpreting sparse tails or large mass points as smooth regions;</li>
 <li>report whether intervals are analytical pointwise, bootstrap pointwise, or covariance-based contrasts from stored curve covariance;</li>
 <li>call the simultaneous band a bootstrap quantile-envelope band, not a studentized sup-<span class="math inline">\(t\)</span> band;</li>
-<li>report key values with <code><a href="https://rdrr.io/pkg/fdid/man/fdid_contrast.html">fdid_contrast()</a></code> or <code><a href="https://rdrr.io/pkg/fdid/man/fdid_derivative.html">fdid_derivative()</a></code> in addition to the plot.</li>
+<li>report key values with <code>fdid_contrast()</code> or <code>fdid_derivative()</code> in addition to the plot.</li>
 </ul>
 
 
@@ -815,7 +863,10 @@ Liu, Jiehan, Ziyi Liu, and Yiqing Xu. 2025. <span>“A Practical Guide to Estima
 Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Differences.”</span> <em>Journal of the American Statistical Association</em>, no. just-accepted: 1–23.
 </div>
 </div>
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();
@@ -1213,7 +1264,9 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
       }
     }
   });
-  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
       <a href="./03-continuous-overview.html" class="pagination-link" aria-label="Continuous-G Overview">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Continuous-G Overview</span></span>
       </a>          
@@ -1225,6 +1278,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
   </div>
 </nav>
 </div> <!-- /content -->
+
 
 
 

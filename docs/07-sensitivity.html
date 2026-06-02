@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.7.32">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
 <title>7&nbsp; Sensitivity Analysis – fdid -- User Manual</title>
 <style>
 code{white-space: pre-wrap;}
@@ -74,6 +77,7 @@ div.csl-indent {
   margin-left: 2em;
 }</style>
 
+
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -92,7 +96,8 @@ div.csl-indent {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-a25c6ca0899ecb75239135bf1b5c1690.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-a25c6ca0899ecb75239135bf1b5c1690.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -118,8 +123,14 @@ div.csl-indent {
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
-<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+}</script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -145,11 +156,15 @@ window.Quarto = {
   typesetMath
 };
 </script>
+
 </head>
+
 <body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -160,9 +175,13 @@ window.Quarto = {
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">fdid – User Manual</a> 
     </div>
@@ -174,7 +193,7 @@ window.Quarto = {
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
@@ -229,25 +248,29 @@ window.Quarto = {
   </div>
 </li>
     </ul>
-</div>
-</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup"><span class="header-section-number">7.1</span> Setup</a></li>
-  <li>
-<a href="#sensitivity-analysis" id="toc-sensitivity-analysis" class="nav-link" data-scroll-target="#sensitivity-analysis"><span class="header-section-number">7.2</span> Sensitivity analysis</a>
+  <li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup"><span class="header-section-number">7.1</span> Setup</a></li>
+  <li><a href="#sensitivity-analysis" id="toc-sensitivity-analysis" class="nav-link" data-scroll-target="#sensitivity-analysis"><span class="header-section-number">7.2</span> Sensitivity analysis</a>
   <ul class="collapse">
-<li><a href="#interpreting-the-plot" id="toc-interpreting-the-plot" class="nav-link" data-scroll-target="#interpreting-the-plot"><span class="header-section-number">7.2.1</span> Interpreting the plot</a></li>
-  </ul>
-</li>
+  <li><a href="#interpreting-the-plot" id="toc-interpreting-the-plot" class="nav-link" data-scroll-target="#interpreting-the-plot"><span class="header-section-number">7.2.1</span> Interpreting the plot</a></li>
+  </ul></li>
   <li><a href="#continuous-g" id="toc-continuous-g" class="nav-link" data-scroll-target="#continuous-g"><span class="header-section-number">7.3</span> Continuous G</a></li>
-  </ul></nav>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
 <h1 class="title"><span id="sec-sensitivity" class="quarto-section-identifier"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Sensitivity Analysis</span></span></h1>
 </div>
 
@@ -262,210 +285,214 @@ window.Quarto = {
   
 
 
-</header><p>After estimating treatment effects with <code><a href="https://rdrr.io/pkg/fdid/man/fdid.html">fdid()</a></code>, a natural next step is to assess how robust the results are to potential unmeasured confounders. We recommend using the <a href="https://carloscinelli.com/sensemakr/"><code>sensemakr</code></a> package (<span class="citation" data-cites="cinelli2020making">Cinelli and Hazlett (<a href="references.html#ref-cinelli2020making" role="doc-biblioref">2020</a>)</span>) for this purpose.</p>
+</header>
+
+
+<p>After estimating treatment effects with <code>fdid()</code>, a natural next step is to assess how robust the results are to potential unmeasured confounders. We recommend using the <a href="https://carloscinelli.com/sensemakr/"><code>sensemakr</code></a> package (<span class="citation" data-cites="cinelli2020making">Cinelli and Hazlett (<a href="references.html#ref-cinelli2020making" role="doc-biblioref">2020</a>)</span>) for this purpose.</p>
 <p><code>sensemakr</code> quantifies sensitivity in terms of partial <span class="math inline">\(R^2\)</span>: how strongly would an omitted variable need to be associated with both the treatment <span class="math inline">\(G\)</span> and the change-score outcome <span class="math inline">\(\Delta Y\)</span> to explain away the estimated effect. A full methodological discussion is in <span class="citation" data-cites="xu2026factorial">Xu, Zhao, and Ding (<a href="references.html#ref-xu2026factorial" role="doc-biblioref">2026</a>)</span> (Appendix A3).</p>
-<section id="setup" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="setup">
-<span class="header-section-number">7.1</span> Setup</h2>
+<section id="setup" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="setup"><span class="header-section-number">7.1</span> Setup</h2>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yiqingxu.org/packages/fdid/">fdid</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/carloscinelli/sensemakr">sensemakr</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">fdid</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fdid)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sensemakr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(fdid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We use the prepared wide-format data from <a href="02-main.html" class="quarto-xref">Chapter&nbsp;<span>2</span></a> and construct the change-score outcome: the average mortality during the famine years minus the pre-famine baseline.</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mortality</span><span class="op">$</span><span class="va">uniqueid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">mortality</span><span class="op">$</span><span class="va">provid</span><span class="op">)</span>,</span>
-<span>                            <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">mortality</span><span class="op">$</span><span class="va">countyid</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"-"</span><span class="op">)</span></span>
-<span><span class="va">mortality</span><span class="op">$</span><span class="va">G</span>        <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">mortality</span><span class="op">$</span><span class="va">pczupu</span> <span class="op">&gt;=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">mortality</span><span class="op">$</span><span class="va">pczupu</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">covar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"avggrain"</span>, <span class="st">"nograin"</span>, <span class="st">"urban"</span>, <span class="st">"dis_bj"</span>, <span class="st">"dis_pc"</span>,</span>
-<span>           <span class="st">"rice"</span>, <span class="st">"minority"</span>, <span class="st">"edu"</span>, <span class="st">"lnpop"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fdid/man/fdid_prepare.html">fdid_prepare</a></span><span class="op">(</span></span>
-<span>  data       <span class="op">=</span> <span class="va">mortality</span>,</span>
-<span>  Y_label    <span class="op">=</span> <span class="st">"mortality"</span>,</span>
-<span>  X_labels   <span class="op">=</span> <span class="va">covar</span>,</span>
-<span>  G_label    <span class="op">=</span> <span class="st">"G"</span>,</span>
-<span>  unit_label <span class="op">=</span> <span class="st">"uniqueid"</span>,</span>
-<span>  time_label <span class="op">=</span> <span class="st">"year"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Change-score outcome: mean(famine years) - reference year</span></span>
-<span><span class="co"># Covariates in s are stored as x1–x9 (matching order of X_labels above)</span></span>
-<span><span class="va">s</span><span class="op">$</span><span class="va">chg_mortality</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="va">s</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Y_"</span>, <span class="fl">1958</span><span class="op">:</span><span class="fl">1961</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="va">s</span><span class="op">$</span><span class="va">Y_1957</span></span>
-<span><span class="va">xvars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">covar</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>mortality<span class="sc">$</span>uniqueid <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">as.character</span>(mortality<span class="sc">$</span>provid),</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                            <span class="fu">as.character</span>(mortality<span class="sc">$</span>countyid), <span class="at">sep =</span> <span class="st">"-"</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>mortality<span class="sc">$</span>G        <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(mortality<span class="sc">$</span>pczupu <span class="sc">&gt;=</span> <span class="fu">median</span>(mortality<span class="sc">$</span>pczupu, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>covar <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"avggrain"</span>, <span class="st">"nograin"</span>, <span class="st">"urban"</span>, <span class="st">"dis_bj"</span>, <span class="st">"dis_pc"</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>           <span class="st">"rice"</span>, <span class="st">"minority"</span>, <span class="st">"edu"</span>, <span class="st">"lnpop"</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">fdid_prepare</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data       =</span> mortality,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">Y_label    =</span> <span class="st">"mortality"</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">X_labels   =</span> covar,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">G_label    =</span> <span class="st">"G"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">unit_label =</span> <span class="st">"uniqueid"</span>,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_label =</span> <span class="st">"year"</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Change-score outcome: mean(famine years) - reference year</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Covariates in s are stored as x1–x9 (matching order of X_labels above)</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>chg_mortality <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(s[, <span class="fu">paste0</span>(<span class="st">"Y_"</span>, <span class="dv">1958</span><span class="sc">:</span><span class="dv">1961</span>)]) <span class="sc">-</span> s<span class="sc">$</span>Y_1957</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>xvars <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"x"</span>, <span class="fu">seq_along</span>(covar))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="sensitivity-analysis" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="sensitivity-analysis">
-<span class="header-section-number">7.2</span> Sensitivity analysis</h2>
+</section>
+<section id="sensitivity-analysis" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="sensitivity-analysis"><span class="header-section-number">7.2</span> Sensitivity analysis</h2>
 <p>Fit the OLS change-score regression and pass it to <code>sensemakr</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fml</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html">as.formula</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"chg_mortality ~ G +"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">xvars</span>, collapse <span class="op">=</span> <span class="st">" + "</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">fml</span>, data <span class="op">=</span> <span class="va">s</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">sens</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sensemakr/man/sensemakr.html">sensemakr</a></span><span class="op">(</span></span>
-<span>  model                <span class="op">=</span> <span class="va">mod</span>,</span>
-<span>  treatment            <span class="op">=</span> <span class="st">"G"</span>,</span>
-<span>  benchmark_covariates <span class="op">=</span> <span class="va">xvars</span>,</span>
-<span>  kd                   <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  sensitivity.of       <span class="op">=</span> <span class="st">"t-value"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">sens</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sensitivity Analysis to Unobserved Confounding</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Model Formula: chg_mortality ~ G + x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Null hypothesis: q = 1 and reduce = TRUE </span></span>
-<span><span class="co">#&gt; -- This means we are considering biases that reduce the absolute value of the current estimate.</span></span>
-<span><span class="co">#&gt; -- The null hypothesis deemed problematic is H0:tau = 0 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Unadjusted Estimates of 'G': </span></span>
-<span><span class="co">#&gt;   Coef. estimate: -2.8024 </span></span>
-<span><span class="co">#&gt;   Standard Error: 0.7243 </span></span>
-<span><span class="co">#&gt;   t-value (H0:tau = 0): -3.8691 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Sensitivity Statistics:</span></span>
-<span><span class="co">#&gt;   Partial R2 of treatment with outcome: 0.0162 </span></span>
-<span><span class="co">#&gt;   Robustness Value, q = 1: 0.1203 </span></span>
-<span><span class="co">#&gt;   Robustness Value, q = 1, alpha = 0.05: 0.0612 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Verbal interpretation of sensitivity statistics:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -- Partial R2 of the treatment with the outcome: an extreme confounder (orthogonal to the covariates) that explains 100% of the residual variance of the outcome, would need to explain at least 1.62% of the residual variance of the treatment to fully account for the observed estimated effect.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -- Robustness Value, q = 1: unobserved confounders (orthogonal to the covariates) that explain more than 12.03% of the residual variance of both the treatment and the outcome are strong enough to bring the point estimate to 0 (a bias of 100% of the original estimate). Conversely, unobserved confounders that do not explain more than 12.03% of the residual variance of both the treatment and the outcome are not strong enough to bring the point estimate to 0.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -- Robustness Value, q = 1, alpha = 0.05: unobserved confounders (orthogonal to the covariates) that explain more than 6.12% of the residual variance of both the treatment and the outcome are strong enough to bring the estimate to a range where it is no longer 'statistically different' from 0 (a bias of 100% of the original estimate), at the significance level of alpha = 0.05. Conversely, unobserved confounders that do not explain more than 6.12% of the residual variance of both the treatment and the outcome are not strong enough to bring the estimate to a range where it is no longer 'statistically different' from 0, at the significance level of alpha = 0.05.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Bounds on omitted variable bias:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; --The table below shows the maximum strength of unobserved confounders with association with the treatment and the outcome bounded by a multiple of the observed explanatory power of the chosen benchmark covariate(s).</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Bound Label R2dz.x R2yz.dx Treatment Adjusted Estimate Adjusted Se Adjusted T</span></span>
-<span><span class="co">#&gt;        1x x1 0.0016  0.0082         G           -2.7241      0.7223    -3.7715</span></span>
-<span><span class="co">#&gt;        1x x2 0.0002  0.0000         G           -2.8024      0.7248    -3.8664</span></span>
-<span><span class="co">#&gt;        1x x3 0.0003  0.0009         G           -2.7903      0.7245    -3.8513</span></span>
-<span><span class="co">#&gt;        1x x4 0.0007  0.0309         G           -2.7009      0.7137    -3.7844</span></span>
-<span><span class="co">#&gt;        1x x5 0.0136  0.0158         G           -2.4806      0.7239    -3.4266</span></span>
-<span><span class="co">#&gt;        1x x6 0.0029  0.0058         G           -2.7131      0.7236    -3.7493</span></span>
-<span><span class="co">#&gt;        1x x7 0.0318  0.0019         G           -2.6277      0.7358    -3.5712</span></span>
-<span><span class="co">#&gt;        1x x8 0.0254  0.0016         G           -2.6627      0.7335    -3.6301</span></span>
-<span><span class="co">#&gt;        1x x9 0.0119  0.0653         G           -2.1908      0.7048    -3.1082</span></span>
-<span><span class="co">#&gt;  Adjusted Lower CI Adjusted Upper CI</span></span>
-<span><span class="co">#&gt;            -4.1416           -1.3066</span></span>
-<span><span class="co">#&gt;            -4.2248           -1.3799</span></span>
-<span><span class="co">#&gt;            -4.2121           -1.3684</span></span>
-<span><span class="co">#&gt;            -4.1015           -1.3002</span></span>
-<span><span class="co">#&gt;            -3.9013           -1.0598</span></span>
-<span><span class="co">#&gt;            -4.1333           -1.2929</span></span>
-<span><span class="co">#&gt;            -4.0718           -1.1837</span></span>
-<span><span class="co">#&gt;            -4.1022           -1.2231</span></span>
-<span><span class="co">#&gt;            -3.5741           -0.8075</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fml <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"chg_mortality ~ G +"</span>, <span class="fu">paste</span>(xvars, <span class="at">collapse =</span> <span class="st">" + "</span>)))</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(fml, <span class="at">data =</span> s)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>sens <span class="ot">&lt;-</span> <span class="fu">sensemakr</span>(</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">model                =</span> mod,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">treatment            =</span> <span class="st">"G"</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">benchmark_covariates =</span> xvars,</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">kd                   =</span> <span class="dv">1</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">sensitivity.of       =</span> <span class="st">"t-value"</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sens)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sensitivity Analysis to Unobserved Confounding</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Model Formula: chg_mortality ~ G + x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Null hypothesis: q = 1 and reduce = TRUE </span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -- This means we are considering biases that reduce the absolute value of the current estimate.</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -- The null hypothesis deemed problematic is H0:tau = 0 </span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unadjusted Estimates of 'G': </span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Coef. estimate: -2.8024 </span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Standard Error: 0.7243 </span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   t-value (H0:tau = 0): -3.8691 </span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sensitivity Statistics:</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Partial R2 of treatment with outcome: 0.0162 </span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Robustness Value, q = 1: 0.1203 </span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Robustness Value, q = 1, alpha = 0.05: 0.0612 </span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Verbal interpretation of sensitivity statistics:</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -- Partial R2 of the treatment with the outcome: an extreme confounder (orthogonal to the covariates) that explains 100% of the residual variance of the outcome, would need to explain at least 1.62% of the residual variance of the treatment to fully account for the observed estimated effect.</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -- Robustness Value, q = 1: unobserved confounders (orthogonal to the covariates) that explain more than 12.03% of the residual variance of both the treatment and the outcome are strong enough to bring the point estimate to 0 (a bias of 100% of the original estimate). Conversely, unobserved confounders that do not explain more than 12.03% of the residual variance of both the treatment and the outcome are not strong enough to bring the point estimate to 0.</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -- Robustness Value, q = 1, alpha = 0.05: unobserved confounders (orthogonal to the covariates) that explain more than 6.12% of the residual variance of both the treatment and the outcome are strong enough to bring the estimate to a range where it is no longer 'statistically different' from 0 (a bias of 100% of the original estimate), at the significance level of alpha = 0.05. Conversely, unobserved confounders that do not explain more than 6.12% of the residual variance of both the treatment and the outcome are not strong enough to bring the estimate to a range where it is no longer 'statistically different' from 0, at the significance level of alpha = 0.05.</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Bounds on omitted variable bias:</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --The table below shows the maximum strength of unobserved confounders with association with the treatment and the outcome bounded by a multiple of the observed explanatory power of the chosen benchmark covariate(s).</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Bound Label R2dz.x R2yz.dx Treatment Adjusted Estimate Adjusted Se Adjusted T</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x1 0.0016  0.0082         G           -2.7241      0.7223    -3.7715</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x2 0.0002  0.0000         G           -2.8024      0.7248    -3.8664</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x3 0.0003  0.0009         G           -2.7903      0.7245    -3.8513</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x4 0.0007  0.0309         G           -2.7009      0.7137    -3.7844</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x5 0.0136  0.0158         G           -2.4806      0.7239    -3.4266</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x6 0.0029  0.0058         G           -2.7131      0.7236    -3.7493</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x7 0.0318  0.0019         G           -2.6277      0.7358    -3.5712</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x8 0.0254  0.0016         G           -2.6627      0.7335    -3.6301</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x9 0.0119  0.0653         G           -2.1908      0.7048    -3.1082</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Adjusted Lower CI Adjusted Upper CI</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -4.1416           -1.3066</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -4.2248           -1.3799</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -4.2121           -1.3684</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -4.1015           -1.3002</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -3.9013           -1.0598</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -4.1333           -1.2929</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -4.0718           -1.1837</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -4.1022           -1.2231</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            -3.5741           -0.8075</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">sens</span>, show.unadjusted <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sens, <span class="at">show.unadjusted =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="07-sensitivity_files/figure-html/plot-sens-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure">
+<p><img src="07-sensitivity_files/figure-html/plot-sens-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
 </div>
-<section id="interpreting-the-plot" class="level3" data-number="7.2.1"><h3 data-number="7.2.1" class="anchored" data-anchor-id="interpreting-the-plot">
-<span class="header-section-number">7.2.1</span> Interpreting the plot</h3>
+<section id="interpreting-the-plot" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="interpreting-the-plot"><span class="header-section-number">7.2.1</span> Interpreting the plot</h3>
 <p>The contour plot visualises how a hypothetical unmeasured confounder would need to relate to both the treatment and the outcome to explain away the result:</p>
 <ul>
-<li>
-<strong>Horizontal axis</strong>: partial <span class="math inline">\(R^2\)</span> of the confounder with <span class="math inline">\(G\)</span> — how much variation in the treatment the confounder explains, beyond the observed covariates.</li>
-<li>
-<strong>Vertical axis</strong>: partial <span class="math inline">\(R^2\)</span> of the confounder with <span class="math inline">\(\Delta Y\)</span> — how much variation in the change-score outcome it explains.</li>
-<li>
-<strong>Contour lines</strong>: combinations that yield a given t-value. The outermost contour (labelled <code>t = 0</code>) marks the boundary where the effect is no longer statistically distinguishable from zero.</li>
-<li>
-<strong>Dots (benchmarks)</strong>: each dot represents one observed covariate scaled to have the same association strength as that covariate (<code>kd = 1</code>). If all benchmark dots fall well inside the t = 0 contour, the result is robust — an unobserved confounder would need to be substantially stronger than any observed covariate to nullify the finding.</li>
+<li><strong>Horizontal axis</strong>: partial <span class="math inline">\(R^2\)</span> of the confounder with <span class="math inline">\(G\)</span> — how much variation in the treatment the confounder explains, beyond the observed covariates.</li>
+<li><strong>Vertical axis</strong>: partial <span class="math inline">\(R^2\)</span> of the confounder with <span class="math inline">\(\Delta Y\)</span> — how much variation in the change-score outcome it explains.</li>
+<li><strong>Contour lines</strong>: combinations that yield a given t-value. The outermost contour (labelled <code>t = 0</code>) marks the boundary where the effect is no longer statistically distinguishable from zero.</li>
+<li><strong>Dots (benchmarks)</strong>: each dot represents one observed covariate scaled to have the same association strength as that covariate (<code>kd = 1</code>). If all benchmark dots fall well inside the t = 0 contour, the result is robust — an unobserved confounder would need to be substantially stronger than any observed covariate to nullify the finding.</li>
 </ul>
 <p>In this application, the benchmarks cluster far from the t = 0 boundary, suggesting the moderation effect of high social capital on famine mortality is robust to moderate unmeasured confounding.</p>
-</section></section><section id="continuous-g" class="level2" data-number="7.3"><h2 data-number="7.3" class="anchored" data-anchor-id="continuous-g">
-<span class="header-section-number">7.3</span> Continuous G</h2>
+</section>
+</section>
+<section id="continuous-g" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="continuous-g"><span class="header-section-number">7.3</span> Continuous G</h2>
 <p>Repeat the analysis with <code>lnpczupu</code> as a continuous treatment:</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mortality</span><span class="op">$</span><span class="va">lnpczupu</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">mortality</span><span class="op">$</span><span class="va">pczupu</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">s_cont</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/fdid/man/fdid_prepare.html">fdid_prepare</a></span><span class="op">(</span></span>
-<span>  data       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html">transform</a></span><span class="op">(</span><span class="va">mortality</span>, G <span class="op">=</span> <span class="va">lnpczupu</span><span class="op">)</span>,</span>
-<span>  Y_label    <span class="op">=</span> <span class="st">"mortality"</span>,</span>
-<span>  X_labels   <span class="op">=</span> <span class="va">covar</span>,</span>
-<span>  G_label    <span class="op">=</span> <span class="st">"G"</span>,</span>
-<span>  unit_label <span class="op">=</span> <span class="st">"uniqueid"</span>,</span>
-<span>  time_label <span class="op">=</span> <span class="st">"year"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">s_cont</span><span class="op">$</span><span class="va">chg_mortality</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowMeans</a></span><span class="op">(</span><span class="va">s_cont</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"Y_"</span>, <span class="fl">1958</span><span class="op">:</span><span class="fl">1961</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="op">-</span> <span class="va">s_cont</span><span class="op">$</span><span class="va">Y_1957</span></span>
-<span></span>
-<span><span class="va">fml_cont</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html">as.formula</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"chg_mortality ~ G +"</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">xvars</span>, collapse <span class="op">=</span> <span class="st">" + "</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">mod_cont</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">fml_cont</span>, data <span class="op">=</span> <span class="va">s_cont</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">sens_cont</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sensemakr/man/sensemakr.html">sensemakr</a></span><span class="op">(</span></span>
-<span>  model                <span class="op">=</span> <span class="va">mod_cont</span>,</span>
-<span>  treatment            <span class="op">=</span> <span class="st">"G"</span>,</span>
-<span>  benchmark_covariates <span class="op">=</span> <span class="va">xvars</span>,</span>
-<span>  kd                   <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  sensitivity.of       <span class="op">=</span> <span class="st">"t-value"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">sens_cont</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Sensitivity Analysis to Unobserved Confounding</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Model Formula: chg_mortality ~ G + x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Null hypothesis: q = 1 and reduce = TRUE </span></span>
-<span><span class="co">#&gt; -- This means we are considering biases that reduce the absolute value of the current estimate.</span></span>
-<span><span class="co">#&gt; -- The null hypothesis deemed problematic is H0:tau = 0 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Unadjusted Estimates of 'G': </span></span>
-<span><span class="co">#&gt;   Coef. estimate: -10.1637 </span></span>
-<span><span class="co">#&gt;   Standard Error: 1.4067 </span></span>
-<span><span class="co">#&gt;   t-value (H0:tau = 0): -7.225 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Sensitivity Statistics:</span></span>
-<span><span class="co">#&gt;   Partial R2 of treatment with outcome: 0.0543 </span></span>
-<span><span class="co">#&gt;   Robustness Value, q = 1: 0.2125 </span></span>
-<span><span class="co">#&gt;   Robustness Value, q = 1, alpha = 0.05: 0.1599 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Verbal interpretation of sensitivity statistics:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -- Partial R2 of the treatment with the outcome: an extreme confounder (orthogonal to the covariates) that explains 100% of the residual variance of the outcome, would need to explain at least 5.43% of the residual variance of the treatment to fully account for the observed estimated effect.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -- Robustness Value, q = 1: unobserved confounders (orthogonal to the covariates) that explain more than 21.25% of the residual variance of both the treatment and the outcome are strong enough to bring the point estimate to 0 (a bias of 100% of the original estimate). Conversely, unobserved confounders that do not explain more than 21.25% of the residual variance of both the treatment and the outcome are not strong enough to bring the point estimate to 0.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; -- Robustness Value, q = 1, alpha = 0.05: unobserved confounders (orthogonal to the covariates) that explain more than 15.99% of the residual variance of both the treatment and the outcome are strong enough to bring the estimate to a range where it is no longer 'statistically different' from 0 (a bias of 100% of the original estimate), at the significance level of alpha = 0.05. Conversely, unobserved confounders that do not explain more than 15.99% of the residual variance of both the treatment and the outcome are not strong enough to bring the estimate to a range where it is no longer 'statistically different' from 0, at the significance level of alpha = 0.05.</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Bounds on omitted variable bias:</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; --The table below shows the maximum strength of unobserved confounders with association with the treatment and the outcome bounded by a multiple of the observed explanatory power of the chosen benchmark covariate(s).</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Bound Label R2dz.x R2yz.dx Treatment Adjusted Estimate Adjusted Se Adjusted T</span></span>
-<span><span class="co">#&gt;        1x x1 0.0158  0.0140         G           -9.5277      1.4088    -6.7631</span></span>
-<span><span class="co">#&gt;        1x x2 0.0000  0.0000         G          -10.1635      1.4075    -7.2209</span></span>
-<span><span class="co">#&gt;        1x x3 0.0142  0.0000         G          -10.1382      1.4176    -7.1518</span></span>
-<span><span class="co">#&gt;        1x x4 0.0029  0.0289         G           -9.7745      1.3891    -7.0368</span></span>
-<span><span class="co">#&gt;        1x x5 0.0062  0.0154         G           -9.7489      1.4010    -6.9586</span></span>
-<span><span class="co">#&gt;        1x x6 0.0223  0.0116         G           -9.4744      1.4152    -6.6946</span></span>
-<span><span class="co">#&gt;        1x x7 0.0410  0.0050         G           -9.5415      1.4337    -6.6551</span></span>
-<span><span class="co">#&gt;        1x x8 0.0058  0.0018         G          -10.0256      1.4103    -7.1088</span></span>
-<span><span class="co">#&gt;        1x x9 0.0046  0.0525         G           -9.5054      1.3732    -6.9221</span></span>
-<span><span class="co">#&gt;  Adjusted Lower CI Adjusted Upper CI</span></span>
-<span><span class="co">#&gt;           -12.2926           -6.7629</span></span>
-<span><span class="co">#&gt;           -12.9259           -7.4012</span></span>
-<span><span class="co">#&gt;           -12.9203           -7.3561</span></span>
-<span><span class="co">#&gt;           -12.5006           -7.0484</span></span>
-<span><span class="co">#&gt;           -12.4985           -6.9994</span></span>
-<span><span class="co">#&gt;           -12.2519           -6.6969</span></span>
-<span><span class="co">#&gt;           -12.3552           -6.7277</span></span>
-<span><span class="co">#&gt;           -12.7935           -7.2578</span></span>
-<span><span class="co">#&gt;           -12.2005           -6.8104</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>mortality<span class="sc">$</span>lnpczupu <span class="ot">&lt;-</span> <span class="fu">log</span>(mortality<span class="sc">$</span>pczupu <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>s_cont <span class="ot">&lt;-</span> <span class="fu">fdid_prepare</span>(</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">data       =</span> <span class="fu">transform</span>(mortality, <span class="at">G =</span> lnpczupu),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">Y_label    =</span> <span class="st">"mortality"</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">X_labels   =</span> covar,</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">G_label    =</span> <span class="st">"G"</span>,</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">unit_label =</span> <span class="st">"uniqueid"</span>,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_label =</span> <span class="st">"year"</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>s_cont<span class="sc">$</span>chg_mortality <span class="ot">&lt;-</span> <span class="fu">rowMeans</span>(s_cont[, <span class="fu">paste0</span>(<span class="st">"Y_"</span>, <span class="dv">1958</span><span class="sc">:</span><span class="dv">1961</span>)]) <span class="sc">-</span> s_cont<span class="sc">$</span>Y_1957</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>fml_cont <span class="ot">&lt;-</span> <span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">"chg_mortality ~ G +"</span>, <span class="fu">paste</span>(xvars, <span class="at">collapse =</span> <span class="st">" + "</span>)))</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>mod_cont  <span class="ot">&lt;-</span> <span class="fu">lm</span>(fml_cont, <span class="at">data =</span> s_cont)</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>sens_cont <span class="ot">&lt;-</span> <span class="fu">sensemakr</span>(</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">model                =</span> mod_cont,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">treatment            =</span> <span class="st">"G"</span>,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">benchmark_covariates =</span> xvars,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">kd                   =</span> <span class="dv">1</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">sensitivity.of       =</span> <span class="st">"t-value"</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(sens_cont)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sensitivity Analysis to Unobserved Confounding</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Model Formula: chg_mortality ~ G + x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Null hypothesis: q = 1 and reduce = TRUE </span></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -- This means we are considering biases that reduce the absolute value of the current estimate.</span></span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -- The null hypothesis deemed problematic is H0:tau = 0 </span></span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Unadjusted Estimates of 'G': </span></span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Coef. estimate: -10.1637 </span></span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Standard Error: 1.4067 </span></span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   t-value (H0:tau = 0): -7.225 </span></span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sensitivity Statistics:</span></span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Partial R2 of treatment with outcome: 0.0543 </span></span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Robustness Value, q = 1: 0.2125 </span></span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   Robustness Value, q = 1, alpha = 0.05: 0.1599 </span></span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Verbal interpretation of sensitivity statistics:</span></span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -- Partial R2 of the treatment with the outcome: an extreme confounder (orthogonal to the covariates) that explains 100% of the residual variance of the outcome, would need to explain at least 5.43% of the residual variance of the treatment to fully account for the observed estimated effect.</span></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -- Robustness Value, q = 1: unobserved confounders (orthogonal to the covariates) that explain more than 21.25% of the residual variance of both the treatment and the outcome are strong enough to bring the point estimate to 0 (a bias of 100% of the original estimate). Conversely, unobserved confounders that do not explain more than 21.25% of the residual variance of both the treatment and the outcome are not strong enough to bring the point estimate to 0.</span></span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; -- Robustness Value, q = 1, alpha = 0.05: unobserved confounders (orthogonal to the covariates) that explain more than 15.99% of the residual variance of both the treatment and the outcome are strong enough to bring the estimate to a range where it is no longer 'statistically different' from 0 (a bias of 100% of the original estimate), at the significance level of alpha = 0.05. Conversely, unobserved confounders that do not explain more than 15.99% of the residual variance of both the treatment and the outcome are not strong enough to bring the estimate to a range where it is no longer 'statistically different' from 0, at the significance level of alpha = 0.05.</span></span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Bounds on omitted variable bias:</span></span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; --The table below shows the maximum strength of unobserved confounders with association with the treatment and the outcome bounded by a multiple of the observed explanatory power of the chosen benchmark covariate(s).</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Bound Label R2dz.x R2yz.dx Treatment Adjusted Estimate Adjusted Se Adjusted T</span></span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x1 0.0158  0.0140         G           -9.5277      1.4088    -6.7631</span></span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x2 0.0000  0.0000         G          -10.1635      1.4075    -7.2209</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x3 0.0142  0.0000         G          -10.1382      1.4176    -7.1518</span></span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x4 0.0029  0.0289         G           -9.7745      1.3891    -7.0368</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x5 0.0062  0.0154         G           -9.7489      1.4010    -6.9586</span></span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x6 0.0223  0.0116         G           -9.4744      1.4152    -6.6946</span></span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x7 0.0410  0.0050         G           -9.5415      1.4337    -6.6551</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x8 0.0058  0.0018         G          -10.0256      1.4103    -7.1088</span></span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;        1x x9 0.0046  0.0525         G           -9.5054      1.3732    -6.9221</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  Adjusted Lower CI Adjusted Upper CI</span></span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           -12.2926           -6.7629</span></span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           -12.9259           -7.4012</span></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           -12.9203           -7.3561</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           -12.5006           -7.0484</span></span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           -12.4985           -6.9994</span></span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           -12.2519           -6.6969</span></span>
+<span id="cb5-71"><a href="#cb5-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           -12.3552           -6.7277</span></span>
+<span id="cb5-72"><a href="#cb5-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           -12.7935           -7.2578</span></span>
+<span id="cb5-73"><a href="#cb5-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;           -12.2005           -6.8104</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">sens_cont</span>, show.unadjusted <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(sens_cont, <span class="at">show.unadjusted =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="07-sensitivity_files/figure-html/plot-sens-cont-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure">
+<p><img src="07-sensitivity_files/figure-html/plot-sens-cont-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
@@ -487,7 +514,10 @@ Liu, Jiehan, Ziyi Liu, and Yiqing Xu. 2025. <span>“A Practical Guide to Estima
 Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Differences.”</span> <em>Journal of the American Statistical Association</em>, no. just-accepted: 1–23.
 </div>
 </div>
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();
@@ -885,7 +915,9 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
       }
     }
   });
-  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
       <a href="./06-visualization.html" class="pagination-link" aria-label="Visualization Options">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Visualization Options</span></span>
       </a>          
@@ -897,6 +929,7 @@ Xu, Yiqing, Anqi Zhao, and Peng Ding. 2026. <span>“Factorial Difference-in-Dif
   </div>
 </nav>
 </div> <!-- /content -->
+
 
 
 
