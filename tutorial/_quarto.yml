@@ -30,7 +30,7 @@ format:
     theme: cosmo
     df-print: paged
     code-fold: false
-    code-tools: true
+    code-tools: false
     code-link: true
     toc-depth: 3
 

@@ -34,8 +34,10 @@ Scope: StatsClaw-guided tutorial update plus GitHub Pages branch sync.
   implementation. The chapter now distinguishes analytical robust
   stacked-sandwich curve covariance from bootstrap replicate curves,
   percentile intervals, and finite-grid quantile-envelope bands. The reporting
-  examples now rely on `fdid_contrast()` / `fdid_derivative()` with automatic
-  covariance-aware inference rather than forcing pointwise fallback.
+  examples use the analytical robust fit for compact reporting and explicitly
+  label the pointwise approximation used when the substantively useful
+  full-support `G = 0` boundary contrast does not have usable cross-grid
+  covariance entries.
 - Expanded Chapter 5's DML tutorial with a target-specific inference table and
   a dedicated `signal_map` table. The text now separates `density_method`
   choices from second-stage curve mapping choices, and labels `blp_spline` as
@@ -43,6 +45,9 @@ Scope: StatsClaw-guided tutorial update plus GitHub Pages branch sync.
 - Updated Chapter 6 to clarify that plotting is a display layer. Curve plots
   draw stored curve/inference objects, contrast plots call `fdid_contrast()`,
   and support panels are descriptive rather than inferential.
+- Disabled the Quarto HTML source-code tool for the tutorial book. Normal code
+  chunks still render, but hidden custom table-construction chunks no longer
+  reappear through the page-level source view.
 - Added an internal kernel bootstrap performance guard after the first full
   tutorial render attempt revealed that bootstrap replicate curves were also
   recomputing the analytical stacked-sandwich covariance. The main robust curve
